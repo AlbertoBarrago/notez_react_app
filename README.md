@@ -2,19 +2,8 @@
 
 🚀 Work in progress, stay tuned.
 
-<span id="countdown"></span>
+# Countdown to 120 Days
 
-<script>
-  const countdown = document.getElementById("countdown");
-  const endDate = new Date(new Date().setDate(new Date().getDate() + 120));
+Days remaining: **120**
 
-  function updateCountdown() {
-    const now = new Date();
-    const timeDiff = endDate - now;
-    const daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    countdown.innerText = `Days remaining: ${daysLeft}`;
-  }
-
-  updateCountdown();
-  setInterval(updateCountdown, 86400000); // Update daily
-</script>
+**To keep this countdown accurate, update every few days!**
