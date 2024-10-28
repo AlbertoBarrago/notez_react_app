@@ -22,7 +22,10 @@ jobs:
         run: npm install
 
       - name: Build project
-        run: npm run build
+        run: | 
+          npm run build
+          echo "" > ./dist/.nojekyll
+
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
