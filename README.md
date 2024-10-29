@@ -1,3 +1,3 @@
-# React + Vite
+# alBz Personal Notes
 
-Work in progress :) 
+🚀 Work in progress, stay tuned.
