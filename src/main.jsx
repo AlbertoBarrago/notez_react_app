@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Home from "./routes/home.jsx";
+import About from "./routes/about.jsx";
 
 const publicPath = import.meta.env.VITE_BASE_URL || '/';
 
@@ -9,6 +10,10 @@ const router = createBrowserRouter([
     {
         path: publicPath,
         element: <Home />,
+    },
+    {
+        path: publicPath + "/about",
+        element: <About />,
     },
     {
         path: "*",
