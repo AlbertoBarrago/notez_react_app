@@ -2,12 +2,14 @@
   "name": "albertobarrago.github.io",
   "private": true,
   "version": "0.0.1",
+  "homepage": ".",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
     "build": "vite build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {

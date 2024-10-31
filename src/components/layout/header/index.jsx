@@ -3,8 +3,8 @@ import {
     NavigationMenuItem,
     NavigationMenuList,
 } from "@/components/ui/navigation-menu.jsx";
+import {NavLink} from "react-router-dom";
 
-const publicPath = import.meta.env.VITE_BASE_URL || '/';
 
 export default function Index() {
     return (
@@ -12,13 +12,28 @@ export default function Index() {
             <NavigationMenu className="min-w-full">
                 <NavigationMenuList className="flex space-x-4">
                     <NavigationMenuItem>
-                        <a href={publicPath + "/"} className="text-white p-4">Articles</a>
+                        <NavLink
+                            to="/"
+                            className="text-white p-4"
+                        >
+                            Articles
+                        </NavLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <a href={publicPath + "/about"} className="text-white p-4">About</a>
+                        <NavLink
+                            to="/about"
+                            className="text-white p-4"
+                        >
+                            About
+                        </NavLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <a href={publicPath + "/contact"} className="text-white p-4">Contact</a>
+                        <NavLink
+                            to="/contact"
+                            className="text-white p-4"
+                        >
+                            Contact
+                        </NavLink>
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
