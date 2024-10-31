@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Home from "./routes/home.jsx";
 import About from "./routes/about.jsx";
-import './App.css';
+import './index.css';
 
 const publicPath = import.meta.env.VITE_BASE_URL || '/';
 
