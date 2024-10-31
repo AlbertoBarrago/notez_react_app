@@ -1,4 +1,4 @@
-import {createContext, useState} from "react";
+import {createContext, useContext, useState} from "react";
 
 /**
  * @enum {string}
@@ -29,7 +29,11 @@ const initialState = {
     }
 }
 
-const AppContext = createContext(null);
+const AppContext = createContext(initialState);
+
+export function useStateContext() {
+    return useContext(AppContext);
+}
 
 export const ContextProvider = ({ children }) => {
     const [userLogged, setUserLogged] = useState(initialState);
