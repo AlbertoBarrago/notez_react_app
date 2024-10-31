@@ -4,11 +4,13 @@ import Footer from "./components/footer/footer.jsx";
 
 const Layout = ({ children }) => {
     return (
-        <>
+        <div className="flex flex-col min-h-screen">
             <Header />
-            {children}
+            <div className="flex-grow p-4">
+                {children}
+            </div>
             <Footer />
-        </>
+        </div>
     );
 }
 
