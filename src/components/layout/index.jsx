@@ -6,9 +6,9 @@ const Index = ({ children }) => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <div className="flex-grow p-4">
+            <main className="flex-grow p-4">
                 {children}
-            </div>
+            </main>
             <Footer />
         </div>
     );
