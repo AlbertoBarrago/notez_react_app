@@ -8,7 +8,6 @@ export default function Home() {
                 <h1 className="mt-2">Home</h1>
                 <Button>Click me</Button>
             </Layout>
-
         </>
     )
 }
