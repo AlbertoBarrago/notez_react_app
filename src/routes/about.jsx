@@ -1,9 +1,9 @@
-import Layout from "../layout.jsx";
+import Index from "../components/layout/index.jsx";
 
 export default function About() {
     return (
-        <Layout>
+        <Index>
             <h1>About</h1>
-        </Layout>
+        </Index>
     )
 }

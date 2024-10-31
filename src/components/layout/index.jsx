@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from "./components/header/header.jsx";
-import Footer from "./components/footer/footer.jsx";
+import Header from "@/components/layout/header/index.jsx";
+import Footer from "@/components/layout/footer/index.jsx";
 
-const Layout = ({ children }) => {
+const Index = ({ children }) => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -14,4 +14,4 @@ const Layout = ({ children }) => {
     );
 }
 
-export default Layout;
+export default Index;
