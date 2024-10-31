@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import Articles from "./routes/articles.jsx";
-import About from "./routes/about.jsx";
-import Contact from "./routes/contact.jsx";
+import Articles from "./routes/articles";
+import About from "./routes/about";
+import Contact from "./routes/contact";
 import './index.css';
 
 const publicPath = import.meta.env.VITE_BASE_URL || '/';
