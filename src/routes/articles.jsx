@@ -1,6 +1,8 @@
 import Layout from "../components/layout/index.jsx";
+import {useStateContext} from "@/context/index.jsx";
 
 export default function Articles() {
+    const appContext = useStateContext();
     return (
         <>
             <Layout>

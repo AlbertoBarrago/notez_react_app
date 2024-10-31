@@ -8,7 +8,7 @@ import './index.css';
 
 const publicPath = import.meta.env.VITE_BASE_URL || '/';
 
-const router = createBrowserRouter([
+const routes = createBrowserRouter([
     {
         path: publicPath,
         element: <Articles />,
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <RouterProvider router={router}/>
+        <RouterProvider router={routes}/>
     </React.StrictMode>
 )
 
