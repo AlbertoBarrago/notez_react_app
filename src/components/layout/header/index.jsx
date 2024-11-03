@@ -10,13 +10,13 @@ export default function Index() {
     return (
         <header className="p-3 min-h-[10px]">
             <NavigationMenu className="min-w-full flex-row justify-start">
-                <NavigationMenuList className="space-x-4">
+                <NavigationMenuList className="ml-3">
                     <NavigationMenuItem>
                         <NavLink
                             to="/"
-                            className='tiny5-regular text-2xl'
+                            className='text-2xl'
                         >
-                            Albz Notes
+                            Notez
                         </NavLink>
                     </NavigationMenuItem>
                 </NavigationMenuList>
