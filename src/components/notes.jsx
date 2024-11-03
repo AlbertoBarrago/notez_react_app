@@ -3,7 +3,8 @@ import {Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} f
 import {Button} from "@/components/ui/button"
 import {Pencil, Trash2} from "lucide-react"
 
-export function NoteComponent({
+
+export function Notes({
                                   id,
                                   title,
                                   content = '',
