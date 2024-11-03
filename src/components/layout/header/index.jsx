@@ -4,6 +4,7 @@ import {
     NavigationMenuList,
 } from "@/components/ui/navigation-menu.jsx";
 import {NavLink} from "react-router-dom";
+import {ThemeSelector} from "@/components/themeSelector.jsx";
 
 
 export default function Index() {
@@ -19,6 +20,7 @@ export default function Index() {
                             Notez
                         </NavLink>
                     </NavigationMenuItem>
+
                 </NavigationMenuList>
                 <div className="flex-1 justify-end justify-items-end">
                     <NavigationMenuList className="space-x-4">
@@ -50,6 +52,7 @@ export default function Index() {
                             >Contact
                             </NavLink>
                         </NavigationMenuItem>
+                        <ThemeSelector/>
                     </NavigationMenuList>
                 </div>
             </NavigationMenu>
