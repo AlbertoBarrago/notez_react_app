@@ -5,21 +5,22 @@ import Articles from "./routes/articles";
 import About from "./routes/about";
 import Contact from "./routes/contact";
 import './index.css';
+import {ContextProvider} from "@/context/index.jsx";
 
 const publicPath = import.meta.env.VITE_BASE_URL || '/';
 
 const routes = createBrowserRouter([
     {
         path: publicPath,
-        element: <Articles />,
+        element: <Articles/>,
     },
     {
         path: publicPath + "/about",
-        element: <About />,
+        element: <About/>,
     },
     {
         path: publicPath + "/contact",
-        element: <Contact />,
+        element: <Contact/>,
     },
     {
         path: "*",
@@ -29,7 +30,9 @@ const routes = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <RouterProvider router={routes}/>
+        <ContextProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <RouterProvider router={routes}/>
+        </ContextProvider>
     </React.StrictMode>
 )
 

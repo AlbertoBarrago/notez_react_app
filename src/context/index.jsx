@@ -1,33 +1,16 @@
-import {createContext, useContext, useState} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 /**
- * @enum {string}
- * @readonly
- */
-const Role = {
-    GUEST: 'GUEST',
-    ADMIN: 'ADMIN'
-};
-
-/**
- * @typedef {Object} UserLogged
- * @property {null} lastLogin - The last login timestamp.
- * @property {Role[]} role - The roles assigned to the user.
- * @property {string} email - The user's email address.
- * @property {string} username - The user's username.
+ * @typedef {Object} AppContextType
+ * @property {string} theme
+ * @property {function(string): void} setTheme
  */
 
-/**
- * @type {{ userLogged: UserLogged }}
- */
+/** @type {AppContextType} */
 const initialState = {
-    userLogged: {
-        username: "",
-        email: "",
-        lastLogin: null,
-        role: null
-    }
-}
+    theme: "system",
+    setTheme: () => null,
+};
 
 const AppContext = createContext(initialState);
 
@@ -35,14 +18,54 @@ export function useStateContext() {
     return useContext(AppContext);
 }
 
-export const ContextProvider = ({ children }) => {
-    const [userLogged, setUserLogged] = useState(initialState);
+export const ContextProvider = ({
+                                    children,
+                                    defaultTheme = "system",
+                                    storageKey = "vite-ui-theme",
+                                    ...props
+                                }) => {
+    const [theme, setTheme] = useState(
+        () => localStorage.getItem(storageKey) || defaultTheme
+    );
 
-    const globalState = {
-        userLogged,
-        setUserLogged
+    useEffect(() => {
+        const root = window.document.documentElement;
+
+        root.classList.remove("light", "dark");
+
+        if (theme === "system") {
+            const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+
+            root.classList.add(systemTheme);
+            return;
+        }
+
+        root.classList.add(theme);
+    }, [theme]);
+
+    const contextValue = {
+        theme,
+        setTheme: (newTheme) => {
+            localStorage.setItem(storageKey, newTheme);
+            setTheme(newTheme);
+        },
+    };
+
+    return (
+        <AppContext.Provider value={contextValue} {...props}>
+            {children}
+        </AppContext.Provider>
+    );
+};
+
+export const useTheme = () => {
+    const context = useContext(AppContext);
+
+    if (context === undefined) {
+        throw new Error("useTheme must be used within a ContextProvider");
     }
 
-    return <AppContext.Provider value={globalState}>{children}</AppContext.Provider>;
-}
-
+    return context;
+};
