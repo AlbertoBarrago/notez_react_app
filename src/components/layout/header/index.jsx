@@ -15,7 +15,7 @@ export default function Index() {
                     <NavigationMenuItem>
                         <NavLink
                             to="/"
-                            className='text-2xl'
+                            className='text-2xl no-bg'
                         >
                             Notez
                         </NavLink>
@@ -28,7 +28,7 @@ export default function Index() {
                             <NavLink
                                 to="/"
                                 className={({isActive, isPending}) =>
-                                    isPending ? "pending p-4" : isActive ? "active text-red-500 p-4" : "p-4"
+                                    isPending ? "pending p-4" : isActive ? "active p-4" : "p-4"
                                 }
                             >
                                 Articles
@@ -38,7 +38,7 @@ export default function Index() {
                             <NavLink
                                 to="/about"
                                 className={({isActive, isPending}) =>
-                                    isPending ? "pending p-4" : isActive ? "active text-red-500 p-4" : "p-4"
+                                    isPending ? "pending p-4" : isActive ? "active p-4" : "p-4"
                                 }
                             >About
                             </NavLink>
@@ -47,7 +47,7 @@ export default function Index() {
                             <NavLink
                                 to="/contact"
                                 className={({isActive, isPending}) =>
-                                    isPending ? "pending p-4" : isActive ? "active text-red-500 p-4" : "p-4"
+                                    isPending ? "pending p-4" : isActive ? "active p-4" : "p-4"
                                 }
                             >Contact
                             </NavLink>
