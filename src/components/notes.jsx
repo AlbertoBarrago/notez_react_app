@@ -5,13 +5,13 @@ import {Pencil, Trash2} from "lucide-react"
 
 
 export function Notes({
-                                  id,
-                                  title,
-                                  content = '',
-                                  createdAt,
-                                  onEdit,
-                                  onDelete
-                              }) {
+                          id,
+                          title,
+                          content = '',
+                          createdAt,
+                          onEdit,
+                          onDelete
+                      }) {
     const [isExpanded, setIsExpanded] = useState(false)
 
     const toggleExpand = () => setIsExpanded(!isExpanded)
@@ -33,7 +33,7 @@ export function Notes({
 
     return (
         <Card
-            className="w-full max-w-md bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900 dark:to-primary-800">
+            className="w-full max-w-md bg-gradient-to-br dark:from-primary dark:to-secondary">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold text-primary-800 dark:text-primary-100">{title}</CardTitle>
                 <CardDescription className="text-sm font-medium text-primary-600 dark:text-primary-300">
@@ -41,16 +41,15 @@ export function Notes({
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <p
-                    className={`text-sm text-primary-700 dark:text-primary-200 leading-relaxed ${isExpanded ? '' : 'line-clamp-3'}`}>
-                    {displayContent}
+                <p className="text-sm text-primary-700 dark:text-primary-300">
+                    {isExpanded ? displayContent.substring(0, 150) + '...' : displayContent}
                 </p>
                 {shouldShowExpandButton && (
-                    <Button
-                        variant="link"
-                        onClick={toggleExpand}
-                        className="mt-2 p-0 text-primary-600 hover:text-primary-800 dark:text-primary-300 dark:hover:text-primary-100">
+                    <Button onClick={toggleExpand} className="text-sm font-medium text-primary-600 dark:text-primary-300">
                         {isExpanded ? 'Show less' : 'Show more'}
+                        <span className="sr-only">
+                            {isExpanded ? 'Show less' : 'Show more'}
+                        </span>
                     </Button>
                 )}
             </CardContent>

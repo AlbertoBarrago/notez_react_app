@@ -75,3 +75,11 @@
   font-style: normal;
   font-size: 18px;
 }
+
+.active {
+  background: red;
+}
+
+.no-bg {
+  background: none;
+}

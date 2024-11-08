@@ -10,7 +10,7 @@ import {
 import {useTheme} from "@/context/index.jsx";
 
 export function ThemeSelector() {
-    const { setTheme } = useTheme()
+    const { setTheme, theme } = useTheme()
 
     return (
         <DropdownMenu>
@@ -22,13 +22,13 @@ export function ThemeSelector() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
+                <DropdownMenuItem className={theme === 'light' ? 'active':''} onClick={() => setTheme("light")}>
                     Light
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                <DropdownMenuItem className={theme === 'dark' ? 'active':''} onClick={() => setTheme("dark")}>
                     Dark
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
+                <DropdownMenuItem className={theme === 'system' ? 'active':''} onClick={() => setTheme("system")}>
                     System
                 </DropdownMenuItem>
             </DropdownMenuContent>

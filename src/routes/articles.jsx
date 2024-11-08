@@ -7,7 +7,7 @@ export default function Articles() {
     return (
         <>
             <Layout>
-                <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+                <div className="flex-1 flex flex-col justify-center items-center space-y-5">
                     <Notes/>
                     <Notes/>
                 </div>
