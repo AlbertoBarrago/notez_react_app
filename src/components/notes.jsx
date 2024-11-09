@@ -42,15 +42,15 @@ export function Notes({
             </CardHeader>
             <CardContent>
                 <p className="text-sm text-primary-700 dark:text-primary-300">
-                    {isExpanded ? displayContent.substring(0, 150) + '...' : displayContent}
+                    {!isExpanded ? displayContent.substring(0, 150) + '...' : displayContent}
                 </p>
                 {shouldShowExpandButton && (
-                    <Button onClick={toggleExpand} className="text-sm font-medium text-primary-600 dark:text-primary-300">
+                    <p onClick={toggleExpand} className="text-sm mt-5 font-medium text-primary-600 dark:text-primary-300">
                         {isExpanded ? 'Show less' : 'Show more'}
                         <span className="sr-only">
                             {isExpanded ? 'Show less' : 'Show more'}
                         </span>
-                    </Button>
+                    </p>
                 )}
             </CardContent>
             <CardFooter className="flex justify-between">
