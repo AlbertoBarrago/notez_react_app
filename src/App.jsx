@@ -6,12 +6,17 @@ import About from "./routes/about";
 import Contact from "./routes/contact";
 import './index.css';
 import {ContextProvider} from "@/context/index.jsx";
+import AuthRoute from "@/routes/auth.jsx";
 
 const publicPath = import.meta.env.VITE_BASE_URL || '/';
 
 const routes = createBrowserRouter([
     {
         path: publicPath,
+        element: <AuthRoute/>,
+    },
+    {
+        path: publicPath + "note",
         element: <Articles/>,
     },
     {

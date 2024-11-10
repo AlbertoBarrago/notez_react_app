@@ -2,8 +2,9 @@ import Layout from "../components/layout/index.jsx";
 import {useStateContext} from "@/context/index.jsx";
 import {Notes} from "@/components/notes.jsx";
 
-export default function Articles() {
+export default function ArticlesRoute() {
     const appContext = useStateContext();
+    console.log(appContext)
     return (
         <>
             <Layout>
