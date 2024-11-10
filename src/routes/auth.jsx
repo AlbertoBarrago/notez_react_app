@@ -12,7 +12,9 @@ export default function AuthRoute() {
 
     return (
         <Layout>
-            <SignInLogin/>
+            <div className="flex justify-center items-center min-h-screen">
+                <SignInLogin/>
+            </div>
         </Layout>
     )
 }

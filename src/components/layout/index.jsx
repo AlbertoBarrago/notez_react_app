@@ -12,7 +12,7 @@ const Index = ({ children }) => {
             <main className="flex-grow">
                 {children}
             </main>
-            <Footer />
+            {location.pathname === "/" ? "": <Footer  />}
         </div>
     );
 }
