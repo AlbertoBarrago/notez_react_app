@@ -21,7 +21,7 @@ class Auth {
         try {
             const response = await axios({
                 method: "post",
-                url: "http://localhost:8000/api/v1/login",
+                url: "http://localhost:8000/api/v1/login", //TODO: add baseApi
                 data: {
                     username,
                     password
@@ -54,7 +54,7 @@ class Auth {
         try {
             const response = await axios({
                 method: "post",
-                url: "/api/auth/register",
+                url: "/api/auth/register",  //TODO: fix me
                 data: {
                     email,
                     username,

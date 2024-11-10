@@ -26,7 +26,7 @@ class AuthedNotesService {
         try {
             const resp = await axios({
                 method: "get",
-                url: "/api/notes",
+                url: "/api/notes", //TODO: fix me
                 params: {
                     ids
                 }
@@ -47,7 +47,7 @@ class AuthedNotesService {
         try {
             const resp = await axios({
                 method: "post",
-                url: "/api/notes",
+                url: "/api/notes", //TODO: fix me
                 data: note
             });
 
@@ -70,7 +70,7 @@ class AuthedNotesService {
         try {
             const resp = await axios({
                 method: "put",
-                url: "/api/notes",
+                url: "/api/notes", //TODO: fix me
                 data: note
             });
             if (resp.data.success) {
@@ -92,7 +92,7 @@ class AuthedNotesService {
         try {
             const resp = await axios({
                 method: "delete",
-                url: "/api/notes",
+                url: "/api/notes", //TODO: fix me
                 data: {
                     id
                 }
