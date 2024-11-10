@@ -1,5 +1,10 @@
 import axios from "axios";
 
+/**
+ * @typedef {Object} AuthResp
+ * @property {string} access_token - The access_token
+ * @property {string} token_type - The token_type
+ */
 class Auth {
     constructor() {
         this.user = null;
@@ -7,27 +12,28 @@ class Auth {
 
     /**
      * Logs in a user
-     * @param {string} email - The user's email
+     * @param {string} username - The user's email
      * @param {string} password - The user's password
-     * @returns {Promise<Object>} - The response from the login request
+     * @returns {Promise<AuthResp>} - The response from the login request
      * @throws {Error} - If there is an issue with the login request
      */
-    async login(email, password) {
+    async login(username, password) {
         try {
-            const response = axios({
+            const response = await axios({
                 method: "post",
-                url: "/api/auth/login",
+                url: "http://localhost:8000/api/v1/login",
                 data: {
-                    email,
+                    username,
                     password
                 }
             });
 
-            if (response.data.token) {
+            console.log(response.data)
+            if (response.data) {
                 this.user = response.data;
             }
 
-            this.storeToken(response.data.token);
+            this.storeToken(response.data.access_token);
             return response.data;
 
         } catch (e) {
