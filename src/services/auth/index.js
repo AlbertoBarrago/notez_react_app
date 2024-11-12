@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 /**
  * @typedef {Object} AuthResp
  * @property {string} access_token - The access_token
@@ -21,19 +22,19 @@ class Auth {
         try {
             const response = await axios({
                 method: "post",
-                url: "http://localhost:8000/api/v1/login", //TODO: add baseApi
+                url: `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_END_POINT}/login`,
                 data: {
                     username,
                     password
                 }
             });
 
-            console.log(response.data)
             if (response.data) {
                 this.user = response.data;
             }
 
             this.storeToken(response.data.access_token);
+            this.storeUser(response.data.user);
             return response.data;
 
         } catch (e) {
@@ -54,7 +55,7 @@ class Auth {
         try {
             const response = await axios({
                 method: "post",
-                url: "/api/auth/register",  //TODO: fix me
+                url: `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_END_POINT}/register`,
                 data: {
                     email,
                     username,
@@ -72,14 +73,53 @@ class Auth {
         }
     }
 
+    /**
+     * Stores the provided token in local storage
+     *
+     * @param {string} token - The token to be stored.
+     * @return {void}
+     */
     storeToken(token) {
         localStorage.setItem('token', token);
     }
 
+    /**
+     * Retrieves the stored token from local storage.
+     *
+     * @return {string | null} The token if it exists, otherwise null.
+     */
     getToken() {
         return localStorage.getItem('token');
     }
 
+    /**
+     * Stores the provided user object in the browser's local storage.
+     *
+     * @param {Object} user - The user object to be stored.
+     * @return {void}
+     */
+    storeUser(user) {
+        localStorage.setItem('user', JSON.stringify(user));
+    }
+
+    /**
+     * Retrieves the user data stored in localStorage.
+     *
+     * @return {Object|null} The parsed user data object if available, otherwise null.
+     */
+    getUser() {
+       return JSON.parse(localStorage.getItem('user'));
+    }
+
+    isLoggedIn() {
+        console.log(this.getUser());
+        return !!this.getUser();
+    }
+
+    /**
+     * Removes the 'token' item from the browser's local storage.
+     * @return {void} No return value.
+     */
     removeToken() {
         localStorage.removeItem('token');
     }

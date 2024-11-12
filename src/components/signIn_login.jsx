@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Auth from "@/services/auth/index.js";
+import {useNavigate} from "react-router-dom";
 
 const SIGN_IN = "signin";
 const SIGN_UP = "signup";
@@ -14,6 +15,7 @@ export function SignInLogin() {
     const [isLoading, setIsLoading] = useState(false);
     const auth = new Auth();
     const [tab, setTab] = useState(SIGN_IN);
+    const navigate = useNavigate();
 
     const signinForm = useForm();
     const signupForm = useForm();
@@ -22,8 +24,9 @@ export function SignInLogin() {
         setIsLoading(true);
         try {
             const resp = await auth.login(data.username, data.password);
-            console.log(resp);
-            // TODO: handle navigation
+            navigate(
+                "/note",
+                { state: { user: resp.user } })
         } catch (e) {
             console.error(e);
         } finally {
@@ -67,7 +70,8 @@ export function SignInLogin() {
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="passwordSignIn">Password</Label>
-                                    <Input id="passwordSignIn" type="password"
+                                    <Input id="passwordSignIn" placeholder="********"
+                                           type="password"
                                            {...signinForm.register("password", { required: true })} />
                                     {signinForm.formState.errors.password && <span>This field is required</span>}
                                 </div>

@@ -7,16 +7,18 @@ import Contact from "./routes/contact";
 import './index.css';
 import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/auth.jsx";
+import Auth from "@/services/auth/index.js";
 
-const publicPath = import.meta.env.VITE_BASE_URL || '/';
+const publicPath = '/';
+const auth = new Auth()
 
 const routes = createBrowserRouter([
     {
         path: publicPath,
-        element: <AuthRoute/>,
+        element: !auth.isLoggedIn() ? <AuthRoute/> : <Articles/>,
     },
     {
-        path: publicPath + "note",
+        path: publicPath + "/note",
         element: <Articles/>,
     },
     {
