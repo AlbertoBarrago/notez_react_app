@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 /**
  * @typedef {Object} AuthResp
  * @property {string} access_token - The access_token
@@ -33,8 +32,7 @@ class Auth {
                 this.user = response.data;
             }
 
-            this.storeToken(response.data.access_token);
-            this.storeUser(response.data.user);
+            this.storeTokenAndUser(response.data);
             return response.data;
 
         } catch (e) {
@@ -66,21 +64,12 @@ class Auth {
                 this.user = response.data;
             }
 
+            this.storeTokenAndUser(response.data);
             return response.data;
 
         } catch (e) {
             throw new Error(e.message);
         }
-    }
-
-    /**
-     * Stores the provided token in local storage
-     *
-     * @param {string} token - The token to be stored.
-     * @return {void}
-     */
-    storeToken(token) {
-        localStorage.setItem('token', token);
     }
 
     /**
@@ -95,11 +84,12 @@ class Auth {
     /**
      * Stores the provided user object in the browser's local storage.
      *
-     * @param {Object} user - The user object to be stored.
+     * @param {Object} data - The user object to be stored.
      * @return {void}
      */
-    storeUser(user) {
-        localStorage.setItem('user', JSON.stringify(user));
+    storeTokenAndUser(data) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('token', data.token);
     }
 
     /**
@@ -111,8 +101,15 @@ class Auth {
        return JSON.parse(localStorage.getItem('user'));
     }
 
+    /**
+     * Checks if a user is currently logged in.
+     *
+     * This method logs the user information to the console
+     * and returns a boolean indicating the user's logged-in status.
+     *
+     * @return {boolean} True if a user is logged in, otherwise false.
+     */
     isLoggedIn() {
-        console.log(this.getUser());
         return !!this.getUser();
     }
 
@@ -120,8 +117,9 @@ class Auth {
      * Removes the 'token' item from the browser's local storage.
      * @return {void} No return value.
      */
-    removeToken() {
+    logout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
     }
 }
 

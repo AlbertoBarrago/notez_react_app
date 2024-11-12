@@ -8,26 +8,44 @@ import './index.css';
 import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/auth.jsx";
 import Auth from "@/services/auth/index.js";
+import PrivateRoute from "@/utils/guard.jsx";
 
 const publicPath = '/';
-const auth = new Auth()
 
 const routes = createBrowserRouter([
     {
         path: publicPath,
-        element: !auth.isLoggedIn() ? <AuthRoute/> : <Articles/>,
+        element: <AuthRoute/>,
     },
     {
-        path: publicPath + "/note",
-        element: <Articles/>,
+        path: "/note",
+        element: <PrivateRoute />,
+        children: [
+            {
+                path: "",
+                element: <Articles />
+            }
+        ]
     },
     {
         path: publicPath + "/about",
-        element: <About/>,
+        element: <PrivateRoute />,
+        children: [
+            {
+                path: "",
+                element: <About/>,
+            }
+        ]
     },
     {
         path: publicPath + "/contact",
-        element: <Contact/>,
+        element: <PrivateRoute />,
+        children: [
+            {
+                path:  "",
+                element: <Contact/>,
+            }
+        ]
     },
     {
         path: "*",

@@ -14,7 +14,7 @@ const SIGN_UP = "signup";
 export function SignInLogin() {
     const [isLoading, setIsLoading] = useState(false);
     const auth = new Auth();
-    const [tab, setTab] = useState(SIGN_IN);
+    const [ tab, setTab] = useState(SIGN_IN);
     const navigate = useNavigate();
 
     const signinForm = useForm();
@@ -38,8 +38,9 @@ export function SignInLogin() {
         setIsLoading(true);
         try {
             const resp = await auth.register(data.email, data.username, data.password);
-            console.log(resp);
-            // TODO: handle navigation
+            navigate(
+                "/note",
+                { state: { user: resp.user } })
         } catch (e) {
             console.error(e);
         } finally {
@@ -98,7 +99,7 @@ export function SignInLogin() {
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="passwordSignUp">Password</Label>
-                                    <Input id="passwordSignUp" type="password"
+                                    <Input id="passwordSignUp" type="password" placeholder="********"
                                            {...signupForm.register("password", { required: true })} />
                                     {signupForm.formState.errors.password && <span>This field is required</span>}
                                 </div>

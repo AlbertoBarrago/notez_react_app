@@ -3,30 +3,42 @@ import {
     NavigationMenuItem,
     NavigationMenuList,
 } from "@/components/ui/navigation-menu.jsx";
-import {NavLink} from "react-router-dom";
-import {ThemeSelector} from "@/components/themeSelector.jsx";
+import {NavLink, useNavigate} from "react-router-dom";
+import {ThemeSelector} from "@/components/theme/themeSelector.jsx";
+import {Button} from "@/components/ui/button.jsx";
+import Auth from "@/services/auth/index.js";
 
 
 export default function Index() {
+    const auth = new Auth()
+    const navigate = useNavigate()
+
+    const performLogout = () => {
+        auth.logout()
+        navigate(
+            "/",
+            {
+                replace: true,
+            })
+    }
     return (
         <header className="p-3 min-h-[10px]">
             <NavigationMenu className="min-w-full flex-row justify-start">
                 <NavigationMenuList className="ml-3">
                     <NavigationMenuItem>
                         <NavLink
-                            to="/"
+                            to="/note"
                             className='text-2xl no-bg'
                         >
                             Notez
                         </NavLink>
                     </NavigationMenuItem>
-
                 </NavigationMenuList>
                 <div className="flex-1 justify-end justify-items-end">
                     <NavigationMenuList className="space-x-4">
                         <NavigationMenuItem>
                             <NavLink
-                                to="/"
+                                to="/note"
                                 className={({isActive, isPending}) =>
                                     isPending ? "pending p-4" : isActive ? "active p-4" : "p-4"
                                 }
@@ -52,6 +64,9 @@ export default function Index() {
                             >Contact
                             </NavLink>
                         </NavigationMenuItem>
+                        {auth.isLoggedIn() ?  <NavigationMenuItem>
+                            <Button onClick={performLogout}>Logout</Button>
+                        </NavigationMenuItem>: null}
                         <ThemeSelector/>
                     </NavigationMenuList>
                 </div>
