@@ -51,7 +51,6 @@ export default function ArticlesRoute() {
     const fetchNotes = async (isUpdateOrDelete = false) => {
         if (notesCache.current && !isUpdateOrDelete) {
             setNotes(notesCache.current);
-            setLoading(false);
             return;
         }
 
@@ -63,9 +62,6 @@ export default function ArticlesRoute() {
             }
         } catch (error) {
             handleError(error);
-        }
-        finally {
-            setLoading(false);
         }
     };
     /**
@@ -169,7 +165,11 @@ export default function ArticlesRoute() {
     }
     /**
      * Error handler for note operations
-     * @param {Error} error - Error object
+     * @param {Error} error - Error object from API response
+     * @param {number} error.status - HTTP status code
+     * @param {Object} error.response - Response object from axios
+     * @param {string} error.message - Error message
+     * @throws {Error} Rethrows the error after handling
      */
     const handleError = (error) => {
         if (error.status === 401) {
@@ -179,7 +179,9 @@ export default function ArticlesRoute() {
     };
 
     useEffect(() => {
-        fetchNotes();
+        fetchNotes().finally(() => {
+            setLoading(false);
+        });
     }, []);
 
     if (loading) {
