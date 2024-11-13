@@ -1,6 +1,10 @@
+/**
+ * @fileoverview Authentication route component handling login and registration
+ * @module AuthRoute
+ */
+
 'use client'
 
-import {SignInLogin} from "@/components/signIn_login.jsx";
 import Layout from "../components/layout/index.jsx";
 import {useState} from "react";
 import Auth from "@/services/auth/index.js";
@@ -13,26 +17,70 @@ import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import ErrorsModal from "@/components/dialogs/errors.jsx";
 
+/** @constant {string} */
 const SIGN_IN = "signin";
+/** @constant {string} */
 const SIGN_UP = "signup";
 
+/**
+ * Main authentication component handling both sign-in and sign-up functionality
+ * @function AuthRoute
+ * @returns {JSX.Element} Rendered authentication component
+ */
 export default function AuthRoute() {
+    /**
+     * @type {[boolean, Function]} Loading state and setter
+     */
     const [isLoading, setIsLoading] = useState(false);
+
+    /**
+     * @type {Auth} Authentication service instance
+     */
     const auth = new Auth();
+
+    /**
+     * @type {[string, Function]} Active tab state and setter
+     */
     const [ tab, setTab] = useState(SIGN_IN);
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [errorProps, setErrorProps] = useState({})
+
+    /**
+     * @type {[boolean, Function]} Error modal visibility state and setter
+     */
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    /**
+     * @type {[Object, Function]} Error properties state and setter
+     */
+    const [errorProps, setErrorProps] = useState({});
+
+    /**
+     * * @type {import('react-router-dom').NavigateFunction} Navigation function for route transitions
+     * */
     const navigate = useNavigate();
 
+    /**
+     * @type {Object} Form control for sign-in
+     */
     const signinForm = useForm();
+
+    /**
+     * @type {Object} Form control for sign-up
+     */
     const signupForm = useForm();
 
+    /**
+     * Handles sign-in form submission
+     * @async
+     * @param {Object} data - Form data containing username and password
+     * @param {string} data.username - User's username
+     * @param {string} data.password - User's password
+     */
     const onSubmitSignIn = async (data) => {
         setIsLoading(true);
         try {
             const resp = await auth.login(data.username, data.password);
             if (resp.user) {
-                navigate("/note")
+                navigate("/note");
             }
         } catch (err) {
             const errorMessage = {
@@ -40,20 +88,27 @@ export default function AuthRoute() {
                 status: err.response?.status || 500,
                 message: err.response?.data?.detail || 'Login failed. Please try again.'
             };
-            setErrorProps(errorMessage)
+            setErrorProps(errorMessage);
             setIsModalOpen(true);
         } finally {
             setIsLoading(false);
         }
     };
 
+    /**
+     * Handles sign-up form submission
+     * @async
+     * @param {Object} data - Form data containing email, username and password
+     * @param {string} data.email - User's email
+     * @param {string} data.username - User's username
+     * @param {string} data.password - User's password
+     */
     const onSubmitSignUp = async (data) => {
         setIsLoading(true);
         try {
             const resp = await auth.register(data.email, data.username, data.password);
             if (resp.user) {
-                await new Promise(resolve => setTimeout(resolve, 100));
-                navigate("/note")
+                navigate("/note");
             }
         } catch (e) {
             console.error(e);

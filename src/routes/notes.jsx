@@ -1,18 +1,16 @@
+/**
+ * @fileoverview Articles route component for managing notes functionality
+ * @module ArticlesRoute
+ */
+
 import Layout from "../components/layout/index.jsx";
 import {Notes} from "@/components/notes.jsx";
 import {useEffect, useState, useRef} from "react";
-
 import NotesService from "@/services/notes/index.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
 import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import Auth from "@/services/auth/index.js";
-
-/**
- * @fileoverview Articles route component for managing notes functionality
- * @module ArticlesRoute
- */
 
 /**
  * @typedef {Object} Note
@@ -25,7 +23,6 @@ import Auth from "@/services/auth/index.js";
  * @constant {NotesService}
  */
 const noteService = new NotesService();
-const authService = new Auth();
 
 /**
  * Main part for displaying and managing notes
@@ -175,10 +172,10 @@ export default function ArticlesRoute() {
      * @param {Error} error - Error object
      */
     const handleError = (error) => {
-        // if (error.status === 401) {
-        //     authService.logout();
-        // }
-        // throw error;
+        if (error.status === 401) {
+            authService.logout();
+        }
+        throw error;
     };
 
     useEffect(() => {
