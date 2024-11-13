@@ -65,7 +65,7 @@ export default function ArticlesRoute() {
                 setNotes(notesFetched);
             }
         } catch (error) {
-            handleError(error, "Error fetching notes. Please try again.");
+            handleError(error);
         }
         finally {
             setLoading(false);
@@ -175,10 +175,10 @@ export default function ArticlesRoute() {
      * @param {Error} error - Error object
      */
     const handleError = (error) => {
-        if (error.status === 401) {
-            authService.logout();
-        }
-        throw error;
+        // if (error.status === 401) {
+        //     authService.logout();
+        // }
+        // throw error;
     };
 
     useEffect(() => {
