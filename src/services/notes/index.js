@@ -49,9 +49,7 @@ class NotesService {
 
     async getNotes() {
         try {
-            console.log("Response data... loading");
             const resp = await axios_instance.get('/notes/');
-            console.log("Response data:", resp);
             return resp.data;
         } catch (e) {
             console.error("Error fetching notes:", e.message, e.stack);

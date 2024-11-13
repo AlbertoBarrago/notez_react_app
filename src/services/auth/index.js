@@ -1,5 +1,12 @@
 import axios from "axios";
 
+const axios_instance = axios.create({
+    baseURL: import.meta.env.VITE_BASE_URL || 'http://localhost:8000/api/v1',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+});
 /**
  * @typedef {Object} AuthResp
  * @property {string} access_token - The access_token
@@ -19,13 +26,9 @@ class Auth {
      */
     async login(username, password) {
         try {
-            const response = await axios({
-                method: "post",
-                url: `${import.meta.env.VITE_BASE_URL}/login`,
-                data: {
-                    username,
-                    password
-                }
+            const response = await axios_instance.post('/login', {
+                username,
+                password
             });
 
             if (response.data) {
@@ -51,14 +54,10 @@ class Auth {
      */
     async register(email, username, password) {
         try {
-            const response = await axios({
-                method: "post",
-                url: `${import.meta.env.VITE_BASE_URL}/register`,
-                data: {
-                    email,
-                    username,
-                    password
-                }
+            const response = await axios_instance.post('/register', {
+                email,
+                username,
+                password
             });
             if (response.data.token) {
                 this.user = response.data;
@@ -133,6 +132,7 @@ class Auth {
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('token_type');
     }
 }
 
