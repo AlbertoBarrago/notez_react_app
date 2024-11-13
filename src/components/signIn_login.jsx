@@ -26,12 +26,10 @@ export function SignInLogin() {
     const onSubmitSignIn = async (data) => {
         setIsLoading(true);
         try {
-            const resp = await auth.login(data.username, data.password);
-            if (resp.user) {
+            await auth.login(data.username, data.password).finally(() => {
                 navigate("/note")
-            }
+            });
         } catch (err) {
-            console.error(err);
             const errorMessage = {
                 title: 'Authentication Error',
                 status: err.response?.status || 500,

@@ -30,12 +30,12 @@ class Auth {
             password
         });
 
-        debugger;
         if (response.data) {
             this.user = response.data.user;
         }
 
         this.storeTokenAndUser(response.data);
+        console.log(response.data);
         return response.data;
     }
 
@@ -66,7 +66,7 @@ class Auth {
      *
      * @return {string | null} The token if it exists, otherwise null.
      */
-    getToken() {
+    async getToken() {
         return localStorage.getItem('token');
     }
 

@@ -1,14 +1,20 @@
 import axios from "axios";
 import auth from "@/services/auth/index.js";
 const auth_instance = new auth();
-const token =  auth_instance.getToken();
 const axios_instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL || 'http://localhost:8000/api/v1',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        "Authorization": `Bearer ${token}`
     }
+});
+
+axios_instance.interceptors.request.use(async (config) => {
+    const token = await auth_instance.getToken();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
 });
 
 /**
