@@ -83,7 +83,10 @@ class NotesService {
      */
     async updateNote(note) {
         try {
-            const resp = await axios_instance.put('/notes/', note);
+            const resp = await axios_instance.put(`/notes/${note.id}`, {
+                title: note.title,
+                content: note.content
+            });
             if (resp.data.success) {
                 this.notes.push(resp.data);
             }
