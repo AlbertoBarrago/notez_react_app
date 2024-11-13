@@ -25,23 +25,17 @@ class Auth {
      * @throws {Error} - If there is an issue with the login request
      */
     async login(username, password) {
-        try {
-            const response = await axios_instance.post('/login', {
-                username,
-                password
-            });
+        const response = await axios_instance.post('/login', {
+            username,
+            password
+        });
 
-            if (response.data) {
-                this.user = response.data;
-            }
-
-            this.storeTokenAndUser(response.data);
-            return response.data;
-
-        } catch (e) {
-            throw new Error(e.message);
+        if (response.data) {
+            this.user = response.data;
         }
 
+        this.storeTokenAndUser(response.data);
+        return response.data;
     }
 
     /**
@@ -53,22 +47,17 @@ class Auth {
      * @throws {Error} - If there is an issue with the registration request
      */
     async register(email, username, password) {
-        try {
-            const response = await axios_instance.post('/register', {
-                email,
-                username,
-                password
-            });
-            if (response.data.token) {
-                this.user = response.data;
-            }
-
-            this.storeTokenAndUser(response.data);
-            return response.data;
-
-        } catch (e) {
-            throw new Error(e.message);
+        const response = await axios_instance.post('/register', {
+            email,
+            username,
+            password
+        });
+        if (response.data.token) {
+            this.user = response.data;
         }
+
+        this.storeTokenAndUser(response.data);
+        return response.data;
     }
 
     /**
