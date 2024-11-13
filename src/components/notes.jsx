@@ -48,7 +48,7 @@ export function Notes({note, onEdit, onDelete}) {
                 <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => onEdit(note.id)}
+                    onClick={() => onEdit(note)}
                     className="text-primary-700 border-primary-300 hover:bg-primary-200 dark:text-primary-200 dark:border-primary-600 dark:hover:bg-primary-700">
                     <Pencil className="w-4 h-4 mr-2"/>
                     Edit
