@@ -173,9 +173,8 @@ export default function ArticlesRoute() {
     /**
      * Error handler for note operations
      * @param {Error} error - Error object
-     * @param {string} message - Error message
      */
-    const handleError = (error, message) => {
+    const handleError = (error) => {
         if (error.status === 401) {
             authService.logout();
         }

@@ -58,11 +58,6 @@ export function SignInLogin() {
         }
     };
 
-    const onModalOpen = () => {
-        setIsModalOpen(true);
-        setErrorProps(null)
-    };
-
     return (
         <>
             <Card className="w-[350px]">
