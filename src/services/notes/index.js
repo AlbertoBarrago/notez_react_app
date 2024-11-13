@@ -65,10 +65,14 @@ class NotesService {
      */
     async addNote(note) {
         try {
-            const resp = await axios_instance.post('/notes/', note);
+            const resp = await axios_instance.post('/notes/', {
+                title: note.title,
+                content: note.content
+            });
             if (resp.data.success) {
                 this.notes.push(resp.data);
             }
+            return resp.data;
         } catch (e) {
             throw new Error('Invalid note');
         }

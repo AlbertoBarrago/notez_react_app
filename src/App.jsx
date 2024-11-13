@@ -9,6 +9,7 @@ import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/auth.jsx";
 import PrivateRoute from "@/utils/privateRoute.jsx";
 import Auth from "@/services/auth/index.js";
+import ErrorBoundary from "@/components/errors/error_boundary.jsx";
 
 const publicPath = '/';
 const auth = new Auth();
@@ -59,7 +60,9 @@ const routeConfig = [
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <ContextProvider defaultTheme="system" storageKey="vite-ui-theme">
-            <RouterProvider router={createBrowserRouter(routeConfig)}/>
+            <ErrorBoundary>
+                <RouterProvider router={createBrowserRouter(routeConfig)}/>
+            </ErrorBoundary>
         </ContextProvider>
     </React.StrictMode>
 )

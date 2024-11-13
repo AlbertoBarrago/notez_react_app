@@ -1,33 +1,27 @@
 "use client"
 
 import {useState, useEffect} from 'react'
-import {Button} from "@/components/ui/button"
+import {Button} from "@/components/ui/button.jsx"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogFooter, DialogDescription,
-} from "@/components/ui/dialog"
-import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
-import {Textarea} from "@/components/ui/textarea"
+} from "@/components/ui/dialog.jsx"
+import {Input} from "@/components/ui/input.jsx"
+import {Label} from "@/components/ui/label.jsx"
+import {Textarea} from "@/components/ui/textarea.jsx"
 
-export default function NoteEditModal({isOpen, onClose, onSave, note}) {
+export default function NoteAddNoteModal({isOpen, onClose, onSave}) {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
 
-    useEffect(() => {
-        if (note) {
-            setTitle(note.title)
-            setContent(note.content)
-        }
-    }, [note])
-
-    const handleSave = () => {
-        if (note) {
-            onSave({...note, title, content})
-        }
+    const handleCreationNote = () => {
+        onSave({
+            title,
+            content
+        })
         onClose()
     }
 
@@ -35,7 +29,7 @@ export default function NoteEditModal({isOpen, onClose, onSave, note}) {
         <Dialog open={isOpen} onOpenChange={onClose} aria-labelledby="modal-title">
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Edit Note</DialogTitle>
+                    <DialogTitle>Create Note</DialogTitle>
                     <DialogDescription>
                         Edit notes and save them.
                     </DialogDescription>
@@ -68,8 +62,8 @@ export default function NoteEditModal({isOpen, onClose, onSave, note}) {
                     <Button type="button" variant="secondary" onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button type="button" onClick={handleSave}>
-                        Save changes
+                    <Button type="button" onClick={handleCreationNote}>
+                        Create Note
                     </Button>
                 </DialogFooter>
             </DialogContent>
