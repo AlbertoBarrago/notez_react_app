@@ -7,8 +7,7 @@ import Contact from "./routes/contact";
 import './index.css';
 import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/auth.jsx";
-import Auth from "@/services/auth/index.js";
-import PrivateRoute from "@/utils/guard.jsx";
+import PrivateRoute from "@/utils/privateRoute.jsx";
 
 const publicPath = '/';
 

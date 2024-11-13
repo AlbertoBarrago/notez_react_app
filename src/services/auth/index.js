@@ -21,7 +21,7 @@ class Auth {
         try {
             const response = await axios({
                 method: "post",
-                url: `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_END_POINT}/login`,
+                url: `${import.meta.env.VITE_BASE_URL}/login`,
                 data: {
                     username,
                     password
@@ -53,7 +53,7 @@ class Auth {
         try {
             const response = await axios({
                 method: "post",
-                url: `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_END_POINT}/register`,
+                url: `${import.meta.env.VITE_BASE_URL}/register`,
                 data: {
                     email,
                     username,
@@ -82,14 +82,27 @@ class Auth {
     }
 
     /**
-     * Stores the provided user object in the browser's local storage.
+     * Retrieves the token type from local storage.
      *
-     * @param {Object} data - The user object to be stored.
+     * @return {string|null} The token type if it exists in local storage, or null if not found.
+     */
+    getTokenType() {
+        return localStorage.getItem('token_type');
+    }
+
+    /**
+     * Stores the user information and access token in local storage.
+     *
+     * @param {Object} data - The data object containing user information and token details.
+     * @param {Object} data.user - User information object.
+     * @param {string} data.access_token - Access token string.
+     * @param {string} data.token_type - Type of the token.
      * @return {void}
      */
     storeTokenAndUser(data) {
         localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('token_type', data.token_type);
     }
 
     /**

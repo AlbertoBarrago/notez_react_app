@@ -30,7 +30,7 @@ export default function Index() {
                             to="/note"
                             className='text-2xl no-bg'
                         >
-                            Notez
+                            Notez <span className="text-primary">|</span> {auth.isLoggedIn() ? `Hi, ${auth.getUser().username}`: ``}
                         </NavLink>
                     </NavigationMenuItem>
                 </NavigationMenuList>
