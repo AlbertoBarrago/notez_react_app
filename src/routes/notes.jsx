@@ -165,11 +165,7 @@ export default function ArticlesRoute() {
     }
     /**
      * Error handler for note operations
-     * @param {Error} error - Error object from API response
-     * @param {number} error.status - HTTP status code
-     * @param {Object} error.response - Response object from axios
-     * @param {string} error.message - Error message
-     * @throws {Error} Rethrows the error after handling
+     * @param {Error} error - Error object
      */
     const handleError = (error) => {
         if (error.status === 401) {
