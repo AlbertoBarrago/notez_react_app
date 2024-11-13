@@ -32,7 +32,7 @@ export function Notes({note, onEdit, onDelete}) {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <p className="text-sm text-primary-700 dark:text-primary-300">
+                <p className="text-sm text-primary-700 dark:text-primary-300 min-h-[4rem]">
                     {!isExpanded ? displayContent.substring(0, 140) + '...' : displayContent}
                 </p>
                 {shouldShowExpandButton && (

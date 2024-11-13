@@ -7,6 +7,7 @@ import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
 import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
+import Auth from "@/services/auth/index.js";
 
 /**
  * @fileoverview Articles route component for managing notes functionality
@@ -24,6 +25,7 @@ import {Button} from "@/components/ui/button.jsx";
  * @constant {NotesService}
  */
 const noteService = new NotesService();
+const authService = new Auth();
 
 /**
  * Main part for displaying and managing notes
@@ -62,7 +64,10 @@ export default function ArticlesRoute() {
                 notesCache.current = notesFetched;
                 setNotes(notesFetched);
             }
-        }  finally {
+        } catch (error) {
+            handleError(error, "Error fetching notes. Please try again.");
+        }
+        finally {
             setLoading(false);
         }
     };
@@ -108,7 +113,6 @@ export default function ArticlesRoute() {
            handleError(error, "Error deleting note. Please try again.");
         }
     }
-
     /**
      * Handles note edit action
      * @param {Note} note - Note to edit
@@ -147,7 +151,6 @@ export default function ArticlesRoute() {
             setIsModalCreateOpen(false)
         })
     }
-
     /**
      * Handles note deletion action
      * @param {Note} note - Note to delete
@@ -167,21 +170,21 @@ export default function ArticlesRoute() {
             })
         }
     }
-
     /**
      * Error handler for note operations
      * @param {Error} error - Error object
      * @param {string} message - Error message
      */
     const handleError = (error, message) => {
-        console.error(message, error);
+        if (error.status === 401) {
+            authService.logout();
+        }
+        throw error;
     };
-
 
     useEffect(() => {
         fetchNotes();
     }, []);
-
 
     if (loading) {
         return <div>Loading...</div>;
@@ -202,7 +205,7 @@ export default function ArticlesRoute() {
                 </svg>
             </Button>
 
-            <div className="flex flex-1 flex-col justify-center items-center space-y-5 p-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-10">
                 {notes.length > 0 ? (
                     notes.map(note => <Notes key={note.id} note={note} onEdit={handleEditNote}
                                              onDelete={handleDeleteNote}/>)

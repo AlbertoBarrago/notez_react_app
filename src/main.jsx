@@ -9,60 +9,38 @@ import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/login.jsx";
 import PrivateRoute from "@/utils/privateRoute.jsx";
 import Auth from "@/services/auth/index.js";
+import ErrorBoundary from "@/components/errors/error_boundary.jsx";
 
 const publicPath = '/';
 const auth = new Auth();
+
 const routeConfig = [
     {
         path: publicPath,
-        element: <AuthRoute/>,
-        loader: () => {
-            return auth.isLoggedIn() ? redirect('/note') : null;
-        }
+        element: <ErrorBoundary><AuthRoute/></ErrorBoundary>,
+        loader: () => auth.isLoggedIn() ? redirect('/note') : null,
     },
     {
-        path: "/note",
-        element: <PrivateRoute />,
+        path: "/",
+        element: <ErrorBoundary><PrivateRoute /></ErrorBoundary>,
         children: [
-            {
-                path: "",
-                element: <Articles />
-            }
-        ]
-    },
-    {
-        path: publicPath + "/about",
-        element: <PrivateRoute />,
-        children: [
-            {
-                path: "",
-                element: <About/>,
-            }
-        ]
-    },
-    {
-        path: publicPath + "/contact",
-        element: <PrivateRoute />,
-        children: [
-            {
-                path:  "",
-                element: <Contact/>,
-            }
+            { path: "note", element: <Articles /> },
+            { path: "about", element: <About /> },
+            { path: "contact", element: <Contact /> },
         ]
     },
     {
         path: "*",
-        element: <h1>404 - Page Not Found</h1>,
+        element: <ErrorBoundary><h1>404 - Page Not Found</h1></ErrorBoundary>,
     },
-]
+];
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <ContextProvider defaultTheme="system" storageKey="vite-ui-theme">
-            <RouterProvider router={createBrowserRouter(routeConfig)}/>
+            <ErrorBoundary>
+                <RouterProvider router={createBrowserRouter(routeConfig)}/>
+            </ErrorBoundary>
         </ContextProvider>
     </React.StrictMode>
 )
-
-
-

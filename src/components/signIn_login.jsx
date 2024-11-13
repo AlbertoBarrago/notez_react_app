@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Auth from "@/services/auth/index.js";
 import {useNavigate} from "react-router-dom";
+import ErrorsModal from "@/components/dialogs/errors.jsx";
 
 const SIGN_IN = "signin";
 const SIGN_UP = "signup";
@@ -15,6 +16,8 @@ export function SignInLogin() {
     const [isLoading, setIsLoading] = useState(false);
     const auth = new Auth();
     const [ tab, setTab] = useState(SIGN_IN);
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [errorProps, setErrorProps] = useState({})
     const navigate = useNavigate();
 
     const signinForm = useForm();
@@ -24,11 +27,18 @@ export function SignInLogin() {
         setIsLoading(true);
         try {
             const resp = await auth.login(data.username, data.password);
-            navigate(
-                "/note",
-                { state: { user: resp.user } })
-        } catch (e) {
-            console.error(e);
+            if (resp.user) {
+                navigate("/note")
+            }
+        } catch (err) {
+            console.error(err);
+            const errorMessage = {
+                title: 'Authentication Error',
+                status: err.response?.status || 500,
+                message: err.response?.data?.detail || 'Login failed. Please try again.'
+            };
+            setErrorProps(errorMessage)
+            setIsModalOpen(true);
         } finally {
             setIsLoading(false);
         }
@@ -38,9 +48,9 @@ export function SignInLogin() {
         setIsLoading(true);
         try {
             const resp = await auth.register(data.email, data.username, data.password);
-            navigate(
-                "/note",
-                { state: { user: resp.user } })
+            if (resp.user) {
+                navigate("/note")
+            }
         } catch (e) {
             console.error(e);
         } finally {
@@ -48,8 +58,14 @@ export function SignInLogin() {
         }
     };
 
+    const onModalOpen = () => {
+        setIsModalOpen(true);
+        setErrorProps(null)
+    };
+
     return (
-        <Card className="w-[350px]">
+        <>
+            <Card className="w-[350px]">
             <CardHeader>
                 <CardTitle>Welcome</CardTitle>
                 <CardDescription>Sign in to your account or create a new one.</CardDescription>
@@ -112,5 +128,7 @@ export function SignInLogin() {
                 </Tabs>
             </CardContent>
         </Card>
+            <ErrorsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} errorProps={errorProps} />
+        </>
     );
 }

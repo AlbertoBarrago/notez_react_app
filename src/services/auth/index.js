@@ -30,8 +30,9 @@ class Auth {
             password
         });
 
+        debugger;
         if (response.data) {
-            this.user = response.data;
+            this.user = response.data.user;
         }
 
         this.storeTokenAndUser(response.data);
