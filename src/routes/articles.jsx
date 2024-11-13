@@ -1,5 +1,4 @@
 import Layout from "../components/layout/index.jsx";
-import {useStateContext} from "@/context/index.jsx";
 import {Notes} from "@/components/notes.jsx";
 import {useEffect, useState, useRef} from "react";
 
@@ -9,20 +8,47 @@ import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
 import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
 
+/**
+ * @fileoverview Articles route component for managing notes functionality
+ * @module ArticlesRoute
+ */
+
+/**
+ * @typedef {Object} Note
+ * @property {string} id - Unique identifier for the note
+ * @property {string} title - Title of the note
+ * @property {string} content - Content of the note
+ */
+
+/**
+ * @constant {NotesService}
+ */
 const noteService = new NotesService();
 
+/**
+ * Main part for displaying and managing notes
+ * @function ArticlesRoute
+ * @returns {JSX.Element} Rendered component
+ */
 export default function ArticlesRoute() {
-    const appContext = useStateContext();
+    /** @type {[Array<Note>, Function]} Notes state and setter */
     const [notes, setNotes] = useState([]);
+    /** @type {[boolean, Function]} Loading state and setter */
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    /** @type {React.MutableRefObject} Cache for notes data */
     const notesCache = useRef(null);
+    /** @type {[boolean, Function]} Modal states and setters */
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false)
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
+    /** @type {[Note|null, Function]} Selected note state and setter */
     const [selectedNote, setSelectedNote] = useState(null)
-    const [newNote, setNewNote] = useState(null)
 
+    /**
+     * Fetches notes from the service
+     * @async
+     * @param {boolean} isUpdateOrDelete - Flag to force refresh cache
+     */
     const fetchNotes = async (isUpdateOrDelete = false) => {
         if (notesCache.current && !isUpdateOrDelete) {
             setNotes(notesCache.current);
@@ -40,28 +66,39 @@ export default function ArticlesRoute() {
             setLoading(false);
         }
     };
+    /**
+     * Creates a new note
+     * @async
+     * @param {newNote: {title,content}} note - Note to create
+     */
     const createNotes = async (note) => {
         try {
-            const createdNote = await noteService.addNote(note);
-            if (createdNote) {
-                console.log("Note created successfully:", createdNote);
-                await fetchNotes(true);
-            }
+            await noteService.addNote(note).finally(() => {
+                fetchNotes(true);
+            });
         } catch (error) {
             handleError(error, "Error creating note. Please try again.");
         }
     }
+    /**
+     * Updates an existing note
+     * @async
+     * @param {Note} note - Note to update
+     */
     const updateNote = async (note) => {
         try {
-            const updatedNote = await noteService.updateNote(note);
-            if (updatedNote) {
-                console.log("Note updated successfully:", updatedNote);
-                await fetchNotes(true);
-            }
+            await noteService.updateNote(note).finally(() => {
+                fetchNotes(true);
+            });
         } catch (error) {
             handleError(error, "Error updating note. Please try again.");
         }
     }
+    /**
+     * Deletes a note
+     * @async
+     * @param {Note} note - Note to delete
+     */
     const deleteNote = async (note) => {
         try {
             await noteService.removeNote(note).finally(() => {
@@ -72,11 +109,17 @@ export default function ArticlesRoute() {
         }
     }
 
-
+    /**
+     * Handles note edit action
+     * @param {Note} note - Note to edit
+     */
     const handleEditNote = (note) => {
         setSelectedNote(note)
         setIsModalOpen(true)
     }
+    /**
+     * Handles note creation action
+     */
     const handleSaveNoteConfirm = (updatedNote) => {
         updateNote(updatedNote).finally(() => {
                 setIsModalOpen(false)
@@ -85,27 +128,37 @@ export default function ArticlesRoute() {
         )
 
     }
-
+    /**
+     * Handles note creation action
+     */
     const handleCreateNote = () => {
         setIsModalCreateOpen(true)
     }
-    const handleCreateNoteConfirm = (newNote) => {
-       setNewNote({
-           title: newNote.title,
-           content: newNote.content,
+    /**
+     * Handles note creation action
+     * @param newNoteParam {newNoteParam: {title, content}}
+     */
+    const handleCreateNoteConfirm = (newNoteParam) => {
+       const newNoteCasted = ({
+           title: newNoteParam.title,
+           content: newNoteParam.content,
        })
-        if (newNote) {
-            createNotes(newNote).finally(() => {
-                setIsModalCreateOpen(false)
-                setNewNote(null)
-            })
-        }
+        createNotes(newNoteCasted).finally(() => {
+            setIsModalCreateOpen(false)
+        })
     }
 
+    /**
+     * Handles note deletion action
+     * @param {Note} note - Note to delete
+     */
     const handleDeleteNote = (note) => {
         setSelectedNote(note)
         setIsModalDeleteOpen(true)
     }
+    /**
+     * Handles note deletion confirmation
+     */
     const handleDeleteNoteConfirm = () => {
         if (selectedNote) {
             deleteNote(selectedNote).finally(() => {
@@ -115,9 +168,13 @@ export default function ArticlesRoute() {
         }
     }
 
+    /**
+     * Error handler for note operations
+     * @param {Error} error - Error object
+     * @param {string} message - Error message
+     */
     const handleError = (error, message) => {
         console.error(message, error);
-        setError(message);
     };
 
 
@@ -128,9 +185,6 @@ export default function ArticlesRoute() {
 
     if (loading) {
         return <div>Loading...</div>;
-    }
-    if (error) {
-        return <div>{error}</div>;
     }
 
     return (

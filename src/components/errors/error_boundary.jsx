@@ -1,6 +1,4 @@
 import React from 'react';
-import {useNavigate} from "react-router-dom";
-import Auth from "@/services/auth/index.js";
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
