@@ -99,9 +99,9 @@ class Auth {
      * @return {void}
      */
     storeTokenAndUser(data) {
-        localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('token', data.access_token);
         localStorage.setItem('token_type', data.token_type);
+        localStorage.setItem('user', JSON.stringify(data.user));
     }
 
     /**

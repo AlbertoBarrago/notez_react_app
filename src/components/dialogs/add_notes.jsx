@@ -22,7 +22,12 @@ export default function NoteAddNoteModal({isOpen, onClose, onSave}) {
             title,
             content
         })
-        onClose()
+        onClose(
+            {
+                title: '',
+                content: ''
+            }
+        )
     }
 
     return (
