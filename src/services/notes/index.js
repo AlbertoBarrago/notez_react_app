@@ -36,7 +36,7 @@ class NotesService {
      */
     async getNotesByIds(ids) {
         try {
-            const resp = await axios_instance.get('/notes', {
+            const resp = await axios_instance.get('/notes/', {
                 params: {
                     ids: ids.join(',')
                 }
@@ -50,7 +50,7 @@ class NotesService {
     async getNotes() {
         try {
             console.log("Response data... loading");
-            const resp = await axios_instance.get('/notes');
+            const resp = await axios_instance.get('/notes/');
             console.log("Response data:", resp);
             return resp.data;
         } catch (e) {
@@ -67,7 +67,7 @@ class NotesService {
      */
     async addNote(note) {
         try {
-            const resp = await axios_instance.post('/notes', note);
+            const resp = await axios_instance.post('/notes/', note);
             if (resp.data.success) {
                 this.notes.push(resp.data);
             }
@@ -85,7 +85,7 @@ class NotesService {
      */
     async updateNote(note) {
         try {
-            const resp = await axios_instance.put('/notes', note);
+            const resp = await axios_instance.put('/notes/', note);
             if (resp.data.success) {
                 this.notes.push(resp.data);
             }
