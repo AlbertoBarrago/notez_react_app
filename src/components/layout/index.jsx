@@ -4,9 +4,9 @@ import Footer from "@/components/layout/footer/index.jsx";
 import Auth from "@/services/auth/index.js";
 
 const Index = ({children}) => {
-    const auth = new Auth()
+    const auth = new Auth();
     return (
-        <div className="flex flex-col min-h-screen sm:min-w-screen tiny5-regular">
+        <div className="flex flex-col min-h-screen tiny5-regular">
             {!auth.isLoggedIn() ? "" :
                 <div className="w-full max-w-screen-xl mx-auto">
                     <Header/>
@@ -16,7 +16,8 @@ const Index = ({children}) => {
                 {children}
             </main>
             {!auth.isLoggedIn() ? "" :
-                <div className="w-full max-w-screen-xl mx-auto"><Footer/>
+                <div className="w-full max-w-screen-xl mx-auto">
+                    <Footer/>
                 </div>
             }
         </div>
