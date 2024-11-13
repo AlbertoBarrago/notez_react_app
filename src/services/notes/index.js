@@ -1,8 +1,15 @@
 import axios from "axios";
-import axiosInstance from "@/interceptors/http.js";
-
-const instance = axios.create();
-instance.interceptors.request.use(axiosInstance);
+import auth from "@/services/auth/index.js";
+const auth_instance = new auth();
+const token =  auth_instance.getToken();
+const axios_instance = axios.create({
+    baseURL: import.meta.env.VITE_BASE_URL || 'http://localhost:8000/api/v1',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        "Authorization": `Bearer ${token}`
+    }
+});
 
 /**
  * @typedef {Object} Note
@@ -10,10 +17,15 @@ instance.interceptors.request.use(axiosInstance);
  * @property {string} content - The content of note
  */
 
-class AuthedNotesService {
-    constructor(auth) {
+/**
+ * AuthedNotesService provides a service for managing notes with authorization.
+ *
+ * This class includes methods to fetch, add, update, and remove notes via HTTP requests to the server.
+ * It uses an authentication instance passed during construction to handle any auth-related operations.
+ */
+class NotesService {
+    constructor() {
         this.notes = [];
-        this.auth = auth;  // Added an auth instance to the constructor
     }
 
     /**
@@ -24,15 +36,25 @@ class AuthedNotesService {
      */
     async getNotesByIds(ids) {
         try {
-            const resp = await axios({
-                method: "get",
-                url: "/api/notes", //TODO: fix me
+            const resp = await axios_instance.get('/notes', {
                 params: {
-                    ids
+                    ids: ids.join(',')
                 }
             });
             return resp.data;
         } catch (e) {
+            throw new Error('Invalid note');
+        }
+    }
+
+    async getNotes() {
+        try {
+            console.log("Response data... loading");
+            const resp = await axios_instance.get('/notes');
+            console.log("Response data:", resp);
+            return resp.data;
+        } catch (e) {
+            console.error("Error fetching notes:", e.message, e.stack);
             throw new Error('Invalid note');
         }
     }
@@ -45,12 +67,7 @@ class AuthedNotesService {
      */
     async addNote(note) {
         try {
-            const resp = await axios({
-                method: "post",
-                url: "/api/notes", //TODO: fix me
-                data: note
-            });
-
+            const resp = await axios_instance.post('/notes', note);
             if (resp.data.success) {
                 this.notes.push(resp.data);
             }
@@ -68,11 +85,7 @@ class AuthedNotesService {
      */
     async updateNote(note) {
         try {
-            const resp = await axios({
-                method: "put",
-                url: "/api/notes", //TODO: fix me
-                data: note
-            });
+            const resp = await axios_instance.put('/notes', note);
             if (resp.data.success) {
                 this.notes.push(resp.data);
             }
@@ -90,13 +103,7 @@ class AuthedNotesService {
      */
     async removeNote(id) {
         try {
-            const resp = await axios({
-                method: "delete",
-                url: "/api/notes", //TODO: fix me
-                data: {
-                    id
-                }
-            });
+            const resp = await axios_instance.delete(`/notes/${id}`);
             if (resp.data.success) {
                 this.notes = this.notes.filter(note => note.id !== id);
             }
@@ -107,4 +114,4 @@ class AuthedNotesService {
     }
 }
 
-export default AuthedNotesService;
+export default NotesService;
