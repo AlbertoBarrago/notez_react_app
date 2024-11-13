@@ -12,8 +12,7 @@ import Auth from "@/services/auth/index.js";
 
 const publicPath = '/';
 const auth = new Auth();
-
-const routes = createBrowserRouter([
+const routeConfig = [
     {
         path: publicPath,
         element: <AuthRoute/>,
@@ -55,12 +54,12 @@ const routes = createBrowserRouter([
         path: "*",
         element: <h1>404 - Page Not Found</h1>,
     },
-]);
+]
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <ContextProvider defaultTheme="system" storageKey="vite-ui-theme">
-            <RouterProvider router={routes}/>
+            <RouterProvider router={createBrowserRouter(routeConfig)}/>
         </ContextProvider>
     </React.StrictMode>
 )
