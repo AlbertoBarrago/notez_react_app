@@ -35,26 +35,17 @@ class NotesService {
      * @return {Promise<Array<Object>>} A promise that resolves to an array of note objects.
      */
     async getNotesByIds(ids) {
-        try {
-            const resp = await axios_instance.get('/notes/', {
-                params: {
-                    ids: ids.join(',')
-                }
-            });
-            return resp.data;
-        } catch (e) {
-            throw new Error('Invalid note');
-        }
+        const resp = await axios_instance.get('/notes/', {
+            params: {
+                ids: ids.join(',')
+            }
+        });
+        return resp.data;
     }
 
     async getNotes() {
-        try {
-            const resp = await axios_instance.get('/notes/');
-            return resp.data;
-        } catch (e) {
-            console.error("Error fetching notes:", e.message, e.stack);
-            throw new Error('Invalid note');
-        }
+        const resp = await axios_instance.get('/notes/');
+        return resp.data;
     }
 
     /**
@@ -64,18 +55,14 @@ class NotesService {
      * @throws {Error} If the note is invalid or the server returns an error.
      */
     async addNote(note) {
-        try {
-            const resp = await axios_instance.post('/notes/', {
-                title: note.title,
-                content: note.content
-            });
-            if (resp.data.success) {
-                this.notes.push(resp.data);
-            }
-            return resp.data;
-        } catch (e) {
-            throw new Error('Invalid note');
+        const resp = await axios_instance.post('/notes/', {
+            title: note.title,
+            content: note.content
+        });
+        if (resp.data.success) {
+            this.notes.push(resp.data);
         }
+        return resp.data;
     }
 
     /**
@@ -86,18 +73,14 @@ class NotesService {
      * @throws {Error} If the note is invalid or the server returns an error.
      */
     async updateNote(note) {
-        try {
-            const resp = await axios_instance.put(`/notes/${note.id}`, {
-                title: note.title,
-                content: note.content
-            });
-            if (resp.data.success) {
-                this.notes.push(resp.data);
-            }
-            return resp.data;
-        } catch (e) {
-            throw new Error('Invalid note');
+        const resp = await axios_instance.put(`/notes/${note.id}`, {
+            title: note.title,
+            content: note.content
+        });
+        if (resp.data.success) {
+            this.notes.push(resp.data);
         }
+        return resp.data;
     }
 
     /**
@@ -107,15 +90,11 @@ class NotesService {
      * @return {Promise} A promise that resolves with the server response indicating the success or failure of the note removal.
      */
     async removeNote(id) {
-        try {
-            const resp = await axios_instance.delete(`/notes/${id}`);
-            if (resp.data.success) {
-                this.notes = this.notes.filter(note => note.id !== id);
-            }
-            return resp.data;
-        } catch (e) {
-            throw new Error('Invalid note');
+        const resp = await axios_instance.delete(`/notes/${id}`);
+        if (resp.data.success) {
+            this.notes = this.notes.filter(note => note.id !== id);
         }
+        return resp.data;
     }
 }
 

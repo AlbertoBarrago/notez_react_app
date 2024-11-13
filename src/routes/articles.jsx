@@ -7,6 +7,7 @@ import NotesService from "@/services/notes/index.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
 import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
+import {Button} from "@/components/ui/button.jsx";
 
 const noteService = new NotesService();
 
@@ -20,6 +21,7 @@ export default function ArticlesRoute() {
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false)
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
     const [selectedNote, setSelectedNote] = useState(null)
+    const [newNote, setNewNote] = useState(null)
 
     const fetchNotes = async (isUpdateOrDelete = false) => {
         if (notesCache.current && !isUpdateOrDelete) {
@@ -28,17 +30,13 @@ export default function ArticlesRoute() {
             return;
         }
 
-        console.log('Fetching notes...');
         try {
             const notesFetched = await noteService.getNotes();
             if (notesFetched) {
                 notesCache.current = notesFetched;
                 setNotes(notesFetched);
             }
-        } catch (error) {
-            console.error('Error fetching notes:', error);
-            setError("Error fetching notes. Please try again.");
-        } finally {
+        }  finally {
             setLoading(false);
         }
     };
@@ -50,8 +48,7 @@ export default function ArticlesRoute() {
                 await fetchNotes(true);
             }
         } catch (error) {
-            console.error('Error creating note:', error);
-            setError("Error creating note. Please try again.");
+            handleError(error, "Error creating note. Please try again.");
         }
     }
     const updateNote = async (note) => {
@@ -62,8 +59,7 @@ export default function ArticlesRoute() {
                 await fetchNotes(true);
             }
         } catch (error) {
-            console.error('Error updating note:', error);
-            setError("Error updating note. Please try again.");
+            handleError(error, "Error updating note. Please try again.");
         }
     }
     const deleteNote = async (note) => {
@@ -72,8 +68,7 @@ export default function ArticlesRoute() {
                 fetchNotes(true);
             });
         } catch (error) {
-            console.error('Error deleting note:', error);
-            setError("Error deleting note. Please try again.");
+           handleError(error, "Error deleting note. Please try again.");
         }
     }
 
@@ -95,14 +90,14 @@ export default function ArticlesRoute() {
         setIsModalCreateOpen(true)
     }
     const handleCreateNoteConfirm = (newNote) => {
-        const note = {
-            title: newNote.title,
-            content: newNote.content,
-        }
-        if (note) {
-            createNotes(note).finally(() => {
-                setSelectedNote(null)
+       setNewNote({
+           title: newNote.title,
+           content: newNote.content,
+       })
+        if (newNote) {
+            createNotes(newNote).finally(() => {
                 setIsModalCreateOpen(false)
+                setNewNote(null)
             })
         }
     }
@@ -120,6 +115,11 @@ export default function ArticlesRoute() {
         }
     }
 
+    const handleError = (error, message) => {
+        console.error(message, error);
+        setError(message);
+    };
+
 
     useEffect(() => {
         fetchNotes();
@@ -135,7 +135,19 @@ export default function ArticlesRoute() {
 
     return (
         <Layout>
-            <button onClick={handleCreateNote}>Aggiungi nota</button>
+            <Button
+                className="fixed bottom-6 right-6 rounded-full p-4 shadow-lg hover:shadow-xl transition-all transform hover:scale-110"
+                onClick={handleCreateNote}
+                variant="secondary"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" className="w-6 h-6">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="M12 4.5v15m7.5-7.5h-15"/>
+                </svg>
+            </Button>
+
             <div className="flex flex-1 flex-col justify-center items-center space-y-5 p-10">
                 {notes.length > 0 ? (
                     notes.map(note => <Notes key={note.id} note={note} onEdit={handleEditNote}
@@ -148,7 +160,6 @@ export default function ArticlesRoute() {
                 isOpen={isModalCreateOpen}
                 onClose={() => setIsModalCreateOpen(false)}
                 onSave={handleCreateNoteConfirm}
-                note={selectedNote}
             >
             </NoteAddNoteModal>
             <NoteEditModal
