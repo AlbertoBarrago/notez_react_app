@@ -8,7 +8,7 @@ import './index.css';
 import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/login.jsx";
 import PrivateRoute from "@/utils/privateRoute.jsx";
-import AuthService from "@/services/auth/index.js";
+import AuthService from "@/services/login/index.js";
 import ErrorBoundary from "@/components/errors/error_boundary.jsx";
 
 const publicPath = '/';
