@@ -6,11 +6,11 @@ import {
 import {NavLink, useNavigate} from "react-router-dom";
 import {ThemeSelector} from "@/components/theme/themeSelector.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import Auth from "@/services/auth/index.js";
+import AuthService from "@/services/auth/index.js";
 
 
 export default function Index() {
-    const auth = new Auth()
+    const auth = new AuthService()
     const navigate = useNavigate()
 
     const performLogout = () => {

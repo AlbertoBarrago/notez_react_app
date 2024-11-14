@@ -1,9 +1,9 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import Auth from "@/services/auth/index.js";
+import AuthService from "@/services/auth/index.js";
 
 const PrivateRoute = () => {
-    const auth = new Auth();
+    const auth = new AuthService();
 
     return auth.isLoggedIn() ? <Outlet /> : <Navigate to="/" replace />;
 };
