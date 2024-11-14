@@ -13,9 +13,6 @@ const axios_instance = axios.create({
  * @property {string} token_type - The token_type
  */
 class AuthService {
-    constructor() {
-        this.user = null;
-    }
 
     /**
      * Logs in a user
@@ -30,10 +27,6 @@ class AuthService {
             password
         });
 
-        if (response.data) {
-            this.user = response.data.user;
-        }
-
         this.storeTokenAndUser(response.data);
         return response.data;
     }
@@ -47,14 +40,11 @@ class AuthService {
      * @throws {Error} - If there is an issue with the registration request
      */
     async register(email, username, password) {
-        const response = await axios_instance.post('/register', {
+        const response = await axios_instance.post('/users/register', {
             email,
             username,
             password
         });
-        if (response.data.token) {
-            this.user = response.data;
-        }
 
         this.storeTokenAndUser(response.data);
         return response.data;

@@ -7,7 +7,7 @@
 
 import Layout from "../components/layout/index.jsx";
 import {useState} from "react";
-import AuthService from "@/services/auth/index.js";
+import AuthService from "@/services/login/index.js";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.jsx";

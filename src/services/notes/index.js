@@ -11,11 +11,10 @@ import axios_instance from "@/interceptor/index.js";
  * AuthedNotesService provides a service for managing notes with authorization.
  *
  * This class includes methods to fetch, add, update, and remove notes via HTTP requests to the server.
- * It uses an authentication instance passed during construction to handle any auth-related operations.
+ * It uses an authentication instance passed during construction to handle any login-related operations.
  */
 class NotesService {
     constructor() {
-        this.notes = [];
     }
 
     /**
@@ -49,9 +48,7 @@ class NotesService {
             title: note.title,
             content: note.content
         });
-        if (resp.data.success) {
-            this.notes.push(resp.data);
-        }
+
         return resp.data;
     }
 
@@ -67,9 +64,7 @@ class NotesService {
             title: note.title,
             content: note.content
         });
-        if (resp.data.success) {
-            this.notes.push(resp.data);
-        }
+       
         return resp.data;
     }
 

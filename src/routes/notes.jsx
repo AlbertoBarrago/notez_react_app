@@ -11,7 +11,8 @@ import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
 import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import AuthService from "@/services/auth/index.js";
+import AuthService from "@/services/login/index.js";
+import {PlusIcon} from "lucide-react";
 
 /**
  * @typedef {Object} Note
@@ -193,16 +194,12 @@ export default function ArticlesRoute() {
     return (
         <Layout>
             <Button
-                className="fixed bottom-6 right-6 rounded-full p-4 shadow-lg hover:shadow-xl transition-all transform hover:scale-110"
+                className="fixed bottom-6 right-6 rounded-full p-4 shadow-lg"
                 onClick={handleCreateNote}
                 variant="secondary"
+                size="icon"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-6 h-6">
-                    <path d="M0 0h24v24H0z" fill="none"/>
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="M12 4.5v15m7.5-7.5h-15"/>
-                </svg>
+               <PlusIcon className="h-6 w-6" />
             </Button>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-10">
