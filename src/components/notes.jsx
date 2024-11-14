@@ -63,10 +63,10 @@ export function Notes({note, onEdit, onDelete}) {
 
     return (
         <Card
-            className="w-full max-w-md bg-gradient-to-br dark:from-primary dark:to-secondary">
+            className="w-full max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold text-primary-800 dark:text-primary-100">{note?.title} </CardTitle>
-                <CardDescription className="text-sm font-medium text-primary-600 dark:text-primary-300">
+                <CardDescription className="text-sm font-medium text-primary-600 dark:text-primary-300 text-secondary">
                     Created: {formatDate(note?.created_at)} - Edited: {formatDate(note?.updated_at)}
                 </CardDescription>
             </CardHeader>
