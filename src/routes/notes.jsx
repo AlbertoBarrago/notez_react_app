@@ -167,12 +167,16 @@ export default function ArticlesRoute() {
     }
     /**
      * Error handler for note operations
-     * @param {Error} error - Error object
+     * * @param {{status?: number, message?: string}} error - Error object with status and message     * @param {string} [message] - Optional custom error message
+     * @throws {Error} Rethrows the error after handling
      */
-    const handleError = (error) => {
+    const handleError = (error, message) => {
         if (error.status === 401) {
             authService.logout();
         }
+
+        const errorMessage = message || error.message || 'An unexpected error occurred';
+        console.error(errorMessage, error);
         throw error;
     };
 
