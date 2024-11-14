@@ -11,6 +11,7 @@ import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
 import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
+import AuthService from "@/services/auth/index.js";
 
 /**
  * @typedef {Object} Note
@@ -23,6 +24,7 @@ import {Button} from "@/components/ui/button.jsx";
  * @constant {NotesService}
  */
 const noteService = new NotesService();
+const authService = new AuthService();
 
 /**
  * Main part for displaying and managing notes

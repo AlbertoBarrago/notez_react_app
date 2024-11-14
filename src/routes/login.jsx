@@ -7,7 +7,7 @@
 
 import Layout from "../components/layout/index.jsx";
 import {useState} from "react";
-import Auth from "@/services/auth/index.js";
+import AuthService from "@/services/auth/index.js";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.jsx";
@@ -34,9 +34,9 @@ export default function AuthRoute() {
     const [isLoading, setIsLoading] = useState(false);
 
     /**
-     * @type {Auth} Authentication service instance
+     * @type {AuthService} Authentication service instance
      */
-    const auth = new Auth();
+    const auth = new AuthService();
 
     /**
      * @type {[string, Function]} Active tab state and setter

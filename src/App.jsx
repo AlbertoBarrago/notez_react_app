@@ -8,10 +8,10 @@ import './index.css';
 import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/login.jsx";
 import PrivateRoute from "@/utils/privateRoute.jsx";
-import Auth from "@/services/auth/index.js";
+import AuthService from "@/services/auth/index.js";
 
 const publicPath = '/';
-const auth = new Auth();
+const auth = new AuthService();
 const routeConfig = [
     {
         path: publicPath,

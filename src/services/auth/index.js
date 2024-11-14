@@ -12,7 +12,7 @@ const axios_instance = axios.create({
  * @property {string} access_token - The access_token
  * @property {string} token_type - The token_type
  */
-class Auth {
+class AuthService {
     constructor() {
         this.user = null;
     }
@@ -35,7 +35,6 @@ class Auth {
         }
 
         this.storeTokenAndUser(response.data);
-        console.log(response.data);
         return response.data;
     }
 
@@ -126,4 +125,4 @@ class Auth {
     }
 }
 
-export default Auth;
+export default AuthService;
