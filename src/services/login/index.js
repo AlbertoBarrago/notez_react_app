@@ -56,6 +56,7 @@ class AuthService {
      * @returns {Promise<any>}
      */
     async googleOAuth(data) {
+        delete data.select_by
         const response = await axios_instance.post('/login/google', data);
         this.storeTokenAndUser(response.data);
         return response.data;
