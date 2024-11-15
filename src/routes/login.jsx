@@ -16,11 +16,13 @@ import {Label} from "@/components/ui/label.jsx";
 import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import ErrorsModal from "@/components/dialogs/errors.jsx";
+import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
 
 /** @constant {string} */
 const SIGN_IN = "signin";
 /** @constant {string} */
 const SIGN_UP = "signup";
+
 
 /**
  * Main authentication component handling both sign-in and sign-up functionality
@@ -111,80 +113,107 @@ export default function AuthRoute() {
                 navigate("/note");
             }
         } catch (e) {
-            console.error(e);
+            setErrorProps(e);
+            setIsModalOpen(true);
         } finally {
             setIsLoading(false);
         }
     };
 
+    const googleOAuth = async(data) => {
+        setIsLoading(true);
+        try {
+            const resp = await auth.googleOAuth(data);
+            if (resp.user) {
+                navigate("/note");
+            }
+        } catch (e) {
+            setErrorProps(e);
+            setIsModalOpen(true);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
     return (
-        <Layout>
-            <div className="flex justify-center items-center min-h-screen sm:min-h-auto">
-                <Card className="w-[350px]">
-                    <CardHeader>
-                        <CardTitle>Welcome</CardTitle>
-                        <CardDescription>Sign in to your account or create a new one.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Tabs defaultValue={SIGN_IN} className="w-full" onValueChange={setTab}>
-                            <TabsList className="grid w-full grid-cols-2">
-                                <TabsTrigger value={SIGN_IN}>Sign In</TabsTrigger>
-                                <TabsTrigger value={SIGN_UP}>Sign Up</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value={SIGN_IN}>
-                                <form onSubmit={signinForm.handleSubmit(onSubmitSignIn)}>
-                                    <div className="grid w-full items-center gap-4">
-                                        <div className="flex flex-col space-y-1.5">
-                                            <Label htmlFor="usernameSignIn">Username</Label>
-                                            <Input id="usernameSignIn" placeholder="johnDoe"
-                                                   {...signinForm.register("username", { required: true })} />
-                                            {signinForm.formState.errors.username && <span>This field is required</span>}
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
+            <Layout>
+                <div className="flex justify-center items-center min-h-screen sm:min-h-auto">
+                    <Card className="w-[350px]">
+                        <CardHeader>
+                            <CardTitle>Welcome</CardTitle>
+                            <CardDescription>Sign in to your account or create a new one.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Tabs defaultValue={SIGN_IN} className="w-full mb-5" onValueChange={setTab}>
+                                <TabsList className="grid w-full grid-cols-2">
+                                    <TabsTrigger value={SIGN_IN}>Sign In</TabsTrigger>
+                                    <TabsTrigger value={SIGN_UP}>Sign Up</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value={SIGN_IN}>
+                                    <form onSubmit={signinForm.handleSubmit(onSubmitSignIn)}>
+                                        <div className="grid w-full items-center gap-4">
+                                            <div className="flex flex-col space-y-1.5">
+                                                <Label htmlFor="usernameSignIn">Username</Label>
+                                                <Input id="usernameSignIn" placeholder="johnDoe"
+                                                       {...signinForm.register("username", { required: true })} />
+                                                {signinForm.formState.errors.username && <span>This field is required</span>}
+                                            </div>
+                                            <div className="flex flex-col space-y-1.5">
+                                                <Label htmlFor="passwordSignIn">Password</Label>
+                                                <Input id="passwordSignIn" placeholder="********"
+                                                       type="password"
+                                                       {...signinForm.register("password", { required: true })} />
+                                                {signinForm.formState.errors.password && <span>This field is required</span>}
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col space-y-1.5">
-                                            <Label htmlFor="passwordSignIn">Password</Label>
-                                            <Input id="passwordSignIn" placeholder="********"
-                                                   type="password"
-                                                   {...signinForm.register("password", { required: true })} />
-                                            {signinForm.formState.errors.password && <span>This field is required</span>}
+                                        <Button className="w-full mt-6" type="submit" disabled={isLoading}>
+                                            {isLoading ? 'Signing In...' : 'Sign In'}
+                                        </Button>
+                                    </form>
+                                </TabsContent>
+                                <TabsContent value={SIGN_UP}>
+                                    <form onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
+                                        <div className="grid w-full items-center gap-4">
+                                            <div className="flex flex-col space-y-1.5">
+                                                <Label htmlFor="usernameSignUp">Username</Label>
+                                                <Input id="usernameSignUp" placeholder="johndoe"
+                                                       {...signupForm.register("username", { required: true })} />
+                                                {signupForm.formState.errors.username && <span>This field is required</span>}
+                                            </div>
+                                            <div className="flex flex-col space-y-1.5">
+                                                <Label htmlFor="emailSignUp">Email</Label>
+                                                <Input id="emailSignUp" type="email" placeholder="m@example.com"
+                                                       {...signupForm.register("email", { required: true })} />
+                                                {signupForm.formState.errors.email && <span>This field is required</span>}
+                                            </div>
+                                            <div className="flex flex-col space-y-1.5">
+                                                <Label htmlFor="passwordSignUp">Password</Label>
+                                                <Input id="passwordSignUp" type="password" placeholder="********"
+                                                       {...signupForm.register("password", { required: true })} />
+                                                {signupForm.formState.errors.password && <span>This field is required</span>}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <Button className="w-full mt-6" type="submit" disabled={isLoading}>
-                                        {isLoading ? 'Signing In...' : 'Sign In'}
-                                    </Button>
-                                </form>
-                            </TabsContent>
-                            <TabsContent value={SIGN_UP}>
-                                <form onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
-                                    <div className="grid w-full items-center gap-4">
-                                        <div className="flex flex-col space-y-1.5">
-                                            <Label htmlFor="usernameSignUp">Username</Label>
-                                            <Input id="usernameSignUp" placeholder="johndoe"
-                                                   {...signupForm.register("username", { required: true })} />
-                                            {signupForm.formState.errors.username && <span>This field is required</span>}
-                                        </div>
-                                        <div className="flex flex-col space-y-1.5">
-                                            <Label htmlFor="emailSignUp">Email</Label>
-                                            <Input id="emailSignUp" type="email" placeholder="m@example.com"
-                                                   {...signupForm.register("email", { required: true })} />
-                                            {signupForm.formState.errors.email && <span>This field is required</span>}
-                                        </div>
-                                        <div className="flex flex-col space-y-1.5">
-                                            <Label htmlFor="passwordSignUp">Password</Label>
-                                            <Input id="passwordSignUp" type="password" placeholder="********"
-                                                   {...signupForm.register("password", { required: true })} />
-                                            {signupForm.formState.errors.password && <span>This field is required</span>}
-                                        </div>
-                                    </div>
-                                    <Button className="w-full mt-6" type="submit" disabled={isLoading}>
-                                        {isLoading ? 'Signing Up...' : 'Sign Up'}
-                                    </Button>
-                                </form>
-                            </TabsContent>
-                        </Tabs>
-                    </CardContent>
-                </Card>
-                <ErrorsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} errorProps={errorProps} />
-            </div>
-        </Layout>
+                                        <Button className="w-full mt-6" type="submit" disabled={isLoading}>
+                                            {isLoading ? 'Signing Up...' : 'Sign Up'}
+                                        </Button>
+                                    </form>
+                                </TabsContent>
+                            </Tabs>
+                            <GoogleLogin
+                                onSuccess={credentialResponse => {
+                                    googleOAuth(credentialResponse);
+                                }}
+                                onError={() => {
+                                    console.log('Login Failed');
+                                }}
+                            />
+                        </CardContent>
+                    </Card>
+                    <ErrorsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} errorProps={errorProps} />
+                </div>
+            </Layout>
+        </GoogleOAuthProvider>
     )
 }

@@ -51,6 +51,17 @@ class AuthService {
     }
 
     /**
+     * Google OAuth
+     * @param data
+     * @returns {Promise<any>}
+     */
+    async googleOAuth(data) {
+        const response = await axios_instance.post('/login/google', data);
+        this.storeTokenAndUser(response.data);
+        return response.data;
+    }
+
+    /**
      * Retrieves the stored token from local storage.
      *
      * @return {string | null} The token if it exists, otherwise null.
