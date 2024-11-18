@@ -212,9 +212,11 @@ export default function ArticlesRoute() {
 
             {notes.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
-                    {notes.map(note => <Notes key={note.id} note={note}
+                    {notes.map(note => <Notes key={note.id}
+                                              note={note}
                                               onEdit={handleEditNote}
-                                              onDelete={handleDeleteNote}/>)}
+                                              onDelete={handleDeleteNote}/>
+                    )}
                 </div>
             ) : (
                 <div className={"flex items-center mt-40 justify-center"}>

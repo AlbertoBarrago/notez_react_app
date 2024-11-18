@@ -65,9 +65,11 @@ export function Notes({note, onEdit, onDelete}) {
         <Card
             className="w-full max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent">
             <CardHeader>
-                <CardTitle className="text-2xl font-bold text-primary-800 dark:text-primary-100">{note?.title} </CardTitle>
-                <CardDescription className="text-sm font-medium text-primary-600 dark:text-primary-300 text-secondary">
-                    Created: {formatDate(note?.created_at)} - Edited: {formatDate(note?.updated_at)}
+                <CardTitle className="text-2xl font-bold ">{note?.title} </CardTitle>
+                <CardDescription className="text-sm font-medium">
+                    Created: {formatDate(note?.created_at)} <br/>
+                    Edited: {formatDate(note?.updated_at)} <br/>
+                    Author: {note?.user?.role === "ADMIN" ? ` 🥷🏻 ${note?.user.username}` : note?.user.username} <br/>
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -75,7 +77,8 @@ export function Notes({note, onEdit, onDelete}) {
                     {!isExpanded ? displayContent.substring(0, 140) + '...' : displayContent}
                 </p>
                 {shouldShowExpandButton && (
-                    <p onClick={toggleExpand} className="text-sm mt-5 font-medium text-primary-600 dark:text-primary-300">
+                    <p onClick={toggleExpand}
+                       className="text-sm mt-5 font-medium text-primary-600 dark:text-primary-300">
                         {isExpanded ? 'Show less' : 'Show more'}
                         <span className="sr-only">
                             {isExpanded ? 'Show less' : 'Show more'}
