@@ -3,7 +3,7 @@ import auth from "@/services/login/index.js";
 const auth_instance = new auth();
 
 const axios_instance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL || 'http://localhost:8000/api/v1',
+    baseURL: import.meta.env.PROD ? import.meta.env.VITE_PROD_BASE_URL : import.meta.env.VITE_DEV_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

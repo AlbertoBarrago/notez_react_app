@@ -1,12 +1,5 @@
-import axios from "axios";
+import axios_instance from "@/interceptor/index.js";
 
-const axios_instance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL || 'http://localhost:8000/api/v1',
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    }
-});
 /**
  * @typedef {Object} AuthResp
  * @property {string} access_token - The access_token
