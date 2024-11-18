@@ -55,7 +55,7 @@ export default function AuthRoute() {
     /**
      * @type {Object} Form control for sign-in
      */
-    const signinForm = useForm();
+    const signingForm = useForm();
 
     /**
      * @type {Object} Form control for sign-up
@@ -134,7 +134,7 @@ export default function AuthRoute() {
     }
 
     return (
-       <Login signinForm={signinForm}
+       <Login signinForm={signingForm}
               signupForm={signupForm}
               onSubmitSignUp={onSubmitSignUp}
               onSubmitSignIn={onSubmitSignIn}
