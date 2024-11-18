@@ -209,26 +209,33 @@ export default function ArticlesRoute() {
                 <PlusIcon className="h-6 w-6"/>
             </Button>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-10">
-                {notes.length > 0 ? (
-                    notes.map(note => <Notes key={note.id} note={note} onEdit={handleEditNote}
-                                             onDelete={handleDeleteNote}/>)
-                ) : (
-                    <div>No notes found.</div>
-                )}
-            </div>
+
+            {notes.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
+                    {notes.map(note => <Notes key={note.id} note={note}
+                                              onEdit={handleEditNote}
+                                              onDelete={handleDeleteNote}/>)}
+                </div>
+            ) : (
+                <div className={"flex items-center mt-40 justify-center"}>
+                    <p className={"text-primary animate-pulse"}> &#215; No Notes Found</p>
+                </div>
+            )}
+
             <NoteAddNoteModal
                 isOpen={isModalCreateOpen}
                 onClose={() => setIsModalCreateOpen(false)}
                 onSave={handleCreateNoteConfirm}
             >
             </NoteAddNoteModal>
+
             <NoteEditModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSaveNoteConfirm}
                 note={selectedNote}
             />
+
             <NoteDeleteModal
                 isOpen={isModalDeleteOpen}
                 onClose={() => setIsModalDeleteOpen(false)}
