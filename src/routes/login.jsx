@@ -120,7 +120,6 @@ export default function AuthRoute() {
      */
     const googleOAuth = async(data, isSigning = true) => {
         setIsLoading(true);
-        console.log("IS SIGN IN", isSigning);
         try {
             const resp = isSigning ?  await auth.googleOAuth(data) : await auth.googleAuthSignup(data);
             if (resp.user) {
