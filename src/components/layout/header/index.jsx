@@ -40,7 +40,7 @@ export default function Index() {
                             <NavLink
                                 to="/note"
                                 className={({isActive, isPending}) =>
-                                    isPending ? "pending p-4" : isActive ? "active p-4" : "p-4"
+                                    isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
                                 }
                             >
                                 Articles
@@ -50,7 +50,7 @@ export default function Index() {
                             <NavLink
                                 to="/about"
                                 className={({isActive, isPending}) =>
-                                    isPending ? "pending p-4" : isActive ? "active p-4" : "p-4"
+                                    isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
                                 }
                             >About
                             </NavLink>
@@ -59,7 +59,7 @@ export default function Index() {
                             <NavLink
                                 to="/contact"
                                 className={({isActive, isPending}) =>
-                                    isPending ? "pending p-4" : isActive ? "active p-4" : "p-4"
+                                    isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
                                 }
                             >Contact
                             </NavLink>

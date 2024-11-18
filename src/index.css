@@ -113,7 +113,7 @@
 }
 
 .active {
-    background: red;
+    background: hsl(var(--secondary));
 }
 
 .no-bg {
