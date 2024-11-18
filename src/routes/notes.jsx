@@ -36,7 +36,7 @@ export default function ArticlesRoute() {
     /** @type {[Array<Note>, Function]} Notes state and setter */
     const [notes, setNotes] = useState([]);
     /** @type {[boolean, Function]} Loading state and setter */
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     /** @type {React.MutableRefObject} Cache for notes data */
     const notesCache = useRef(null);
     /** @type {[boolean, Function]} Modal states and setters */
@@ -52,10 +52,14 @@ export default function ArticlesRoute() {
      * @param {boolean} isUpdateOrDelete - Flag to force refresh cache
      */
     const fetchNotes = async (isUpdateOrDelete = false) => {
+        console.log('here')
         if (notesCache.current && !isUpdateOrDelete) {
+            console.log('here current')
             setNotes(notesCache.current);
             return;
         }
+
+        setLoading(true);
 
         try {
             const notesFetched = await noteService.getNotes();

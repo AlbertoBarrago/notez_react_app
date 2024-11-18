@@ -17,7 +17,6 @@ export default function ErrorsModal({isOpen, onClose, errorProps}) {
     useEffect(() => {
         if(errorProps) {
             setError(errorProps)
-            console.log(errorProps)
         }
     }, [errorProps])
 

@@ -48,7 +48,12 @@ const routeConfig = [
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <ContextProvider defaultTheme="system" storageKey="vite-ui-theme">
-            <RouterProvider router={createBrowserRouter(routeConfig)}/>
+            <RouterProvider router={createBrowserRouter(routeConfig, {
+                future: {
+                    v7_fetcherPersist: true,
+                    v7_startTransition: true,
+                },
+            })}/>
         </ContextProvider>
     </React.StrictMode>
 )
