@@ -187,7 +187,7 @@ export default function ArticlesRoute() {
         });
     });
 
-    if (!loading) {
+    if (loading) {
         return (
             <Layout>
                 <div className="flex items-center justify-center mt-40">
