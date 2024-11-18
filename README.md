@@ -2,8 +2,6 @@
 
 🚀 Work in progress, stay tuned.
 
-## High Architecture
-![img.png](img.png)
 
 ## TODO: 
 - [x] Create Base structure
