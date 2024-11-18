@@ -16,7 +16,8 @@ export default function ErrorsModal({isOpen, onClose, errorProps}) {
 
     useEffect(() => {
         if(errorProps) {
-            setError(errorProps.message)
+            setError(errorProps)
+            console.log(errorProps)
         }
     }, [errorProps])
 
@@ -30,7 +31,8 @@ export default function ErrorsModal({isOpen, onClose, errorProps}) {
                     </DialogDescription>
                 </DialogHeader>
                 {error && <div className="text-red-500">
-                    🛑 {error}
+                    🛑 {error.message} <br/>
+                    {error?.response?.data?.detail ? `👉🏻 Details: ${error?.response?.data?.detail}` : null}
                 </div>}
                 <DialogFooter>
                     <Button type="button" onClick={onClose}>

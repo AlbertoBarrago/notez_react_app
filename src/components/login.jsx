@@ -6,7 +6,6 @@ import {Label} from "@/components/ui/label.jsx";
 import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import ErrorsModal from "@/components/dialogs/errors.jsx";
-import {useState} from "react";
 
 /** @constant {string} */
 const SIGN_IN = "signin";
@@ -62,9 +61,21 @@ export default function Login({
                                                     <span>This field is required</span>}
                                             </div>
                                         </div>
-                                        <Button className="w-full mt-6" type="submit" disabled={isLoading}>
+                                        <Button className="w-full mt-6 mb-4" type="submit" disabled={isLoading}>
                                             {isLoading ? 'Signing In...' : 'Sign In'}
                                         </Button>
+                                        <GoogleLogin
+                                            text="signin"
+                                            type="standard"
+                                            theme="filled_black"
+                                            size="large"
+                                            onSuccess={credentialResponse => {
+                                                googleOAuth(credentialResponse);
+                                            }}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                        />
                                     </form>
                                 </TabsContent>
                                 <TabsContent value={SIGN_UP}>
@@ -79,10 +90,23 @@ export default function Login({
                                             </div>
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="emailSignUp">Email</Label>
-                                                <Input id="emailSignUp" type="email" placeholder="m@example.com"
-                                                       {...signupForm.register("email", {required: true})} />
-                                                {signupForm.formState.errors.email &&
-                                                    <span>This field is required</span>}
+                                                <Input
+                                                    id="emailSignUp"
+                                                    type="email"
+                                                    placeholder="m@example.com"
+                                                    {...signupForm.register("email", {
+                                                        required: "Email is required",
+                                                        pattern: {
+                                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                            message: "Invalid email address"
+                                                        }
+                                                    })}
+                                                />
+                                                {signupForm.formState.errors.email && (
+                                                    <span className="text-sm text-red-500">
+                                                        {signupForm.formState.errors.email.message}
+                                                    </span>
+                                                )}
                                             </div>
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="passwordSignUp">Password</Label>
@@ -92,20 +116,24 @@ export default function Login({
                                                     <span>This field is required</span>}
                                             </div>
                                         </div>
-                                        <Button className="w-full mt-6" type="submit" disabled={isLoading}>
+                                        <Button className="w-full mt-6 mb-4" type="submit" disabled={isLoading}>
                                             {isLoading ? 'Signing Up...' : 'Sign Up'}
                                         </Button>
+                                        <GoogleLogin
+                                            text="signup_with"
+                                            type="standard"
+                                            theme="filled_black"
+                                            size="large"
+                                            onSuccess={credentialResponse => {
+                                                googleOAuth(credentialResponse, false);
+                                            }}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                        />
                                     </form>
                                 </TabsContent>
                             </Tabs>
-                            <GoogleLogin
-                                onSuccess={credentialResponse => {
-                                    googleOAuth(credentialResponse);
-                                }}
-                                onError={() => {
-                                    console.log('Login Failed');
-                                }}
-                            />
                         </CardContent>
                     </Card>
                     <ErrorsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} errorProps={errorProps}/>

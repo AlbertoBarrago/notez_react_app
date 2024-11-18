@@ -115,12 +115,14 @@ export default function AuthRoute() {
     /**
      * Handles Google OAuth
      * @param data
+     * @param isSigning
      * @returns {Promise<void>}
      */
-    const googleOAuth = async(data) => {
+    const googleOAuth = async(data, isSigning = true) => {
         setIsLoading(true);
+        console.log("IS SIGN IN", isSigning);
         try {
-            const resp = await auth.googleOAuth(data);
+            const resp = isSigning ?  await auth.googleOAuth(data) : await auth.googleAuthSignup(data);
             if (resp.user) {
                 navigate("/note");
             }

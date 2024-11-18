@@ -51,13 +51,25 @@ class AuthService {
     }
 
     /**
-     * Google OAuth
+     * Google OAuth Login
      * @param data
      * @returns {Promise<any>}
      */
     async googleOAuth(data) {
         delete data.select_by
         const response = await axios_instance.post('/login/google', data);
+        this.storeTokenAndUser(response.data);
+        return response.data;
+    }
+
+    /**
+     * Google OAuth Register
+     * @param data
+     * @returns {Promise<any>}
+     */
+    async googleAuthSignup(data) {
+        delete data.select_by
+        const response = await axios_instance.post('/users/register/google', data);
         this.storeTokenAndUser(response.data);
         return response.data;
     }
