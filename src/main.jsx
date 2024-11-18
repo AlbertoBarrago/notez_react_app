@@ -11,39 +11,26 @@ import AuthService from "@/services/login/index.js";
 
 const publicPath = '/';
 const auth = new AuthService();
+
 const routeConfig = [
     {
         path: publicPath,
         element: <AuthRoute/>,
-        loader: () => {
-            return auth.isLoggedIn() ? redirect('/note') : null;
-        }
+        loader: () => auth.isLoggedIn() ? redirect('/note') : null,
     },
     {
-        path: "/note",
+        path: "/",
         element: <PrivateRoute />,
         children: [
-            {
-                path: "",
-                element: <Articles />
-            }
-        ]
-    },
-    {
-        path: publicPath + "/about",
-        element: <PrivateRoute />,
-        children: [
-            {
-                path: "",
-                element: <About/>,
-            }
+            { path: "note", element: <Articles /> },
+            { path: "about", element: <About /> },
         ]
     },
     {
         path: "*",
         element: <h1>404 - Page Not Found</h1>,
     },
-]
+];
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
@@ -52,6 +39,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </ContextProvider>
     </React.StrictMode>
 )
-
-
-

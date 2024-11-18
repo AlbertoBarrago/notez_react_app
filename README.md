@@ -10,4 +10,5 @@
 - [x] Add Global context 
 - [x] Add react-router and add pages 
 - [x] Add Tailwind and shadiUI for GUI
-- [ ]  work in progress...
+- [ ] Add user profile
+- [ ]  work in progress... 🚀
