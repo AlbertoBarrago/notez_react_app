@@ -187,11 +187,11 @@ export default function ArticlesRoute() {
         });
     });
 
-    if (loading) {
+    if (!loading) {
         return (
             <Layout>
-                <div className="flex items-center justify-center h-screen">
-                    <div className="animate-spin rounded-full border-t-2 border-b-2 border-primary-900"></div>
+                <div className="flex items-center justify-center mt-40">
+                    <div className="animate-spin rounded-full border-t-2 border-primary h-8 w-8"></div>
                     <p className="text-gray-600 ml-2">Loading...</p>
                 </div>
             </Layout>
