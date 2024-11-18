@@ -83,12 +83,12 @@ export function Notes({note, onEdit, onDelete}) {
                     </p>
                 )}
             </CardContent>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex items-end justify-end gap-2">
                 <Button
                     variant="outline"
                     size="sm"
                     onClick={() => onEdit(note)}
-                    className="text-primary-700 border-primary-300 hover:bg-primary-200 dark:text-primary-200 dark:border-primary-600 dark:hover:bg-primary-700">
+                    className="bg:bg-secondary hover:bg-secondary-600 dark:bg-secondary-700 dark:hover:bg-secondary-800">
                     <Pencil className="w-4 h-4 mr-2"/>
                     Edit
                 </Button>
