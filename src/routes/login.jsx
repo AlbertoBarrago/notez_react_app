@@ -16,7 +16,7 @@ const SIGN_IN = "signin";
 
 
 /**
- * Main authentication component handling both sign-in and sign-up functionality
+ * Main authentication part handling both sign-in and sign-up functionality
  * @function AuthRoute
  * @returns {JSX.Element} Rendered authentication component
  */
