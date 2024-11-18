@@ -7,6 +7,7 @@ import {NavLink, useNavigate} from "react-router-dom";
 import {ThemeSelector} from "@/components/theme/themeSelector.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import AuthService from "@/services/login/index.js";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
 
 
 export default function Index() {
@@ -30,7 +31,16 @@ export default function Index() {
                             to="/note"
                             className='text-2xl no-bg'
                         >
-                            Notez <span className="text-primary">|</span> {auth.isLoggedIn() ? `Hi, ${auth.getUser().username}`: ``}
+                            {auth.isLoggedIn() && (
+                                <div className="flex items-center gap-2">
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarImage src={auth.getUser().picture} />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                    <span>{auth.getUser().username}</span>
+                                </div>
+                            )}
+
                         </NavLink>
                     </NavigationMenuItem>
                 </NavigationMenuList>
@@ -55,18 +65,9 @@ export default function Index() {
                             >About
                             </NavLink>
                         </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavLink
-                                to="/contact"
-                                className={({isActive, isPending}) =>
-                                    isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
-                                }
-                            >Contact
-                            </NavLink>
-                        </NavigationMenuItem>
-                        {auth.isLoggedIn() ?  <NavigationMenuItem>
+                        {auth.isLoggedIn() ? <NavigationMenuItem>
                             <Button onClick={performLogout}>Logout</Button>
-                        </NavigationMenuItem>: null}
+                        </NavigationMenuItem> : null}
                         <ThemeSelector/>
                     </NavigationMenuList>
                 </div>

@@ -106,7 +106,7 @@ export default function ArticlesRoute() {
                 fetchNotes(true);
             });
         } catch (error) {
-           handleError(error, "Error deleting note. Please try again.");
+            handleError(error, "Error deleting note. Please try again.");
         }
     }
     /**
@@ -139,10 +139,10 @@ export default function ArticlesRoute() {
      * @param newNoteParam {newNoteParam: {title, content}}
      */
     const handleCreateNoteConfirm = (newNoteParam) => {
-       const newNoteCasted = ({
-           title: newNoteParam.title,
-           content: newNoteParam.content,
-       })
+        const newNoteCasted = ({
+            title: newNoteParam.title,
+            content: newNoteParam.content,
+        })
         createNotes(newNoteCasted).finally(() => {
             setIsModalCreateOpen(false)
         })
@@ -185,10 +185,17 @@ export default function ArticlesRoute() {
         fetchNotes().finally(() => {
             setLoading(false);
         });
-    }, []);
+    });
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <Layout>
+                <div className="flex items-center justify-center h-screen">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+                    <p className="text-gray-600 ml-2">Loading...</p>
+                </div>
+            </Layout>
+        );
     }
 
     return (
@@ -199,7 +206,7 @@ export default function ArticlesRoute() {
                 variant="secondary"
                 size="icon"
             >
-               <PlusIcon className="h-6 w-6" />
+                <PlusIcon className="h-6 w-6"/>
             </Button>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-10">
