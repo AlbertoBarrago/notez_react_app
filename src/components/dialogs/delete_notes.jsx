@@ -30,7 +30,7 @@ export default function NoteDeleteModal({isOpen, onClose, onDelete, note}) {
                 </DialogHeader>
                 <div className="grid">
                     <div className="grid grid-cols-1 items-center">
-                        Sei sicuro di voler eliminare questa nota?
+                        Are you sure you want to delete the note?
                     </div>
                 </div>
                 <DialogFooter>

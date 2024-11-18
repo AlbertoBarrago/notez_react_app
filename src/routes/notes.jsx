@@ -98,11 +98,11 @@ export default function ArticlesRoute() {
     /**
      * Deletes a note
      * @async
-     * @param {Note} note - Note to delete
+     * @param {string} note_id - Note to delete
      */
-    const deleteNote = async (note) => {
+    const deleteNote = async (note_id) => {
         try {
-            await noteService.removeNote(note).finally(() => {
+            await noteService.removeNote(note_id).finally(() => {
                 fetchNotes(true);
             });
         } catch (error) {
