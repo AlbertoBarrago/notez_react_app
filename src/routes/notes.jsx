@@ -20,7 +20,7 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination.jsx";
 import {SearchInput} from "@/components/searchInput.jsx";
-import {useNavigate, useRoutes} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 /**
  * @typedef {Object} Note
