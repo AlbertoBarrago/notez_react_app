@@ -5,7 +5,7 @@
 
 import Layout from "../components/layout/index.jsx";
 import {NotesCard} from "@/components/notesCard.jsx";
-import {useEffect, useState, useRef} from "react";
+import {useEffect, useState, useCallback} from "react";
 import NotesService from "@/services/notes/index.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
@@ -16,7 +16,7 @@ import {PlusIcon} from "lucide-react";
 import {
     Pagination,
     PaginationContent,
-    PaginationItem,
+    PaginationItem, PaginationLink,
     PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination.jsx";
@@ -26,6 +26,15 @@ import {
  * @property {string} id - Unique identifier for the note
  * @property {string} title - Title of the note
  * @property {string} content - Content of the note
+ */
+
+/**
+ * @typedef {Object} PaginatedResponse
+ * @property {Array<Note>} items - Array of notes
+ * @property {number} page - Current page number
+ * @property {number} page_size - Number of items per page
+ * @property {number} total - Total number of items
+ * @property {number} total_pages - Total number of pages
  */
 
 /**
@@ -45,7 +54,6 @@ export default function ArticlesRoute() {
     /** @type {[boolean, Function]} Loading state and setter */
     const [loading, setLoading] = useState(false);
     /** @type {React.MutableRefObject} Cache for notes data */
-    const notesCache = useRef(null);
     /** @type {[boolean, Function]} Modal states and setters */
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false)
@@ -59,41 +67,33 @@ export default function ArticlesRoute() {
         total_pages: 0,
     });
 
-    /**
-     * Fetches notes from the service
-     * @async
-     * @param {boolean} isUpdateOrDelete - Flag to force refresh cache
-     */
-    const fetchNotes = async (isUpdateOrDelete = false) => {
-        setLoading(true);
-        if (notesCache.current && !isUpdateOrDelete) {
-            setNotes(notesCache.current.items);
-            setPagination({
-                total: notesCache.current.total,
-                page: notesCache.current.page,
-                page_size: notesCache.current.page_size,
-                total_pages: notesCache.current.total_pages,
-            });
-            setLoading(false);
-            return;
-        }
 
+    /**
+     * Fetches paginated notes from the server and updates state
+     * @type {() => Promise<void>}
+     * @function
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} When the API request fails
+     */
+    const fetchNotes = useCallback(async () => {
+        setLoading(true);
         try {
+            /** @type {PaginatedResponse|undefined} */
             const notesFetched = await noteService.getPaginatedNotes(pagination.page, pagination.page_size);
             if (notesFetched) {
-                notesCache.current = notesFetched;
                 setNotes(notesFetched.items);
                 setPagination({
-                    total: notesCache.current.total,
-                    page: notesCache.current.page,
-                    page_size: notesCache.current.page_size,
-                    total_pages: notesCache.current.total_pages,
+                    page: notesFetched.page,
+                    page_size: notesFetched.page_size,
+                    total: notesFetched.total,
+                    total_pages: notesFetched.total_pages,
                 });
             }
         } catch (error) {
             handleError(error);
         }
-    };
+    }, [pagination.page, pagination.page_size]);
     /**
      * Creates a new note
      * @async
@@ -102,7 +102,7 @@ export default function ArticlesRoute() {
     const createNotes = async (note) => {
         try {
             await noteService.addNote(note).finally(() => {
-                fetchNotes(true);
+                fetchNotes();
             });
         } catch (error) {
             handleError(error, "Error creating note. Please try again.");
@@ -116,7 +116,7 @@ export default function ArticlesRoute() {
     const updateNote = async (note) => {
         try {
             await noteService.updateNote(note).finally(() => {
-                fetchNotes(true);
+                fetchNotes();
             });
         } catch (error) {
             handleError(error, "Error updating note. Please try again.");
@@ -130,7 +130,7 @@ export default function ArticlesRoute() {
     const deleteNote = async (note_id) => {
         try {
             await noteService.removeNote(note_id).finally(() => {
-                fetchNotes(true);
+                fetchNotes();
             });
         } catch (error) {
             handleError(error, "Error deleting note. Please try again.");
@@ -214,6 +214,14 @@ export default function ArticlesRoute() {
         });
     }, []);
 
+
+    useEffect(() => {
+        fetchNotes().finally(() => {
+            setLoading(false);
+        });
+    }, [pagination.page, pagination.page_size]);
+
+
     if (loading) {
         return (
             <Layout>
@@ -255,18 +263,25 @@ export default function ArticlesRoute() {
                                         ...pagination,
                                         page: Math.max(1, pagination.page - 1)
                                     })
-                                    fetchNotes(true).finally(() => {
-                                        setLoading(false);
-                                    });
                                 }}
                             />
                         )}
 
-                        {pagination.total_pages > 0 && (
-                            <PaginationItem key="current-page">
-                                {pagination.page}
+                        {Array.from({ length: pagination.total_pages }, (_, i) => i + 1).map((page) => (
+                            <PaginationItem key={page + 1}>
+                                <PaginationLink
+                                    isActive={page === pagination.page}
+                                    onClick={() => {
+                                        setPagination({
+                                            ...pagination,
+                                            page: page
+                                        });
+                                    }}
+                                >
+                                    {page}
+                                </PaginationLink>
                             </PaginationItem>
-                        )}
+                        ))}
 
                         {pagination.total_pages > 0 && pagination.page < pagination.total_pages && (
                             <PaginationNext
@@ -275,9 +290,6 @@ export default function ArticlesRoute() {
                                         ...pagination,
                                         page: Math.min(pagination.total_pages, pagination.page + 1)
                                     })
-                                    fetchNotes(true).finally(() => {
-                                        setLoading(false);
-                                    });
                                 }}
                             />
                         )}
