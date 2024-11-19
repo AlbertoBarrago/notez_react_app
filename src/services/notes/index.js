@@ -29,10 +29,12 @@ class NotesService {
      *
      * @param {number} page - The page number for pagination.
      * @param {number} pageSize - The number of notes per page.
+     * @param {string} query - The search query for filtering notes.
+     * @param {string} sort - The sorting criteria for the notes.
      * @return {PaginatedResponse} A promise that resolves to an array of note objects.
      */
-    async getNotes(page, pageSize) {
-        const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}`,);
+    async getNotes(page, pageSize, query, sort = "asc") {
+        const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}&sort=${sort}&query=${query}`);
         return resp.data;
     }
 

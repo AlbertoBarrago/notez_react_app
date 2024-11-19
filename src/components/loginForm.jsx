@@ -18,7 +18,7 @@ const SIGN_UP = "signup";
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 
-export default function LoginForm({
+export function LoginForm({
                                   signingForm,
                                   onSubmitSignIn,
                                   onSubmitSignUp,

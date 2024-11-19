@@ -9,11 +9,10 @@ import {useState} from "react";
 import AuthService from "@/services/login/index.js";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import LoginForm from "@/components/loginForm.jsx";
+import {LoginForm} from "@/components/loginForm.jsx";
 
 /** @constant {string} */
 const SIGN_IN = "signin";
-
 
 /**
  * Main authentication part handling both sign-in and sign-up functionality
@@ -34,8 +33,8 @@ export default function AuthRoute() {
     /**
      * @type {[string, Function]} Active tab state and setter
      */
-    // eslint-disable-next-line no-unused-vars
-    const [ tab, setTab] = useState(SIGN_IN);
+        // eslint-disable-next-line no-unused-vars
+    const [tab, setTab] = useState(SIGN_IN);
 
     /**
      * @type {[boolean, Function]} Error modal visibility state and setter
@@ -118,10 +117,10 @@ export default function AuthRoute() {
      * @param isSigning
      * @returns {Promise<void>}
      */
-    const googleOAuth = async(data, isSigning = true) => {
+    const googleOAuth = async (data, isSigning = true) => {
         setIsLoading(true);
         try {
-            const resp = isSigning ?  await auth.googleOAuth(data) : await auth.googleAuthSignup(data);
+            const resp = isSigning ? await auth.googleOAuth(data) : await auth.googleAuthSignup(data);
             if (resp.user) {
                 navigate("/note");
             }
@@ -134,17 +133,17 @@ export default function AuthRoute() {
     }
 
     return (
-       <LoginForm signingForm={signingForm}
-                  signupForm={signupForm}
-                  onSubmitSignUp={onSubmitSignUp}
-                  onSubmitSignIn={onSubmitSignIn}
-                  onGoogleOAuth={googleOAuth}
-                  setIsModalOpen={setIsModalOpen}
-                  setTab={setTab}
-                  isLoading={isLoading}
-                  isModalOpen={isModalOpen}
-                  googleOAuth={googleOAuth}
-                  errorProps={errorProps}
-       />
+        <LoginForm signingForm={signingForm}
+                   signupForm={signupForm}
+                   onSubmitSignUp={onSubmitSignUp}
+                   onSubmitSignIn={onSubmitSignIn}
+                   onGoogleOAuth={googleOAuth}
+                   setIsModalOpen={setIsModalOpen}
+                   setTab={setTab}
+                   isLoading={isLoading}
+                   isModalOpen={isModalOpen}
+                   googleOAuth={googleOAuth}
+                   errorProps={errorProps}
+        />
     )
 }

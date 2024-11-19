@@ -19,6 +19,8 @@ import {
     PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination.jsx";
+import {SearchInput} from "@/components/searchInput.jsx";
+import {useNavigate, useRoutes} from "react-router-dom";
 
 /**
  * @typedef {Object} Note
@@ -48,6 +50,7 @@ const authService = new AuthService();
  * @returns {JSX.Element} Rendered component
  */
 export default function ArticlesRoute() {
+    const navigate = useNavigate()
     /** @type {[Array<Note>, Function]} NotesCard state and setter */
     const [notes, setNotes] = useState([]);
     /** @type {[boolean, Function]} Loading state and setter */
@@ -59,6 +62,7 @@ export default function ArticlesRoute() {
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
     /** @type {[Note|null, Function]} Selected note state and setter */
     const [selectedNote, setSelectedNote] = useState(null)
+    const [query, setQuery] = useState("");
     const [pagination, setPagination] = useState({
         total: 0,
         page: 1,
@@ -76,10 +80,9 @@ export default function ArticlesRoute() {
      * @throws {Error} When the API request fails
      */
     const fetchNotes = useCallback(async () => {
-        setLoading(true);
         try {
-            /** @type {PaginatedResponse} */
-            const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size);
+            setLoading(true);
+            const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size, query);
             if (notesFetched) {
                 setNotes(notesFetched.items);
                 setPagination({
@@ -91,8 +94,10 @@ export default function ArticlesRoute() {
             }
         } catch (error) {
             handleError(error);
+        } finally {
+            setLoading(false);
         }
-    }, [pagination.page, pagination.page_size]);
+    }, [pagination.page, pagination.page_size, query]);
     /**
      * Creates a new note
      * @async
@@ -115,7 +120,7 @@ export default function ArticlesRoute() {
     const updateNote = async (note) => {
         try {
             await noteService.updateNote(note).finally(() => {
-                fetchNotes();
+                fetchNotes()
             });
         } catch (error) {
             handleError(error, "Error updating note. Please try again.");
@@ -200,6 +205,17 @@ export default function ArticlesRoute() {
     const handleError = (error, message) => {
         if (error.status === 401) {
             authService.logout();
+            navigate.push('/login');
+        }
+
+        if (error.status === 403) {
+            authService.logout();
+            navigate.push('/login');
+        }
+
+        if (error.status === 429) {
+            authService.logout();
+            navigate.push('/login');
         }
 
         const errorMessage = message || error.message || 'An unexpected error occurred';
@@ -208,17 +224,13 @@ export default function ArticlesRoute() {
     };
 
     useEffect(() => {
-        fetchNotes().finally(() => {
-            setLoading(false);
-        });
+        fetchNotes()
     }, []);
 
 
     useEffect(() => {
-        fetchNotes().finally(() => {
-            setLoading(false);
-        });
-    }, [pagination.page, pagination.page_size]);
+        fetchNotes()
+    }, [pagination.page, pagination.page_size, query]);
 
 
     if (loading) {
@@ -234,24 +246,16 @@ export default function ArticlesRoute() {
 
     return (
         <Layout>
-            <Button
-                className="fixed bottom-6 right-6 rounded-full p-4 shadow-lg"
-                onClick={handleCreateNote}
-                variant="secondary"
-                size="icon"
-            >
-                <PlusIcon className="h-6 w-6"/>
-            </Button>
-
-
+            <SearchInput onSearch={(q) => setQuery(q)} initialValue={query}/>
             {notes.length > 0 ? (
                 <>
                     <div
                         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
-                        {notes.map(note => <NotesCard key={note.id}
-                                                      note={note}
-                                                      onEdit={handleEditNote}
-                                                      onDelete={handleDeleteNote}/>
+                        {notes.map(note =>
+                            <NotesCard key={note.id}
+                                       note={note}
+                                       onEdit={handleEditNote}
+                                       onDelete={handleDeleteNote}/>
                         )}
                     </div>
                     <div className="flex items-center justify-center mt-4">
@@ -314,10 +318,19 @@ export default function ArticlesRoute() {
                         </PaginationContent>
                     </div>
                 </>
-            ) : (<div className={"flex items-center mt-40 justify-center"}>
+            ) : (
+                <div className={"flex items-center mt-40 justify-center"}>
                     <p className={"text-primary animate-pulse"}> &#215; No Notes Found</p>
                 </div>
             )}
+
+            <Button
+                className="fixed bottom-6 right-6 rounded-full p-4 shadow-lg"
+                onClick={handleCreateNote}
+                variant="secondary"
+                size="icon">
+                <PlusIcon className="h-6 w-6"/>
+            </Button>
 
             <NoteAddNoteModal
                 isOpen={isModalCreateOpen}
