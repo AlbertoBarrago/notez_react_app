@@ -267,7 +267,6 @@ export default function ArticlesRoute() {
                                 />
                             )}
 
-                            {/* First page */}
                             <PaginationItem>
                                 <PaginationLink
                                     isActive={pagination.page === 1}
@@ -277,7 +276,6 @@ export default function ArticlesRoute() {
                                 </PaginationLink>
                             </PaginationItem>
 
-                            {/* Ellipsis and middle pages */}
                             {pagination.total_pages > 3 && (
                                 <>
                                     {pagination.page > 2 && <PaginationEllipsis/>}
@@ -292,7 +290,6 @@ export default function ArticlesRoute() {
                                 </>
                             )}
 
-                            {/* Last page */}
                             {pagination.total_pages > 1 && (
                                 <PaginationItem>
                                     <PaginationLink
@@ -326,8 +323,7 @@ export default function ArticlesRoute() {
                 isOpen={isModalCreateOpen}
                 onClose={() => setIsModalCreateOpen(false)}
                 onSave={handleCreateNoteConfirm}
-            >
-            </NoteAddNoteModal>
+            />
 
             <NoteEditModal
                 isOpen={isModalOpen}
@@ -341,7 +337,7 @@ export default function ArticlesRoute() {
                 onClose={() => setIsModalDeleteOpen(false)}
                 onDelete={handleDeleteNoteConfirm}
                 note={selectedNote}
-            ></NoteDeleteModal>
+            />
         </Layout>
     );
 }
