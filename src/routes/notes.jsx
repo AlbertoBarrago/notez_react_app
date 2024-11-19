@@ -210,13 +210,13 @@ export default function ArticlesRoute() {
      * @throws {Error} Rethrows the error after handling
      */
     const handleError = (error, message) => {
-
         switch (error.status) {
             case 401:
             case 403:
             case 429:
                 authService.logout();
-                navigate.push('/login');
+                navigate('/login');
+                break;
         }
 
         const errorMessage = message || error.message || 'An unexpected error occurred';
@@ -226,12 +226,11 @@ export default function ArticlesRoute() {
 
     useEffect(() => {
         fetchNotes()
-    }, []);
-
+    }, [fetchNotes]);
 
     useEffect(() => {
         fetchNotes()
-    }, [pagination.page, pagination.page_size, query]);
+    }, [pagination.page, pagination.page_size, query, fetchNotes]);
 
     return (
         <Layout>
@@ -270,7 +269,7 @@ export default function ArticlesRoute() {
                     ))
                 ) : (
                     <div className="col-span-full flex items-center justify-center">
-                        <p className="text-primary animate-pulse">&#215; No Notes Found</p>
+                        <p className="text-primary animate-pulse">× No Notes Found</p>
                     </div>
                 )}
             </div>
