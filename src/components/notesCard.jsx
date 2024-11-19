@@ -73,7 +73,7 @@ export function NotesCard({note, onEdit, onDelete}) {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <p className="text-sm text-primary-700 dark:text-primary-300 min-h-[4rem]">
+                <p className="text-sm text-primary-700 dark:text-primary-300 min-h-[3rem]">
                     {!isExpanded ? displayContent.substring(0, 140) + '...' : displayContent}
                 </p>
                 {shouldShowExpandButton && (

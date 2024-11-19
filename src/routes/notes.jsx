@@ -13,7 +13,7 @@ import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import AuthService from "@/services/login/login.js";
 import {PlusIcon} from "lucide-react";
-import {SearchInput} from "@/components/searchInput.jsx";
+import {FilterSearch} from "@/components/filterSearch.jsx";
 import {useNavigate} from "react-router-dom";
 import {ErrorMessage} from "@/components/error.jsx";
 import PaginationControls from "@/components/pagination.jsx";
@@ -215,7 +215,7 @@ export default function ArticlesRoute() {
             case 403:
             case 429:
                 authService.logout();
-                navigate('/login');
+                navigate('/');
                 break;
         }
 
@@ -235,7 +235,7 @@ export default function ArticlesRoute() {
     return (
         <Layout>
             {error && <ErrorMessage message={error}/>}
-            <SearchInput onSearch={(q) => setQuery(q)} initialValue={query}/>
+            <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
                 {loading ? (
