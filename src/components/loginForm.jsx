@@ -33,7 +33,7 @@ export default function LoginForm({
                 <div className="flex justify-center items-center min-h-[85vh] sm:min-h-auto px-4 py-6">
                     <Card className="w-[350px]">
                         <CardHeader>
-                            <CardTitle>Welcome</CardTitle>
+                            <CardTitle>📒 Notez App</CardTitle>
                             <CardDescription>Sign in to your account or create a new one.</CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -43,7 +43,7 @@ export default function LoginForm({
                                     <TabsTrigger value={SIGN_UP}>Sign Up</TabsTrigger>
                                 </TabsList>
                                 <TabsContent value={SIGN_IN}>
-                                    <form onSubmit={signingForm.handleSubmit(onSubmitSignIn)}>
+                                    <form className="mt-10" onSubmit={signingForm.handleSubmit(onSubmitSignIn)}>
                                         <div className="grid w-full items-center gap-4">
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="usernameSignIn">Username</Label>
@@ -61,7 +61,7 @@ export default function LoginForm({
                                                     <span>This field is required</span>}
                                             </div>
                                         </div>
-                                        <Button className="w-full mt-6 mb-4" type="submit" disabled={isLoading}>
+                                        <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
                                             {isLoading ? 'Signing In...' : 'Sign In'}
                                         </Button>
                                         <GoogleLogin
@@ -79,7 +79,7 @@ export default function LoginForm({
                                     </form>
                                 </TabsContent>
                                 <TabsContent value={SIGN_UP}>
-                                    <form onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
+                                    <form className="mt-10" onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
                                         <div className="grid w-full items-center gap-4">
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="usernameSignUp">Username</Label>
@@ -116,7 +116,7 @@ export default function LoginForm({
                                                     <span>This field is required</span>}
                                             </div>
                                         </div>
-                                        <Button className="w-full mt-6 mb-4" type="submit" disabled={isLoading}>
+                                        <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
                                             {isLoading ? 'Signing Up...' : 'Sign Up'}
                                         </Button>
                                         <GoogleLogin
