@@ -10,3 +10,10 @@
 - [x] Add Tailwind and shadiUI for GUI
 - [ ] Add user profile
 - [ ]  work in progress... 🚀
+
+
+## Version 
+Handling versioning with [semver](https://semver.org/)
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
