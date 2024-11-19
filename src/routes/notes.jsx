@@ -14,8 +14,7 @@ import {Button} from "@/components/ui/button.jsx";
 import AuthService from "@/services/login/index.js";
 import {PlusIcon} from "lucide-react";
 import {
-    Pagination,
-    PaginationContent,
+    PaginationContent, PaginationEllipsis,
     PaginationItem, PaginationLink,
     PaginationNext,
     PaginationPrevious
@@ -63,7 +62,7 @@ export default function ArticlesRoute() {
     const [pagination, setPagination] = useState({
         total: 0,
         page: 1,
-        page_size: 10,
+        page_size: 1,
         total_pages: 0,
     });
 
@@ -79,8 +78,8 @@ export default function ArticlesRoute() {
     const fetchNotes = useCallback(async () => {
         setLoading(true);
         try {
-            /** @type {PaginatedResponse|undefined} */
-            const notesFetched = await noteService.getPaginatedNotes(pagination.page, pagination.page_size);
+            /** @type {PaginatedResponse} */
+            const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size);
             if (notesFetched) {
                 setNotes(notesFetched.items);
                 setPagination({
@@ -247,56 +246,78 @@ export default function ArticlesRoute() {
 
             {notes.length > 0 ? (
                 <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
-                    {notes.map(note => <NotesCard key={note.id}
-                                                  note={note}
-                                                  onEdit={handleEditNote}
-                                                  onDelete={handleDeleteNote}/>
-                    )}
-                </div>
-                <Pagination className="flex items-center justify-center p-5">
-                    <PaginationContent>
-                        {pagination.page > 1 && (
-                            <PaginationPrevious
-                                onClick={() => {
-                                    setPagination({
-                                        ...pagination,
-                                        page: Math.max(1, pagination.page - 1)
-                                    })
-                                }}
-                            />
+                    <div
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
+                        {notes.map(note => <NotesCard key={note.id}
+                                                      note={note}
+                                                      onEdit={handleEditNote}
+                                                      onDelete={handleDeleteNote}/>
                         )}
-
-                        {Array.from({ length: pagination.total_pages }, (_, i) => i + 1).map((page) => (
-                            <PaginationItem key={page + 1}>
-                                <PaginationLink
-                                    isActive={page === pagination.page}
+                    </div>
+                    <div className="flex items-center justify-center mt-4">
+                        <PaginationContent>
+                            {pagination.page > 1 && (
+                                <PaginationPrevious
                                     onClick={() => {
                                         setPagination({
                                             ...pagination,
-                                            page: page
-                                        });
+                                            page: Math.max(1, pagination.page - 1)
+                                        })
                                     }}
+                                />
+                            )}
+
+                            {/* First page */}
+                            <PaginationItem>
+                                <PaginationLink
+                                    isActive={pagination.page === 1}
+                                    onClick={() => setPagination({...pagination, page: 1})}
                                 >
-                                    {page}
+                                    1
                                 </PaginationLink>
                             </PaginationItem>
-                        ))}
 
-                        {pagination.total_pages > 0 && pagination.page < pagination.total_pages && (
-                            <PaginationNext
-                                onClick={() => {
-                                    setPagination({
-                                        ...pagination,
-                                        page: Math.min(pagination.total_pages, pagination.page + 1)
-                                    })
-                                }}
-                            />
-                        )}
-                    </PaginationContent>
-                </Pagination>
+                            {/* Ellipsis and middle pages */}
+                            {pagination.total_pages > 3 && (
+                                <>
+                                    {pagination.page > 2 && <PaginationEllipsis/>}
+                                    {pagination.page > 1 && pagination.page < pagination.total_pages && (
+                                        <PaginationItem>
+                                            <PaginationLink isActive={true}>
+                                                {pagination.page}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    )}
+                                    {pagination.page < pagination.total_pages - 1 && <PaginationEllipsis/>}
+                                </>
+                            )}
+
+                            {/* Last page */}
+                            {pagination.total_pages > 1 && (
+                                <PaginationItem>
+                                    <PaginationLink
+                                        isActive={pagination.page === pagination.total_pages}
+                                        onClick={() => setPagination({...pagination, page: pagination.total_pages})}
+                                    >
+                                        {pagination.total_pages}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            )}
+
+                            {pagination.page < pagination.total_pages && (
+                                <PaginationNext
+                                    onClick={() => {
+                                        setPagination({
+                                            ...pagination,
+                                            page: Math.min(pagination.total_pages, pagination.page + 1)
+                                        })
+                                    }}
+                                />
+                            )}
+                        </PaginationContent>
+                    </div>
                 </>
-            ) : (                <div className={"flex items-center mt-40 justify-center"}>
+            ) : (<div className={"flex items-center mt-40 justify-center"}>
                     <p className={"text-primary animate-pulse"}> &#215; No Notes Found</p>
                 </div>
             )}
