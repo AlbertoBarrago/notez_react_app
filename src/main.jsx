@@ -2,11 +2,11 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
 import Articles from "./routes/notes.jsx";
-import About from "./routes/about";
-import './index.css';
+import Explore from "./routes/explore.jsx";
+import './style.css';
 import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/login.jsx";
-import PrivateRoute from "@/utils/privateRoute.jsx";
+import PrivateRoute from "@/routes/privateRoute.jsx";
 import AuthService from "@/services/login/index.js";
 
 const publicPath = '/';
@@ -23,7 +23,7 @@ const routeConfig = [
         element: <PrivateRoute />,
         children: [
             { path: "note", element: <Articles /> },
-            { path: "about", element: <About /> },
+            { path: "explore", element: <Explore /> },
         ]
     },
     {

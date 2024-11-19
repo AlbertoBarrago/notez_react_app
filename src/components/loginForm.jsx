@@ -6,16 +6,20 @@ import {Label} from "@/components/ui/label.jsx";
 import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import ErrorsModal from "@/components/dialogs/errors.jsx";
+import { EyeIcon, EyeOffIcon } from "lucide-react"
+import {useState} from "react";
+
 
 /** @constant {string} */
-const SIGN_IN = "signin";
+const SIGN_IN = "signing";
 /** @constant {string} */
 const SIGN_UP = "signup";
 /** @constant {string} */
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-export default function Login({
-                                  signinForm,
+
+export function LoginForm({
+                                  signingForm,
                                   onSubmitSignIn,
                                   onSubmitSignUp,
                                   setIsModalOpen,
@@ -27,13 +31,16 @@ export default function Login({
                                   errorProps
                               }) {
 
+    const [showPassword, setShowPassword] = useState(false)
+
     return (
+
         <GoogleOAuthProvider clientId={CLIENT_ID}>
             <Layout>
-                <div className="flex justify-center items-center min-h-screen sm:min-h-auto">
+                <div className="flex justify-center items-center min-h-[85vh] sm:min-h-auto px-4 py-6">
                     <Card className="w-[350px]">
                         <CardHeader>
-                            <CardTitle>Welcome</CardTitle>
+                            <CardTitle>📒 Notez App</CardTitle>
                             <CardDescription>Sign in to your account or create a new one.</CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -43,25 +50,43 @@ export default function Login({
                                     <TabsTrigger value={SIGN_UP}>Sign Up</TabsTrigger>
                                 </TabsList>
                                 <TabsContent value={SIGN_IN}>
-                                    <form onSubmit={signinForm.handleSubmit(onSubmitSignIn)}>
+                                    <form className="mt-6" onSubmit={signingForm.handleSubmit(onSubmitSignIn)}>
                                         <div className="grid w-full items-center gap-4">
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="usernameSignIn">Username</Label>
                                                 <Input id="usernameSignIn" placeholder="johnDoe"
-                                                       {...signinForm.register("username", {required: true})} />
-                                                {signinForm.formState.errors.username &&
+                                                       {...signingForm.register("username", {required: true})} />
+                                                {signingForm.formState.errors.username &&
                                                     <span>This field is required</span>}
                                             </div>
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="passwordSignIn">Password</Label>
-                                                <Input id="passwordSignIn" placeholder="********"
-                                                       type="password"
-                                                       {...signinForm.register("password", {required: true})} />
-                                                {signinForm.formState.errors.password &&
+                                                <div className="relative">
+                                                    <Input
+                                                        id="passwordSignIn"
+                                                        placeholder="********"
+                                                        type={showPassword ? "text" : "password"}
+                                                        {...signingForm.register("password", {required: true})}
+                                                    />
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                                                        onClick={() => setShowPassword(!showPassword)}
+                                                    >
+                                                        {showPassword ? (
+                                                            <EyeOffIcon className="h-4 w-4"/>
+                                                        ) : (
+                                                            <EyeIcon className="h-4 w-4"/>
+                                                        )}
+                                                    </Button>
+                                                </div>
+                                                {signingForm.formState.errors.password &&
                                                     <span>This field is required</span>}
                                             </div>
                                         </div>
-                                        <Button className="w-full mt-6 mb-4" type="submit" disabled={isLoading}>
+                                        <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
                                             {isLoading ? 'Signing In...' : 'Sign In'}
                                         </Button>
                                         <GoogleLogin
@@ -73,13 +98,13 @@ export default function Login({
                                                 googleOAuth(credentialResponse);
                                             }}
                                             onError={() => {
-                                                console.log('Login Failed');
+                                                console.log('LoginForm Failed');
                                             }}
                                         />
                                     </form>
                                 </TabsContent>
                                 <TabsContent value={SIGN_UP}>
-                                    <form onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
+                                    <form className="mt-6" onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
                                         <div className="grid w-full items-center gap-4">
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="usernameSignUp">Username</Label>
@@ -110,13 +135,32 @@ export default function Login({
                                             </div>
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="passwordSignUp">Password</Label>
-                                                <Input id="passwordSignUp" type="password" placeholder="********"
-                                                       {...signupForm.register("password", {required: true})} />
+                                                <div className="relative">
+                                                    <Input
+                                                        id="passwordSignUp"
+                                                        placeholder="********"
+                                                        type={showPassword ? "text" : "password"}
+                                                        {...signupForm.register("password", {required: true})}
+                                                    />
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                                                        onClick={() => setShowPassword(!showPassword)}
+                                                    >
+                                                        {showPassword ? (
+                                                            <EyeOffIcon className="h-4 w-4"/>
+                                                        ) : (
+                                                            <EyeIcon className="h-4 w-4"/>
+                                                        )}
+                                                    </Button>
+                                                </div>
                                                 {signupForm.formState.errors.password &&
                                                     <span>This field is required</span>}
                                             </div>
                                         </div>
-                                        <Button className="w-full mt-6 mb-4" type="submit" disabled={isLoading}>
+                                        <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
                                             {isLoading ? 'Signing Up...' : 'Sign Up'}
                                         </Button>
                                         <GoogleLogin
@@ -128,7 +172,7 @@ export default function Login({
                                                 googleOAuth(credentialResponse, false);
                                             }}
                                             onError={() => {
-                                                console.log('Login Failed');
+                                                console.log('LoginForm Failed');
                                             }}
                                         />
                                     </form>

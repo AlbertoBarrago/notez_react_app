@@ -3,8 +3,18 @@ import axios_instance from "@/interceptor/index.js";
 
 /**
  * @typedef {Object} Note
- * @property {string} title - The title of note
- * @property {string} content - The content of note
+ * @property {string} id - Unique identifier for the note
+ * @property {string} title - Title of the note
+ * @property {string} content - Content of the note
+ */
+
+/**
+ * @typedef {Object} PaginatedResponse
+ * @property {Array<Note>} items - Array of notes
+ * @property {number} page - Current page number
+ * @property {number} page_size - Number of items per page
+ * @property {number} total - Total number of items
+ * @property {number} total_pages - Total number of pages
  */
 
 /**
@@ -14,26 +24,17 @@ import axios_instance from "@/interceptor/index.js";
  * It uses an authentication instance passed during construction to handle any login-related operations.
  */
 class NotesService {
-    constructor() {
-    }
-
     /**
      * Fetches notes based on provided identifiers.
      *
-     * @param {Array<number>} ids - An array of note IDs to fetch.
-     * @return {Promise<Array<Object>>} A promise that resolves to an array of note objects.
+     * @param {number} page - The page number for pagination.
+     * @param {number} pageSize - The number of notes per page.
+     * @param {string} query - The search query for filtering notes.
+     * @param {string} sort - The sorting criteria for the notes.
+     * @return {PaginatedResponse} A promise that resolves to an array of note objects.
      */
-    async getNotesByIds(ids) {
-        const resp = await axios_instance.get('/notes/', {
-            params: {
-                ids: ids.join(',')
-            }
-        });
-        return resp.data;
-    }
-
-    async getNotes() {
-        const resp = await axios_instance.get('/notes/');
+    async getNotes(page, pageSize, query, sort = "asc") {
+        const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}&sort=${sort}&query=${query}`);
         return resp.data;
     }
 
@@ -64,7 +65,7 @@ class NotesService {
             title: note.title,
             content: note.content
         });
-       
+
         return resp.data;
     }
 
