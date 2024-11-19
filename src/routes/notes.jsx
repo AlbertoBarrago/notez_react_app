@@ -246,9 +246,9 @@ export default function ArticlesRoute() {
 
     return (
         <Layout>
-            <SearchInput onSearch={(q) => setQuery(q)} initialValue={query}/>
             {notes.length > 0 ? (
                 <>
+                    <SearchInput onSearch={(q) => setQuery(q)} initialValue={query}/>
                     <div
                         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
                         {notes.map(note =>
@@ -320,6 +320,7 @@ export default function ArticlesRoute() {
                 </>
             ) : (
                 <div className={"flex items-center mt-40 justify-center"}>
+
                     <p className={"text-primary animate-pulse"}> &#215; No Notes Found</p>
                 </div>
             )}

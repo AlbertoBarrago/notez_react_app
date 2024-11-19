@@ -3,10 +3,10 @@ import * as ReactDOM from "react-dom/client";
 import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
 import Articles from "./routes/notes.jsx";
 import Explore from "./routes/explore.jsx";
-import './index.css';
+import './style.css';
 import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/login.jsx";
-import PrivateRoute from "@/utils/privateRoute.jsx";
+import PrivateRoute from "@/routes/privateRoute.jsx";
 import AuthService from "@/services/login/index.js";
 
 const publicPath = '/';

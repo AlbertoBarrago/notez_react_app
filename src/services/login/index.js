@@ -1,5 +1,7 @@
 import axios_instance from "@/interceptor/index.js";
+import CommonService from "@/services/common/index.js";
 
+const CService = new CommonService();
 /**
  * @typedef {Object} AuthResp
  * @property {string} access_token - The access_token
@@ -30,7 +32,7 @@ class AuthService {
             password
         });
 
-        this.storeTokenAndUser(response.data);
+        CService.storeTokenAndUser(response.data);
         return response.data;
     }
 
@@ -49,7 +51,7 @@ class AuthService {
             password
         });
 
-        this.storeTokenAndUser(response.data);
+        CService.storeTokenAndUser(response.data);
         return response.data;
     }
 
@@ -61,7 +63,7 @@ class AuthService {
     async googleOAuth(data) {
         delete data.select_by
         const response = await axios_instance.post('/oauth/google', data);
-        this.storeTokenAndUser(response.data);
+        CService.storeTokenAndUser(response.data);
         return response.data;
     }
 
@@ -73,7 +75,7 @@ class AuthService {
     async googleAuthSignup(data) {
         delete data.select_by
         const response = await axios_instance.post('/users/register/google', data);
-        this.storeTokenAndUser(response.data);
+        CService.storeTokenAndUser(response.data);
         return response.data;
     }
 
@@ -84,30 +86,6 @@ class AuthService {
      */
     async getToken() {
         return localStorage.getItem('token');
-    }
-
-    /**
-     * Retrieves the token type from local storage.
-     *
-     * @return {string|null} The token type if it exists in local storage, or null if not found.
-     */
-    getTokenType() {
-        return localStorage.getItem('token_type');
-    }
-
-    /**
-     * Stores the user information and access token in local storage.
-     *
-     * @param {Object} data - The data object containing user information and token details.
-     * @param {Object} data.user - User information object.
-     * @param {string} data.access_token - Access token string.
-     * @param {string} data.token_type - Type of the token.
-     * @return {void}
-     */
-    storeTokenAndUser(data) {
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('token_type', data.token_type);
-        localStorage.setItem('user', JSON.stringify(data.user));
     }
 
     /**
