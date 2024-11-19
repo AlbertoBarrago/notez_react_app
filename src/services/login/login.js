@@ -1,5 +1,5 @@
-import axios_instance from "@/interceptor/index.js";
-import CommonService from "@/services/common/index.js";
+import axios_instance from "@/interceptor/axios.js";
+import CommonService from "@/services/common/common.js";
 
 const CService = new CommonService();
 /**

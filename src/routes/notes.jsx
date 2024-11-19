@@ -3,15 +3,15 @@
  * @module ArticlesRoute
  */
 
-import Layout from "../components/layout/index.jsx";
+import Layout from "../components/layout/layout.jsx";
 import {NotesCard} from "@/components/notesCard.jsx";
 import {useEffect, useState, useCallback} from "react";
-import NotesService from "@/services/notes/index.js";
+import NotesService from "@/services/notes/notes.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
 import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import AuthService from "@/services/login/index.js";
+import AuthService from "@/services/login/login.js";
 import {PlusIcon} from "lucide-react";
 import {
     PaginationContent, PaginationEllipsis,

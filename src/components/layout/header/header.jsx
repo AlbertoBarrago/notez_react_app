@@ -6,7 +6,7 @@ import {
 import {NavLink, useNavigate} from "react-router-dom";
 import {ThemeSelector} from "@/components/theme/themeSelector.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import AuthService from "@/services/login/index.js";
+import AuthService from "@/services/login/login.js";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
 import {
     Sheet,
@@ -27,11 +27,11 @@ import { Menu } from "lucide-react";
  * @component
  * @returns {JSX.Element} Header component with navigation menu, user info, and theme controls
  */
-export default function Index() {
+export default function Header() {
     const auth = new AuthService()
     const navigate = useNavigate()
 
-    /** @type {import('@/services/login').User} */
+    /** @type {import('@/services/login/login.js').User} */
     const user = auth.getUser();
 
     const performLogout = () => {

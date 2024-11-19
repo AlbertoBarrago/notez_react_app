@@ -1,5 +1,5 @@
 import axios from "axios";
-import AuthService from "@/services/login/index.js";
+import AuthService from "@/services/login/login.js";
 
 
 const axios_instance = axios.create({

@@ -1,5 +1,5 @@
 import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
-import Layout from "@/components/layout/index.jsx";
+import Layout from "@/components/layout/layout.jsx";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.jsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.jsx";
 import {Label} from "@/components/ui/label.jsx";

@@ -1,9 +1,9 @@
-import Header from "@/components/layout/header/index.jsx";
-import Footer from "@/components/layout/footer/index.jsx";
-import AuthService from "@/services/login/index.js";
+import Header from "@/components/layout/header/header.jsx";
+import Footer from "@/components/layout/footer/footer.jsx";
+import AuthService from "@/services/login/login.js";
 const auth = new AuthService();
 
-const Index = ({children}) => {
+const Layout = ({children}) => {
     return (
         <div className="flex flex-col min-h-screen tiny5-regular">
             {!auth.isLoggedIn() ? "" :
@@ -23,4 +23,4 @@ const Index = ({children}) => {
     );
 }
 
-export default Index;
+export default Layout;

@@ -1,4 +1,4 @@
-import axios_instance from "@/interceptor/index.js";
+import axios_instance from "@/interceptor/axios.js";
 
 
 /**
