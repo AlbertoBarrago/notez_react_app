@@ -22,7 +22,7 @@ export function SearchInput({onSearch, initialValue = ""}) {
         <div className="flex items-center space-x-2 w-full md:w-[80%] mx-auto mt-5 px-4 md:px-0">
             <Input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search notes (min. 3 characters)"
                 value={searchTerm}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 focus:shadow-outline-primary"
