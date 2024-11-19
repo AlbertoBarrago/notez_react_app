@@ -19,14 +19,14 @@ import {Pencil, Trash2} from "lucide-react"
 
 /**
  * Note card component
- * @function Notes
+ * @function NotesCard
  * @param {Object} props - Component props
  * @param {Note} props.note - Note data
  * @param {Function} props.onEdit - Edit handler callback
  * @param {Function} props.onDelete - Delete handler callback
  * @returns {JSX.Element} Rendered note card
  */
-export function Notes({note, onEdit, onDelete}) {
+export function NotesCard({note, onEdit, onDelete}) {
     /** @type {[boolean, Function]} Content expansion state */
     const [isExpanded, setIsExpanded] = useState(false)
 

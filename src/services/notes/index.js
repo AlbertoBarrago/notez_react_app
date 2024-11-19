@@ -20,18 +20,19 @@ class NotesService {
     /**
      * Fetches notes based on provided identifiers.
      *
-     * @param {Array<number>} ids - An array of note IDs to fetch.
+     * @param {number} page - The page number for pagination.
+     * @param {number} pageSize - The number of notes per page.
      * @return {Promise<Array<Object>>} A promise that resolves to an array of note objects.
      */
-    async getNotesByIds(ids) {
-        const resp = await axios_instance.get('/notes/', {
-            params: {
-                ids: ids.join(',')
-            }
-        });
+    async getPaginatedNotes(page, pageSize) {
+        const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}`, );
         return resp.data;
     }
 
+    /**
+     * Fetches all notes from the server.
+     * @return {Promise<Array<Object>>} A promise that resolves to an array of note objects.
+     */
     async getNotes() {
         const resp = await axios_instance.get('/notes/');
         return resp.data;

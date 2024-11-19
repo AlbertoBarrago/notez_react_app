@@ -134,7 +134,7 @@ export default function AuthRoute() {
     }
 
     return (
-       <Login signinForm={signingForm}
+       <Login signingForm={signingForm}
               signupForm={signupForm}
               onSubmitSignUp={onSubmitSignUp}
               onSubmitSignIn={onSubmitSignIn}

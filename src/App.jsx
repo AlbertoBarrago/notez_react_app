@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
 import Articles from "./routes/notes.jsx";
-import About from "./routes/about";
+import About from "./routes/explore.jsx";
 import './index.css';
 import {ContextProvider} from "@/context/index.jsx";
 import AuthRoute from "@/routes/login.jsx";

@@ -53,7 +53,7 @@ export default function Index() {
                                     isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
                                 }
                             >
-                                Articles
+                                Your Articles
                             </NavLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
@@ -62,7 +62,7 @@ export default function Index() {
                                 className={({isActive, isPending}) =>
                                     isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
                                 }
-                            >About
+                            >Explore
                             </NavLink>
                         </NavigationMenuItem>
                         {auth.isLoggedIn() ? <NavigationMenuItem>

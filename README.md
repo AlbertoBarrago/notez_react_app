@@ -1,4 +1,4 @@
-# alBz Personal Notes
+# alBz Personal NotesCard
 
 🚀 Work in progress, stay tuned.
 

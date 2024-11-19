@@ -4,7 +4,7 @@
  */
 
 import Layout from "../components/layout/index.jsx";
-import {Notes} from "@/components/notes.jsx";
+import {NotesCard} from "@/components/notesCard.jsx";
 import {useEffect, useState, useRef} from "react";
 import NotesService from "@/services/notes/index.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
@@ -13,6 +13,13 @@ import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import AuthService from "@/services/login/index.js";
 import {PlusIcon} from "lucide-react";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious
+} from "@/components/ui/pagination.jsx";
 
 /**
  * @typedef {Object} Note
@@ -33,7 +40,7 @@ const authService = new AuthService();
  * @returns {JSX.Element} Rendered component
  */
 export default function ArticlesRoute() {
-    /** @type {[Array<Note>, Function]} Notes state and setter */
+    /** @type {[Array<Note>, Function]} NotesCard state and setter */
     const [notes, setNotes] = useState([]);
     /** @type {[boolean, Function]} Loading state and setter */
     const [loading, setLoading] = useState(false);
@@ -45,6 +52,12 @@ export default function ArticlesRoute() {
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
     /** @type {[Note|null, Function]} Selected note state and setter */
     const [selectedNote, setSelectedNote] = useState(null)
+    const [pagination, setPagination] = useState({
+        total: 0,
+        page: 1,
+        page_size: 10,
+        total_pages: 0,
+    });
 
     /**
      * Fetches notes from the service
@@ -52,20 +65,30 @@ export default function ArticlesRoute() {
      * @param {boolean} isUpdateOrDelete - Flag to force refresh cache
      */
     const fetchNotes = async (isUpdateOrDelete = false) => {
-        console.log('here')
+        setLoading(true);
         if (notesCache.current && !isUpdateOrDelete) {
-            console.log('here current')
-            setNotes(notesCache.current);
+            setNotes(notesCache.current.items);
+            setPagination({
+                total: notesCache.current.total,
+                page: notesCache.current.page,
+                page_size: notesCache.current.page_size,
+                total_pages: notesCache.current.total_pages,
+            });
+            setLoading(false);
             return;
         }
 
-        setLoading(true);
-
         try {
-            const notesFetched = await noteService.getNotes();
+            const notesFetched = await noteService.getPaginatedNotes(pagination.page, pagination.page_size);
             if (notesFetched) {
                 notesCache.current = notesFetched;
-                setNotes(notesFetched);
+                setNotes(notesFetched.items);
+                setPagination({
+                    total: notesCache.current.total,
+                    page: notesCache.current.page,
+                    page_size: notesCache.current.page_size,
+                    total_pages: notesCache.current.total_pages,
+                });
             }
         } catch (error) {
             handleError(error);
@@ -189,7 +212,7 @@ export default function ArticlesRoute() {
         fetchNotes().finally(() => {
             setLoading(false);
         });
-    });
+    }, []);
 
     if (loading) {
         return (
@@ -215,15 +238,53 @@ export default function ArticlesRoute() {
 
 
             {notes.length > 0 ? (
+                <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
-                    {notes.map(note => <Notes key={note.id}
-                                              note={note}
-                                              onEdit={handleEditNote}
-                                              onDelete={handleDeleteNote}/>
+                    {notes.map(note => <NotesCard key={note.id}
+                                                  note={note}
+                                                  onEdit={handleEditNote}
+                                                  onDelete={handleDeleteNote}/>
                     )}
                 </div>
-            ) : (
-                <div className={"flex items-center mt-40 justify-center"}>
+                <Pagination className="flex items-center justify-center p-5">
+                    <PaginationContent>
+                        {pagination.page > 1 && (
+                            <PaginationPrevious
+                                onClick={() => {
+                                    setPagination({
+                                        ...pagination,
+                                        page: Math.max(1, pagination.page - 1)
+                                    })
+                                    fetchNotes(true).finally(() => {
+                                        setLoading(false);
+                                    });
+                                }}
+                            />
+                        )}
+
+                        {pagination.total_pages > 0 && (
+                            <PaginationItem key="current-page">
+                                {pagination.page}
+                            </PaginationItem>
+                        )}
+
+                        {pagination.total_pages > 0 && pagination.page < pagination.total_pages && (
+                            <PaginationNext
+                                onClick={() => {
+                                    setPagination({
+                                        ...pagination,
+                                        page: Math.min(pagination.total_pages, pagination.page + 1)
+                                    })
+                                    fetchNotes(true).finally(() => {
+                                        setLoading(false);
+                                    });
+                                }}
+                            />
+                        )}
+                    </PaginationContent>
+                </Pagination>
+                </>
+            ) : (                <div className={"flex items-center mt-40 justify-center"}>
                     <p className={"text-primary animate-pulse"}> &#215; No Notes Found</p>
                 </div>
             )}
