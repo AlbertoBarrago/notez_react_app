@@ -5,6 +5,16 @@ import axios_instance from "@/interceptor/index.js";
  * @property {string} access_token - The access_token
  * @property {string} token_type - The token_type
  */
+
+/**
+ * @typedef {Object} User
+ * @property {string} id - The user's ID
+ * @property {string} username - The user's username
+ * @property {string} email - The user's email
+ * @property {string} created_at - The date the user was created
+ * @property {string} role - The user's role
+ * @property {string} picture - The user's image_url
+ */
 class AuthService {
 
     /**
@@ -103,7 +113,7 @@ class AuthService {
     /**
      * Retrieves the user data stored in localStorage.
      *
-     * @return {Object|null} The parsed user data object if available, otherwise null.
+     * @return {User|null} The parsed user data object if available, otherwise null.
      */
     getUser() {
        return JSON.parse(localStorage.getItem('user'));
