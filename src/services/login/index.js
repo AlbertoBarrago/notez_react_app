@@ -54,7 +54,7 @@ class AuthService {
     }
 
     /**
-     * Google OAuth Login
+     * Google OAuth LoginForm
      * @param data
      * @returns {Promise<any>}
      */

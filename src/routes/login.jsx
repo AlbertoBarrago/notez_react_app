@@ -9,7 +9,7 @@ import {useState} from "react";
 import AuthService from "@/services/login/index.js";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import Login from "@/components/login.jsx";
+import LoginForm from "@/components/loginForm.jsx";
 
 /** @constant {string} */
 const SIGN_IN = "signin";
@@ -80,7 +80,7 @@ export default function AuthRoute() {
             const errorMessage = {
                 title: 'Authentication Error',
                 status: err.response?.status || 500,
-                message: err.response?.data?.detail || 'Login failed. Please try again.'
+                message: err.response?.data?.detail || 'LoginForm failed. Please try again.'
             };
             setErrorProps(errorMessage);
             setIsModalOpen(true);
@@ -134,17 +134,17 @@ export default function AuthRoute() {
     }
 
     return (
-       <Login signingForm={signingForm}
-              signupForm={signupForm}
-              onSubmitSignUp={onSubmitSignUp}
-              onSubmitSignIn={onSubmitSignIn}
-              onGoogleOAuth={googleOAuth}
-              setIsModalOpen={setIsModalOpen}
-              setTab={setTab}
-              isLoading={isLoading}
-              isModalOpen={isModalOpen}
-              googleOAuth={googleOAuth}
-              errorProps={errorProps}
+       <LoginForm signingForm={signingForm}
+                  signupForm={signupForm}
+                  onSubmitSignUp={onSubmitSignUp}
+                  onSubmitSignIn={onSubmitSignIn}
+                  onGoogleOAuth={googleOAuth}
+                  setIsModalOpen={setIsModalOpen}
+                  setTab={setTab}
+                  isLoading={isLoading}
+                  isModalOpen={isModalOpen}
+                  googleOAuth={googleOAuth}
+                  errorProps={errorProps}
        />
     )
 }

@@ -62,7 +62,7 @@ export default function ArticlesRoute() {
     const [pagination, setPagination] = useState({
         total: 0,
         page: 1,
-        page_size: 1,
+        page_size: 8,
         total_pages: 0,
     });
 
@@ -96,7 +96,7 @@ export default function ArticlesRoute() {
     /**
      * Creates a new note
      * @async
-     * @param {newNote: {title,content}} note - Note to create
+     * @param {newNote: {title,content} | undefined} note - Note to create
      */
     const createNotes = async (note) => {
         try {

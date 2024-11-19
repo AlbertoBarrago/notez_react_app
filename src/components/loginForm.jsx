@@ -14,7 +14,7 @@ const SIGN_UP = "signup";
 /** @constant {string} */
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-export default function Login({
+export default function LoginForm({
                                   signingForm,
                                   onSubmitSignIn,
                                   onSubmitSignUp,
@@ -30,7 +30,7 @@ export default function Login({
     return (
         <GoogleOAuthProvider clientId={CLIENT_ID}>
             <Layout>
-                <div className="flex justify-center items-center min-h-screen sm:min-h-auto">
+                <div className="flex justify-center items-center min-h-[85vh] sm:min-h-auto px-4 py-6">
                     <Card className="w-[350px]">
                         <CardHeader>
                             <CardTitle>Welcome</CardTitle>
@@ -73,7 +73,7 @@ export default function Login({
                                                 googleOAuth(credentialResponse);
                                             }}
                                             onError={() => {
-                                                console.log('Login Failed');
+                                                console.log('LoginForm Failed');
                                             }}
                                         />
                                     </form>
@@ -128,7 +128,7 @@ export default function Login({
                                                 googleOAuth(credentialResponse, false);
                                             }}
                                             onError={() => {
-                                                console.log('Login Failed');
+                                                console.log('LoginForm Failed');
                                             }}
                                         />
                                     </form>
