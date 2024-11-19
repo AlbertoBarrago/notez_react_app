@@ -48,7 +48,7 @@ export default function Index() {
             <NavLink
                 to="/note"
                 className={({isActive, isPending}) =>
-                    `w-full p-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
+                    `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
                 }
             >
                 Your Articles
@@ -56,7 +56,7 @@ export default function Index() {
             <NavLink
                 to="/about"
                 className={({isActive, isPending}) =>
-                    `w-full p-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
+                    `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
                 }
             >
                 Explore

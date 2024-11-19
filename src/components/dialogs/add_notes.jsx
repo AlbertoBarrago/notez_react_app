@@ -39,9 +39,9 @@ export default function NoteAddNoteModal({isOpen, onClose, onSave}) {
                         Edit notes and save them.
                     </DialogDescription>
                 </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="title" className="text-right">
+                    <div className="flex flex-col space-y-4">
+                        <div className="flex flex-col">
+                            <Label htmlFor="title" className="mb-2">
                                 Title
                             </Label>
                             <Input
@@ -51,8 +51,8 @@ export default function NoteAddNoteModal({isOpen, onClose, onSave}) {
                                 className="col-span-3"
                             />
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="content" className="text-right">
+                        <div className="flex flex-col">
+                            <Label htmlFor="content" className="mb-2">
                                 Content
                             </Label>
                             <Textarea
@@ -63,7 +63,7 @@ export default function NoteAddNoteModal({isOpen, onClose, onSave}) {
                             />
                         </div>
                     </div>
-                <DialogFooter>
+                <DialogFooter className="sm:justify-end gap-4">
                     <Button type="button" variant="secondary" onClick={onClose}>
                         Cancel
                     </Button>
