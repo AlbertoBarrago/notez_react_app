@@ -13,14 +13,19 @@ import NoteAddNoteModal from "@/components/dialogs/add_notes.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import AuthService from "@/services/login/login.js";
 import {PlusIcon} from "lucide-react";
-import {
-    PaginationContent, PaginationEllipsis,
-    PaginationItem, PaginationLink,
-    PaginationNext,
-    PaginationPrevious
-} from "@/components/ui/pagination.jsx";
 import {SearchInput} from "@/components/searchInput.jsx";
 import {useNavigate} from "react-router-dom";
+import {ErrorMessage} from "@/components/error.jsx";
+import PaginationControls from "@/components/pagination.jsx";
+
+/**
+ * @constant {NotesService}
+ * @type {{PAGE_SIZE: number, INITIAL_PAGE: number}}
+ */
+const PAGINATION_DEFAULTS = {
+    PAGE_SIZE: 8,
+    INITIAL_PAGE: 1
+}
 
 /**
  * @typedef {Object} Note
@@ -65,10 +70,11 @@ export default function ArticlesRoute() {
     const [query, setQuery] = useState("");
     const [pagination, setPagination] = useState({
         total: 0,
-        page: 1,
-        page_size: 8,
+        page: PAGINATION_DEFAULTS.INITIAL_PAGE,
+        page_size: PAGINATION_DEFAULTS.PAGE_SIZE,
         total_pages: 0,
     });
+    const [error, setError] = useState(null)
 
 
     /**
@@ -144,10 +150,10 @@ export default function ArticlesRoute() {
      * Handles note edit action
      * @param {Note} note - Note to edit
      */
-    const handleEditNote = (note) => {
+    const memoizedHandleEditNote = useCallback((note) => {
         setSelectedNote(note)
         setIsModalOpen(true)
-    }
+    }, [])
     /**
      * Handles note creation action
      */
@@ -199,28 +205,23 @@ export default function ArticlesRoute() {
     }
     /**
      * Error handler for note operations
-     * * @param {{status?: number, message?: string}} error - Error object with status and message     * @param {string} [message] - Optional custom error message
+     * @param {{status?: number, message?: string}} error - Error object with status and message
+     * @param {string} [message] - Optional custom error message
      * @throws {Error} Rethrows the error after handling
      */
     const handleError = (error, message) => {
-        if (error.status === 401) {
-            authService.logout();
-            navigate.push('/login');
-        }
 
-        if (error.status === 403) {
-            authService.logout();
-            navigate.push('/login');
-        }
-
-        if (error.status === 429) {
-            authService.logout();
-            navigate.push('/login');
+        switch (error.status) {
+            case 401:
+            case 403:
+            case 429:
+                authService.logout();
+                navigate.push('/login');
         }
 
         const errorMessage = message || error.message || 'An unexpected error occurred';
+        setError(errorMessage)
         console.error(errorMessage, error);
-        throw error;
     };
 
     useEffect(() => {
@@ -232,96 +233,54 @@ export default function ArticlesRoute() {
         fetchNotes()
     }, [pagination.page, pagination.page_size, query]);
 
-
-    if (loading) {
-        return (
-            <Layout>
-                <div className="flex items-center justify-center mt-40">
-                    <div className="animate-spin rounded-full border-t-2 border-primary h-8 w-8"></div>
-                    <p className="text-gray-600 ml-2">Loading...</p>
-                </div>
-            </Layout>
-        );
-    }
-
     return (
         <Layout>
-            {notes.length > 0 ? (
-                <>
-                    <SearchInput onSearch={(q) => setQuery(q)} initialValue={query}/>
-                    <div
-                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
-                        {notes.map(note =>
-                            <NotesCard key={note.id}
-                                       note={note}
-                                       onEdit={handleEditNote}
-                                       onDelete={handleDeleteNote}/>
-                        )}
+            {error && <ErrorMessage message={error}/>}
+            <SearchInput onSearch={(q) => setQuery(q)} initialValue={query}/>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
+                {loading ? (
+                    Array(pagination.page_size).fill(null).map((_, index) => (
+                        <div key={`skeleton-${index}`}
+                             className="border-2 rounded-xl p-6 shadow-md min-h-[200px] bg-secondary/50">
+                            <div className="animate-pulse space-y-6">
+                                <div className="h-6 bg-primary/20 rounded-lg w-3/4"></div>
+
+                                <div className="space-y-3">
+                                    <div className="h-4 bg-primary/20 rounded-lg w-full"></div>
+                                    <div className="h-4 bg-primary/20 rounded-lg w-5/6"></div>
+                                    <div className="h-4 bg-primary/20 rounded-lg w-4/6"></div>
+                                </div>
+
+                                <div className="flex justify-end space-x-2 mt-4">
+                                    <div className="h-8 w-8 bg-primary/20 rounded-full"></div>
+                                    <div className="h-8 w-8 bg-primary/20 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : notes.length > 0 ? (
+                    notes.map(note => (
+                        <NotesCard
+                            key={note.id}
+                            note={note}
+                            onEdit={memoizedHandleEditNote}
+                            onDelete={handleDeleteNote}
+                        />
+                    ))
+                ) : (
+                    <div className="col-span-full flex items-center justify-center">
+                        <p className="text-primary animate-pulse">&#215; No Notes Found</p>
                     </div>
-                    <div className="flex items-center justify-center mt-4">
-                        <PaginationContent>
-                            {pagination.page > 1 && (
-                                <PaginationPrevious
-                                    onClick={() => {
-                                        setPagination({
-                                            ...pagination,
-                                            page: Math.max(1, pagination.page - 1)
-                                        })
-                                    }}
-                                />
-                            )}
+                )}
+            </div>
 
-                            <PaginationItem>
-                                <PaginationLink
-                                    isActive={pagination.page === 1}
-                                    onClick={() => setPagination({...pagination, page: 1})}
-                                >
-                                    1
-                                </PaginationLink>
-                            </PaginationItem>
-
-                            {pagination.total_pages > 3 && (
-                                <>
-                                    {pagination.page > 2 && <PaginationEllipsis/>}
-                                    {pagination.page > 1 && pagination.page < pagination.total_pages && (
-                                        <PaginationItem>
-                                            <PaginationLink isActive={true}>
-                                                {pagination.page}
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                    )}
-                                    {pagination.page < pagination.total_pages - 1 && <PaginationEllipsis/>}
-                                </>
-                            )}
-
-                            {pagination.total_pages > 1 && (
-                                <PaginationItem>
-                                    <PaginationLink
-                                        isActive={pagination.page === pagination.total_pages}
-                                        onClick={() => setPagination({...pagination, page: pagination.total_pages})}
-                                    >
-                                        {pagination.total_pages}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            )}
-
-                            {pagination.page < pagination.total_pages && (
-                                <PaginationNext
-                                    onClick={() => {
-                                        setPagination({
-                                            ...pagination,
-                                            page: Math.min(pagination.total_pages, pagination.page + 1)
-                                        })
-                                    }}
-                                />
-                            )}
-                        </PaginationContent>
-                    </div>
-                </>
-            ) : (
-                <div className={"flex items-center mt-40 justify-center"}>
-
-                    <p className={"text-primary animate-pulse"}> &#215; No Notes Found</p>
+            {notes.length > 0 && (
+                <div className="flex items-center justify-center">
+                    <PaginationControls
+                        pagination={pagination}
+                        setPagination={setPagination}
+                    />
                 </div>
             )}
 
