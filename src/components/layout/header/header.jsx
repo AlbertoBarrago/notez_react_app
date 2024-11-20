@@ -112,7 +112,7 @@ export default function Header() {
                             {auth.isLoggedIn() && (
                                 <div className="flex items-center gap-2">
                                     <Avatar className="h-8 w-8">
-                                        <AvatarImage src={user?.picture}/>
+                                        <AvatarImage src={user?.picture_url}/>
                                         <AvatarFallback>CN</AvatarFallback>
                                     </Avatar>
                                     <span>{user?.username}</span>
