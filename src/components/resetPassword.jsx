@@ -33,10 +33,7 @@ export default function ResetPasswordForm({ className }) {
             let token_parsed = token.token.toString().replace('token=', '');
             let resp = await authService.resetGoogleAuthPassword(token_parsed, newPassword);
             if (resp) {
-                console.log(resp);
                 navigate('/');
-            } else {
-                console.log("Error", resp);
             }
         } catch (error) {
             console.error(error);
