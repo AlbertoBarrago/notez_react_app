@@ -54,7 +54,7 @@ export default function Header() {
                 Your Articles
             </NavLink>
             <NavLink
-                to="/about"
+                to="/explore"
                 className={({isActive, isPending}) =>
                     `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
                 }
@@ -87,7 +87,7 @@ export default function Header() {
             </NavigationMenuItem>
             <NavigationMenuItem>
                 <NavLink
-                    to="/about"
+                    to="/explore"
                     className={({isActive, isPending}) =>
                         isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
                     }

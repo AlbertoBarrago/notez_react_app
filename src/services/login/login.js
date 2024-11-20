@@ -74,8 +74,38 @@ class AuthService {
      */
     async googleAuthSignup(data) {
         delete data.select_by
-        const response = await axios_instance.post('/users/register/google', data);
+        const response = await axios_instance.post('/register/google', data);
         CService.storeTokenAndUser(response.data);
+        return response.data;
+    }
+
+    /**
+     * Reset the password
+     * @param email
+     * @param oldPassword
+     * @param newPassword
+     * @returns {Promise<any>}
+     */
+    async resetPassword(email, oldPassword, newPassword) {
+        const response = await axios_instance.post('/users/reset/password', {
+            username: email,
+            old_password: oldPassword,
+            new_password: newPassword
+        });
+        return response.data;
+    }
+
+    /**
+     * Reset the password for Google auth
+     * @param email
+     * @param newPassword
+     * @returns {Promise<any>}
+     */
+    async resetGoogleAuthPassword(email, newPassword) {
+        const response = await axios_instance.post('/users/reset/google-password', {
+            email,
+            new_password: newPassword
+        });
         return response.data;
     }
 
