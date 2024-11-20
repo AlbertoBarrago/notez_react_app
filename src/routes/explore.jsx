@@ -1,4 +1,4 @@
-import Layout from "../components/layout/index.jsx";
+import Layout from "../components/layout/layout.jsx";
 
 export default function AboutRoute() {
     return (

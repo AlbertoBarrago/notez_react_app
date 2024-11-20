@@ -6,7 +6,7 @@ import {
 import {NavLink, useNavigate} from "react-router-dom";
 import {ThemeSelector} from "@/components/theme/themeSelector.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import AuthService from "@/services/login/index.js";
+import AuthService from "@/services/login/login.js";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
 import {
     Sheet,
@@ -27,11 +27,11 @@ import { Menu } from "lucide-react";
  * @component
  * @returns {JSX.Element} Header component with navigation menu, user info, and theme controls
  */
-export default function Index() {
+export default function Header() {
     const auth = new AuthService()
     const navigate = useNavigate()
 
-    /** @type {import('@/services/login').User} */
+    /** @type {import('@/services/login/login.js').User} */
     const user = auth.getUser();
 
     const performLogout = () => {
@@ -48,15 +48,15 @@ export default function Index() {
             <NavLink
                 to="/note"
                 className={({isActive, isPending}) =>
-                    `w-full p-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
+                    `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
                 }
             >
                 Your Articles
             </NavLink>
             <NavLink
-                to="/about"
+                to="/explore"
                 className={({isActive, isPending}) =>
-                    `w-full p-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
+                    `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
                 }
             >
                 Explore
@@ -87,7 +87,7 @@ export default function Index() {
             </NavigationMenuItem>
             <NavigationMenuItem>
                 <NavLink
-                    to="/about"
+                    to="/explore"
                     className={({isActive, isPending}) =>
                         isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
                     }

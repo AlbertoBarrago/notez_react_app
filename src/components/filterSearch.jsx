@@ -1,12 +1,15 @@
 import {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input.jsx";
 
-export function SearchInput({onSearch, initialValue = ""}) {
+/** @constant {number} WORDS_LIMIT */
+const WORDS_LIMIT = 3;
+
+export function FilterSearch({onSearch, initialValue = ""}) {
     const [searchTerm, setSearchTerm] = useState(initialValue)
 
     useEffect(() => {
         const debounceTimer = setTimeout(() => {
-            if (searchTerm.length === 0 || searchTerm.length >= 3) {
+            if (searchTerm.length === 0 || searchTerm.length >= WORDS_LIMIT) {
                 onSearch(searchTerm)
             }
         }, 500);
@@ -19,7 +22,7 @@ export function SearchInput({onSearch, initialValue = ""}) {
     }
 
     return (
-        <div className="flex items-center space-x-2 w-full max-w-[990px] mx-auto mt-5 px-4 md:px-0">
+        <div className="flex items-center space-x-1 w-full max-w-[890px] mx-auto mt-5 px-4 md:px-0">
             <Input
                 type="text"
                 placeholder="Search notes (min. 3 characters)"
