@@ -25,7 +25,7 @@ const routeConfig = [
         children: [
             { path: "note", element: <Articles /> },
             { path: "explore", element: <Explore /> },
-            { path: "reset", element: <ResetPassword /> },
+            { path: "reset/password/:token", element: <ResetPassword /> },
         ]
     },
     {

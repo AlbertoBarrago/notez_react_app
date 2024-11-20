@@ -97,13 +97,13 @@ class AuthService {
 
     /**
      * Reset the password for Google auth
-     * @param email
+     * @param token
      * @param newPassword
      * @returns {Promise<any>}
      */
-    async resetGoogleAuthPassword(email, newPassword) {
+    async resetGoogleAuthPassword(token, newPassword) {
         const response = await axios_instance.post('/users/reset/google-password', {
-            email,
+            token,
             new_password: newPassword
         });
         return response.data;
