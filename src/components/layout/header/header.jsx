@@ -34,6 +34,8 @@ export default function Header() {
     /** @type {import('@/services/login/login.js').User} */
     const user = auth.getUser();
 
+    console.log(user)
+
     const performLogout = () => {
         auth.logout()
         navigate("/", {replace: true})
@@ -112,9 +114,14 @@ export default function Header() {
                             {auth.isLoggedIn() && (
                                 <div className="flex items-center gap-2">
                                     <Avatar className="h-8 w-8">
-                                        <AvatarImage src={user?.picture_url}/>
-                                        <AvatarFallback>CN</AvatarFallback>
+                                        <AvatarImage src={user?.picture_url}
+                                                     alt={user?.username || 'User avatar'}
+                                                     referrerPolicy="no-referrer"/>
+                                        <AvatarFallback>
+                                            {'NA'}
+                                        </AvatarFallback>
                                     </Avatar>
+
                                     <span>{user?.username}</span>
                                 </div>
                             )}
