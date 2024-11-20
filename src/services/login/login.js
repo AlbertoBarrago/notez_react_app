@@ -62,7 +62,7 @@ class AuthService {
      */
     async googleOAuth(data) {
         delete data.select_by
-        const response = await axios_instance.post('/oauth/google', data);
+        const response = await axios_instance.post('/login/google', data);
         CService.storeTokenAndUser(response.data);
         return response.data;
     }
