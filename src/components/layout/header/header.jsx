@@ -48,7 +48,7 @@ export default function Header() {
     const MobileNavigationItems = () => (
         <div className="flex flex-col w-full gap-2">
             <NavLink
-                to="/note"
+                to="/notes"
                 className={({isActive, isPending}) =>
                     `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
                 }
@@ -79,7 +79,7 @@ export default function Header() {
         <>
             <NavigationMenuItem>
                 <NavLink
-                    to="/note"
+                    to="/notes"
                     className={({isActive, isPending}) =>
                         isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
                     }
@@ -110,7 +110,7 @@ export default function Header() {
             <NavigationMenu className="min-w-full flex justify-between items-center">
                 <NavigationMenuList className="ml-3">
                     <NavigationMenuItem>
-                        <NavLink to="/note" className='text-2xl no-bg'>
+                        <NavLink to="/notes" className='text-2xl no-bg'>
                             {auth.isLoggedIn() && (
                                 <div className="flex items-center gap-2">
                                     <Avatar className="h-8 w-8">
