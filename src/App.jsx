@@ -17,13 +17,13 @@ const routeConfig = [
     {
         path: publicPath,
         element: <AuthRoute/>,
-        loader: () => auth.isLoggedIn() ? redirect('/note') : null,
+        loader: () => auth.isLoggedIn() ? redirect('/notes') : null,
     },
     {
         path: "/",
         element: <PrivateRoute />,
         children: [
-            { path: "note", element: <Articles /> },
+            { path: "notes", element: <Articles /> },
             { path: "explore", element: <Explore /> },
             { path: "reset/password/:token", element: <ResetPassword /> },
         ]

@@ -73,7 +73,7 @@ export default function AuthRoute() {
         try {
             const resp = await auth.login(data.username, data.password);
             if (resp.user) {
-                navigate("/note");
+                navigate("/notes");
             }
         } catch (err) {
             const errorMessage = {
@@ -101,7 +101,7 @@ export default function AuthRoute() {
         try {
             const resp = await auth.register(data.email, data.username, data.password);
             if (resp.user) {
-                navigate("/note");
+                navigate("/notes");
             }
         } catch (e) {
             setErrorProps(e);
@@ -122,7 +122,7 @@ export default function AuthRoute() {
         try {
             const resp = isSigning ? await auth.googleOAuth(data) : await auth.googleAuthSignup(data);
             if (resp.user) {
-                navigate("/note");
+                navigate("/notes");
             }
         } catch (e) {
             setErrorProps(e);
