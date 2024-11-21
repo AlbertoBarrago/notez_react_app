@@ -235,7 +235,7 @@ export default function ArticlesRoute() {
     return (
         <Layout>
             {error && <ErrorMessage message={error}/>}
-            {notes && notes.length > 1 ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
+            {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
                 {loading ? (
