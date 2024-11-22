@@ -39,6 +39,20 @@ class NotesService {
     }
 
     /**
+     * Fetches public notes.
+     *
+     * @param {number} page - The page number for pagination.
+     * @param {number} pageSize - The number of notes per page.
+     * @param {string} query - The search query for filtering notes.
+     * @param {string} sort - The sorting criteria for the notes.
+     * @return {PaginatedResponse} A promise that resolves to an array of note objects.
+     */
+    async getPublicNotes(page, pageSize, query, sort = "asc") {
+        const resp = await axios_instance.get(`/notes/list/explore/?page=${page}&page_size=${pageSize}&sort=${sort}&query=${query}`);
+        return resp.data;
+    }
+
+    /**
      * Add note
      * @param {Note} note - The object of note (title, content)
      * @return {Object} The updated note data from the server.
