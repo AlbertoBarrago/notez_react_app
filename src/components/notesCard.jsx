@@ -24,9 +24,10 @@ import {Pencil, Trash2} from "lucide-react"
  * @param {Note} props.note - Note data
  * @param {Function} props.onEdit - Edit handler callback
  * @param {Function} props.onDelete - Delete handler callback
+ * @param {boolean} props.justReadable - Flag to indicate if the note is just readable
  * @returns {JSX.Element} Rendered note card
  */
-export function NotesCard({note, onEdit, onDelete}) {
+export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
     /** @type {[boolean, Function]} Content expansion state */
     const [isExpanded, setIsExpanded] = useState(false)
 
@@ -87,22 +88,25 @@ export function NotesCard({note, onEdit, onDelete}) {
                 )}
             </CardContent>
             <CardFooter className="flex items-end justify-end gap-2">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onEdit(note)}
-                    className="bg:bg-secondary hover:bg-secondary-600 dark:bg-secondary-700 dark:hover:bg-secondary-800">
-                    <Pencil className="w-4 h-4 mr-2"/>
-                    Edit
-                </Button>
-                <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => onDelete(note.id)}
-                    className="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-                    <Trash2 className="w-4 h-4 mr-2"/>
-                    Delete
-                </Button>
+                {!justReadable && (
+                    <>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onEdit(note)}
+                            className="bg:bg-secondary hover:bg-secondary-600 dark:bg-secondary-700 dark:hover:bg-secondary-800">
+                            <Pencil className="w-4 h-4 mr-2"/>
+                            Edit
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => onDelete(note.id)}
+                            className="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
+                            <Trash2 className="w-4 h-4 mr-2"/>
+                            Delete
+                        </Button>
+                    </>)}
             </CardFooter>
         </Card>
     );
