@@ -214,6 +214,7 @@ export default function ArticlesRoute() {
             case 401:
             case 403:
             case 429:
+                alert(error.message);
                 authService.logout();
                 navigate('/');
                 break;
