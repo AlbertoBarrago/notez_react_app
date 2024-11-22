@@ -8,6 +8,7 @@
 - [x] Add Global context 
 - [x] Add react-router and add pages 
 - [x] Add Tailwind and shadiUI for GUI
+- [x] Add explore page with note just readable 
 - [ ] Add Article page 
 - [ ] Add user profile
 
