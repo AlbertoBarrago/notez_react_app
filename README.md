@@ -8,9 +8,8 @@
 - [x] Add Global context 
 - [x] Add react-router and add pages 
 - [x] Add Tailwind and shadiUI for GUI
+- [ ] Add Article page 
 - [ ] Add user profile
-- [ ]  work in progress... 🚀
-
 
 ## Version 
 Handling versioning with [semver](https://semver.org/)
