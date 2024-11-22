@@ -15,7 +15,7 @@ const CService = new CommonService();
  * @property {string} email - The user's email
  * @property {string} created_at - The date the user was created
  * @property {string} role - The user's role
- * @property {string} picture - The user's image_url
+ * @property {string} picture_url - The user's image_url
  */
 class AuthService {
 
@@ -97,13 +97,13 @@ class AuthService {
 
     /**
      * Reset the password for Google auth
-     * @param email
+     * @param token
      * @param newPassword
      * @returns {Promise<any>}
      */
-    async resetGoogleAuthPassword(email, newPassword) {
+    async resetGoogleAuthPassword(token, newPassword) {
         const response = await axios_instance.post('/users/reset/google-password', {
-            email,
+            token,
             new_password: newPassword
         });
         return response.data;

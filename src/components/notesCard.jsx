@@ -63,7 +63,7 @@ export function NotesCard({note, onEdit, onDelete}) {
 
     return (
         <Card
-            className="w-full max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent">
+            className="w-full min-w-[290px] max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold ">{note?.title} </CardTitle>
                 <CardDescription className="text-sm font-medium">

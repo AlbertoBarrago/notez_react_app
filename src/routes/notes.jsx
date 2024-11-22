@@ -235,7 +235,7 @@ export default function ArticlesRoute() {
     return (
         <Layout>
             {error && <ErrorMessage message={error}/>}
-            <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/>
+            {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
                 {loading ? (
@@ -268,8 +268,8 @@ export default function ArticlesRoute() {
                         />
                     ))
                 ) : (
-                    <div className="col-span-full flex items-center justify-center">
-                        <p className="text-primary animate-pulse">× No Notes Found</p>
+                    <div className="col-span-full flex items-center justify-center text-center mt-40">
+                        <p className="text-primary-400 text-2xl">Add some notes Dude, press the <br/> button below with symbol <code>+</code></p>
                     </div>
                 )}
             </div>
@@ -284,7 +284,7 @@ export default function ArticlesRoute() {
             )}
 
             <Button
-                className="fixed bottom-6 right-6 rounded-full p-4 shadow-lg"
+                className={`fixed bottom-6 right-6 rounded-full p-4 shadow-lg ${notes.length === 0 ? 'animate-pulse' : ''}`}
                 onClick={handleCreateNote}
                 variant="secondary"
                 size="icon">

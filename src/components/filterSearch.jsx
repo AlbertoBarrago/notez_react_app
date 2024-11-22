@@ -22,7 +22,13 @@ export function FilterSearch({onSearch, initialValue = ""}) {
     }
 
     return (
-        <div className="flex items-center space-x-1 w-full max-w-[890px] mx-auto mt-5 px-4 md:px-0">
+        <div className="flex items-center space-x-1 w-full
+                        sm:max-w-[640px]
+                        md:max-w-[768px]
+                        lg:max-w-[890px]
+                        xl:max-w-[1024px]
+                        mx-auto mt-5
+                        px-4 md:px-0">
             <Input
                 type="text"
                 placeholder="Search notes (min. 3 characters)"
