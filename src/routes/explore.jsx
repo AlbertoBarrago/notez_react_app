@@ -116,11 +116,7 @@ export default function ExploreRoute() {
 
     useEffect(() => {
         fetchNotes()
-    }, [fetchNotes]);
-
-    useEffect(() => {
-        fetchNotes()
-    }, [pagination.page, pagination.page_size, query, fetchNotes]);
+    }, [pagination.page, pagination.page_size, query]);
 
     return (
         <Layout>
