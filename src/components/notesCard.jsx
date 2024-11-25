@@ -60,7 +60,7 @@ export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
     const displayContent = note?.content || fakeText
 
     /** @type {boolean} Whether to show expand button */
-    const shouldShowExpandButton = displayContent.length > 140
+    const shouldShowExpandButton = displayContent.length > 120
 
     return (
         <Card
@@ -74,8 +74,8 @@ export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <p className="text-sm text-primary-700 dark:text-primary-300 min-h-[3rem]">
-                    {!isExpanded ? displayContent.substring(0, 140) + '...' : displayContent}
+                <p className="text-sm text-primary-700 dark:text-primary-300 min-h-[2rem]">
+                    {!isExpanded ? displayContent.substring(0, 120) + '...' : displayContent}
                 </p>
                 {shouldShowExpandButton && (
                     <p onClick={toggleExpand}
