@@ -14,18 +14,10 @@ import {Button} from "@/components/ui/button.jsx";
 import AuthService from "@/services/login/login.js";
 import {PlusIcon} from "lucide-react";
 import {FilterSearch} from "@/components/filterSearch.jsx";
-import {useNavigate} from "react-router-dom";
+import {useLoaderData, useNavigate, useNavigation} from "react-router-dom";
 import {ErrorMessage} from "@/components/error.jsx";
 import PaginationControls from "@/components/pagination.jsx";
 
-/**
- * @constant {NotesService}
- * @type {{PAGE_SIZE: number, INITIAL_PAGE: number}}
- */
-const PAGINATION_DEFAULTS = {
-    PAGE_SIZE: 8,
-    INITIAL_PAGE: 1
-}
 
 /**
  * @typedef {Object} Note
@@ -43,38 +35,36 @@ const PAGINATION_DEFAULTS = {
  * @property {number} total_pages - Total number of pages
  */
 
-/**
- * @constant {NotesService}
- */
 const noteService = new NotesService();
 const authService = new AuthService();
 
 /**
  * Main part for displaying and managing notes
- * @function ArticlesRoute
+ * @function NotesList
  * @returns {JSX.Element} Rendered component
  */
-export default function ArticlesRoute() {
+export default function NotesList() {
     const navigate = useNavigate()
-    /** @type {[Array<Note>, Function]} NotesCard state and setter */
-    const [notes, setNotes] = useState([]);
-    /** @type {[boolean, Function]} Loading state and setter */
-    const [loading, setLoading] = useState(false);
-    /** @type {React.MutableRefObject} Cache for notes data */
-    /** @type {[boolean, Function]} Modal states and setters */
+    const initialData = useLoaderData()
+    const navigation = useNavigation()
+    const [notes, setNotes] = useState(initialData.items);
+    const routeLoading = navigation.state === "loading"
+    const [operationLoading, setOperationLoading] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false)
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
-    /** @type {[Note|null, Function]} Selected note state and setter */
     const [selectedNote, setSelectedNote] = useState(null)
     const [query, setQuery] = useState("");
     const [pagination, setPagination] = useState({
-        total: 0,
-        page: PAGINATION_DEFAULTS.INITIAL_PAGE,
-        page_size: PAGINATION_DEFAULTS.PAGE_SIZE,
-        total_pages: 0,
-    });
+        total: initialData.total,
+        page: initialData.page,
+        page_size: initialData.page_size,
+        total_pages: initialData.total_pages,
+    })
     const [error, setError] = useState(null)
+    const isLoading = routeLoading || operationLoading
+
+
 
 
     /**
@@ -87,8 +77,8 @@ export default function ArticlesRoute() {
      */
     const fetchNotes = useCallback(async () => {
         try {
-            setLoading(true);
-            const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size, query);
+            setOperationLoading(true)
+            const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size, query, "desc");
             if (notesFetched) {
                 setNotes(notesFetched.items);
                 setPagination({
@@ -97,17 +87,17 @@ export default function ArticlesRoute() {
                     total: notesFetched.total,
                     total_pages: notesFetched.total_pages,
                 });
+                setOperationLoading(false)
             }
         } catch (error) {
             handleError(error);
-        } finally {
-            setLoading(false);
+            setOperationLoading(false)
         }
     }, [pagination.page, pagination.page_size, query]);
     /**
      * Creates a new note
      * @async
-     * @param {newNote: {title,content} | undefined} note - Note to create
+     * @param {newNote: {title,content} | undefined} note - NoteElement to create
      */
     const createNotes = async (note) => {
         try {
@@ -121,7 +111,7 @@ export default function ArticlesRoute() {
     /**
      * Updates an existing note
      * @async
-     * @param {Note} note - Note to update
+     * @param {Note} note - NoteElement to update
      */
     const updateNote = async (note) => {
         try {
@@ -135,7 +125,7 @@ export default function ArticlesRoute() {
     /**
      * Deletes a note
      * @async
-     * @param {string} note_id - Note to delete
+     * @param {string} note_id - NoteElement to delete
      */
     const deleteNote = async (note_id) => {
         try {
@@ -148,7 +138,7 @@ export default function ArticlesRoute() {
     }
     /**
      * Handles note edit action
-     * @param {Note} note - Note to edit
+     * @param {Note} note - NoteElement to edit
      */
     const memoizedHandleEditNote = useCallback((note) => {
         setSelectedNote(note)
@@ -186,7 +176,7 @@ export default function ArticlesRoute() {
     }
     /**
      * Handles note deletion action
-     * @param {Note} note - Note to delete
+     * @param {Note} note - NoteElement to delete
      */
     const handleDeleteNote = (note) => {
         setSelectedNote(note)
@@ -200,6 +190,12 @@ export default function ArticlesRoute() {
             deleteNote(selectedNote).finally(() => {
                 setIsModalDeleteOpen(false)
                 setSelectedNote(null)
+                if(notes.length < 5) {
+                    setPagination({
+                        ...pagination,
+                        page: 1,
+                    })
+                }
             })
         }
     }
@@ -235,7 +231,7 @@ export default function ArticlesRoute() {
             {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
-                {loading ? (
+                {isLoading ? (
                     Array(pagination.page_size).fill(null).map((_, index) => (
                         <div key={`skeleton-${index}`}
                              className="border-2 rounded-xl p-6 shadow-md min-h-[200px] bg-secondary/50">

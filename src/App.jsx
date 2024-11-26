@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
-import Articles from "./routes/notes.jsx";
+import NoteList from "./routes/notesList.jsx";
 import Explore from "./routes/explore.jsx";
 import './style.css';
 import {ContextProvider} from "@/context/theme.jsx";
@@ -9,9 +9,20 @@ import AuthRoute from "@/routes/login.jsx";
 import PrivateRoute from "@/routes/privateRoute.jsx";
 import AuthService from "@/services/login/login.js";
 import ResetPassword from "@/routes/resetPassword.jsx";
+import {Note} from "@/routes/note.jsx";
+import NotesService from "@/services/notes/notes.js";
 
 const publicPath = '/';
 const auth = new AuthService();
+
+/**
+ * @constant {NotesService}
+ * @type {{PAGE_SIZE: number, INITIAL_PAGE: number}}
+ */
+const PAGINATION_DEFAULTS = {
+    PAGE_SIZE: 8,
+    INITIAL_PAGE: 1
+}
 
 const routeConfig = [
     {
@@ -23,8 +34,27 @@ const routeConfig = [
         path: "/",
         element: <PrivateRoute />,
         children: [
-            { path: "notes", element: <Articles /> },
-            { path: "explore", element: <Explore /> },
+            { path: "notes", element: <NoteList />,
+                loader: async ({ request }) => {
+                    const url = new URL(request.url);
+                    const page = url.searchParams.get("page") || PAGINATION_DEFAULTS.INITIAL_PAGE;
+                    const pageSize = PAGINATION_DEFAULTS.PAGE_SIZE;
+                    const query = url.searchParams.get("query") || "";
+
+                    const noteService = new NotesService();
+                    return noteService.getNotes(page, pageSize, query);
+                }},
+            { path: "note/:id", element: <Note /> },
+            { path: "explore", element: <Explore />,
+                loader: async ({ request }) => {
+                    const url = new URL(request.url);
+                    const page = url.searchParams.get("page") || PAGINATION_DEFAULTS.INITIAL_PAGE;
+                    const pageSize = PAGINATION_DEFAULTS.PAGE_SIZE;
+                    const query = url.searchParams.get("query") || "";
+
+                    const noteService = new NotesService();
+                    return noteService.getNotes(page, pageSize, query);
+                }},
             { path: "reset/password/:token", element: <ResetPassword /> },
         ]
     },

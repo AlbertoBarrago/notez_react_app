@@ -9,18 +9,10 @@ import {useEffect, useState, useCallback} from "react";
 import NotesService from "@/services/notes/notes.js";
 import AuthService from "@/services/login/login.js";
 import {FilterSearch} from "@/components/filterSearch.jsx";
-import {useNavigate} from "react-router-dom";
+import {useLoaderData, useNavigate, useNavigation} from "react-router-dom";
 import {ErrorMessage} from "@/components/error.jsx";
 import PaginationControls from "@/components/pagination.jsx";
 
-/**
- * @constant {NotesService}
- * @type {{PAGE_SIZE: number, INITIAL_PAGE: number}}
- */
-const PAGINATION_DEFAULTS = {
-    PAGE_SIZE: 8,
-    INITIAL_PAGE: 1
-}
 
 /**
  * @typedef {Object} Note
@@ -51,17 +43,17 @@ const authService = new AuthService();
  */
 export default function ExploreRoute() {
     const navigate = useNavigate()
-    /** @type {[Array<Note>, Function]} NotesCard state and setter */
-    const [notes, setNotes] = useState([]);
-    /** @type {[boolean, Function]} Loading state and setter */
-    const [loading, setLoading] = useState(false);
+    const initialData = useLoaderData()
+    const navigation = useNavigation()
+    const [notes, setNotes] = useState(initialData.items);
+    const loading = navigation.state === "loading";
     const [query, setQuery] = useState("");
     const [pagination, setPagination] = useState({
-        total: 0,
-        page: PAGINATION_DEFAULTS.INITIAL_PAGE,
-        page_size: PAGINATION_DEFAULTS.PAGE_SIZE,
-        total_pages: 0,
-    });
+        total: initialData.total,
+        page: initialData.page,
+        page_size: initialData.page_size,
+        total_pages: initialData.total_pages,
+    })
     const [error, setError] = useState(null)
 
 
@@ -75,7 +67,6 @@ export default function ExploreRoute() {
      */
     const fetchNotes = useCallback(async () => {
         try {
-            setLoading(true);
             const notesFetched = await noteService.getPublicNotes(pagination.page, pagination.page_size, query);
             if (notesFetched) {
                 setNotes(notesFetched.items);
@@ -88,8 +79,6 @@ export default function ExploreRoute() {
             }
         } catch (error) {
             handleError(error);
-        } finally {
-            setLoading(false);
         }
     }, [pagination.page, pagination.page_size, query]);
 
