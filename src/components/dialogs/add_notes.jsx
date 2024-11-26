@@ -22,16 +22,19 @@ export default function NoteAddNoteModal({isOpen, onClose, onSave}) {
             title,
             content
         })
-        onClose(
-            {
-                title: '',
-                content: ''
-            }
-        )
+        setTitle('')
+        setContent('')
+        onClose()
+    }
+
+    const handleClose = () => {
+        setTitle('')
+        setContent('')
+        onClose()
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose} aria-labelledby="modal-title">
+        <Dialog open={isOpen} onOpenChange={handleClose} aria-labelledby="modal-title">
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Create Note</DialogTitle>
@@ -64,7 +67,7 @@ export default function NoteAddNoteModal({isOpen, onClose, onSave}) {
                         </div>
                     </div>
                 <DialogFooter className="sm:justify-end gap-4">
-                    <Button type="button" variant="secondary" onClick={onClose}>
+                    <Button type="button" variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
                     <Button type="button" onClick={handleCreationNote}>

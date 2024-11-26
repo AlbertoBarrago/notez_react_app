@@ -34,8 +34,6 @@ export default function Header() {
     /** @type {import('@/services/login/login.js').User} */
     const user = auth.getUser();
 
-    console.log(user)
-
     const performLogout = () => {
         auth.logout()
         navigate("/", {replace: true})

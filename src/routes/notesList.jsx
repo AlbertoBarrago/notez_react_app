@@ -62,9 +62,8 @@ export default function NotesList() {
         total_pages: initialData.total_pages,
     })
     const [error, setError] = useState(null)
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
     const isLoading = routeLoading || operationLoading
-
-
 
 
     /**
@@ -222,6 +221,10 @@ export default function NotesList() {
     };
 
     useEffect(() => {
+        if(isInitialLoad) {
+            setIsInitialLoad(false);
+            return;
+        }
         fetchNotes()
     }, [pagination.page, pagination.page_size, query]);
 
