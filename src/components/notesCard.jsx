@@ -1,5 +1,5 @@
 /**
- * @fileoverview Note card component for displaying individual notes
+ * @fileoverview NoteElement card component for displaying individual notes
  * @module Notes
  */
 
@@ -10,18 +10,18 @@ import {Pencil, Trash2} from "lucide-react"
 
 /**
  * @typedef {Object} Note
- * @property {string} id - Note identifier
- * @property {string} title - Note title
- * @property {string} content - Note content
+ * @property {string} id - NoteElement identifier
+ * @property {string} title - NoteElement title
+ * @property {string} content - NoteElement content
  * @property {string|Date} created_at - Creation date
  * @property {string|Date} updated_at - Last update date
  */
 
 /**
- * Note card component
+ * NoteElement card component
  * @function NotesCard
  * @param {Object} props - Component props
- * @param {Note} props.note - Note data
+ * @param {Note} props.note - NoteElement data
  * @param {Function} props.onEdit - Edit handler callback
  * @param {Function} props.onDelete - Delete handler callback
  * @param {boolean} props.justReadable - Flag to indicate if the note is just readable
