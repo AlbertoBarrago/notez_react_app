@@ -55,6 +55,7 @@ export default function ExploreRoute() {
         total_pages: initialData.total_pages,
     })
     const [error, setError] = useState(null)
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
 
     /**
@@ -104,6 +105,10 @@ export default function ExploreRoute() {
     };
 
     useEffect(() => {
+        if(isInitialLoad){
+            setIsInitialLoad(false);
+            return;
+        }
         fetchNotes()
     }, [pagination.page, pagination.page_size, query]);
 
