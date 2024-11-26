@@ -21,7 +21,8 @@ const auth = new AuthService();
  */
 const PAGINATION_DEFAULTS = {
     PAGE_SIZE: 8,
-    INITIAL_PAGE: 1
+    INITIAL_PAGE: 1,
+    DESC_ORDER: 'desc'
 }
 
 const routeConfig = [
@@ -39,10 +40,11 @@ const routeConfig = [
                     const url = new URL(request.url);
                     const page = url.searchParams.get("page") || PAGINATION_DEFAULTS.INITIAL_PAGE;
                     const pageSize = PAGINATION_DEFAULTS.PAGE_SIZE;
+                    const sort = PAGINATION_DEFAULTS.DESC_ORDER;
                     const query = url.searchParams.get("query") || "";
 
                     const noteService = new NotesService();
-                    return noteService.getNotes(page, pageSize, query);
+                    return noteService.getNotes(page, pageSize, query, sort);
                 }},
             { path: "note/:id", element: <Note /> },
             { path: "explore", element: <Explore />,
@@ -50,10 +52,11 @@ const routeConfig = [
                     const url = new URL(request.url);
                     const page = url.searchParams.get("page") || PAGINATION_DEFAULTS.INITIAL_PAGE;
                     const pageSize = PAGINATION_DEFAULTS.PAGE_SIZE;
+                    const sort = PAGINATION_DEFAULTS.DESC_ORDER;
                     const query = url.searchParams.get("query") || "";
 
                     const noteService = new NotesService();
-                    return noteService.getNotes(page, pageSize, query);
+                    return noteService.getNotes(page, pageSize, query, sort);
                 }},
             { path: "reset/password/:token", element: <ResetPassword /> },
         ]

@@ -222,7 +222,7 @@ export default function NotesList() {
 
     useEffect(() => {
         if(isInitialLoad) {
-            setIsInitialLoad(true);
+            setIsInitialLoad(false);
             return;
         }
         fetchNotes()
