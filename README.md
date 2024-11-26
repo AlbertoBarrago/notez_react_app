@@ -71,7 +71,7 @@ src/
 ## Getting Started 🚀
 
 ## Live Demo 🌐
-Try it out: [NotesCard Demo](https://albertobarrago.github.io/notes-card/)
+Try it out: [NotesCard Demo](https://albertobarrago.github.io/)
 
 ```bash
 # Clone the repository
