@@ -24,10 +24,16 @@ export default function NoteEditModal({isOpen, onClose, onSave, note}) {
         }
     }, [note])
 
-    const handleSave = () => {
-        if (note) {
-            onSave({...note, title, content})
+    useEffect(() => {
+        if (!isOpen) {
+            setTitle('')
+            setContent('')
         }
+    }, [isOpen])
+
+    const handleSave = () => {
+        if (!note || !title.trim() || !content.trim()) return
+        onSave({...note, title: title.trim(), content: content.trim()})
         onClose()
     }
 
@@ -64,7 +70,7 @@ export default function NoteEditModal({isOpen, onClose, onSave, note}) {
                             />
                         </div>
                     </div>
-                <DialogFooter>
+                <DialogFooter className="sm:justify-end gap-4">
                     <Button type="button" variant="secondary" onClick={onClose}>
                         Cancel
                     </Button>
