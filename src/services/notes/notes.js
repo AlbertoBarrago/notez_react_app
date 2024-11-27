@@ -34,8 +34,6 @@ const PAGINATION_DEFAULTS = {
  * It uses an authentication instance passed during construction to handle any login-related operations.
  */
 class NotesService {
-
-
     /**
      * Get notes for routes
      * @param request
