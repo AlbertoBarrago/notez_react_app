@@ -27,7 +27,7 @@ class AuthService {
      * @throws {Error} - If there is an issue with the login request
      */
     async login(username, password) {
-        const response = await axios_instance.post('/login', {
+        const response = await axios_instance.post('/auth/login', {
             username,
             password
         });
@@ -62,7 +62,7 @@ class AuthService {
      */
     async googleOAuth(data) {
         delete data.select_by
-        const response = await axios_instance.post('/login/google', data);
+        const response = await axios_instance.post('/oauth/login/google', data);
         CService.storeTokenAndUser(response.data);
         return response.data;
     }
@@ -74,7 +74,7 @@ class AuthService {
      */
     async googleAuthSignup(data) {
         delete data.select_by
-        const response = await axios_instance.post('/register/google', data);
+        const response = await axios_instance.post('/oauth/register/google', data);
         CService.storeTokenAndUser(response.data);
         return response.data;
     }
@@ -87,7 +87,7 @@ class AuthService {
      * @returns {Promise<any>}
      */
     async resetPassword(email, oldPassword, newPassword) {
-        const response = await axios_instance.post('/users/reset/password', {
+        const response = await axios_instance.post('/auth/reset/password', {
             username: email,
             old_password: oldPassword,
             new_password: newPassword
@@ -102,7 +102,7 @@ class AuthService {
      * @returns {Promise<any>}
      */
     async resetGoogleAuthPassword(token, newPassword) {
-        const response = await axios_instance.post('/users/reset/google-password', {
+        const response = await axios_instance.post('/oauth/reset/google-password', {
             token,
             new_password: newPassword
         });

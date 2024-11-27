@@ -93,7 +93,9 @@ export default function NotesList() {
     const createNotes = async (note) => {
         try {
             await noteService.addNote(note).finally(() => {
-                toast('Notes created successfully.');
+                toast.success('Notes created successfully.', {
+                    description: note.title
+                });
                 fetchNotes();
             });
         } catch (error) {
@@ -108,7 +110,9 @@ export default function NotesList() {
     const updateNote = async (note) => {
         try {
             await noteService.updateNote(note).finally(() => {
-                toast('Notes updated successfully.');
+                toast.success('Notes updated.', {
+                    description: 'Note updated successfully.',
+                });
                 fetchNotes()
             });
         } catch (error) {
@@ -135,7 +139,9 @@ export default function NotesList() {
             } else {
                 fetchNotes();
             }
-            toast('Notes deleted successfully.');
+            toast.success('Deleting note', {
+                description: 'The note has been deleted successfully.',
+            });
         } catch (error) {
             handleError(error, "Error deleting note. Please try again.");
         } finally {
@@ -164,9 +170,9 @@ export default function NotesList() {
     /**
      * Handles note creation action
      */
-    const handleCreateNote = () => {
+    const handleCreateNote = useCallback( () => {
         setIsModalCreateOpen(true)
-    }
+    }, [])
     /**
      * Handles note creation action
      * @param newNoteParam {newNoteParam: {title, content}}
@@ -213,6 +219,9 @@ export default function NotesList() {
      */
     const handleError = (message = "", error = null) => {
         console.error(error, message)
+        toast.error(message, {
+            description: 'shit happens',
+        })
         authService.logout();
         navigate('/');
     };

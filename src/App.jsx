@@ -11,7 +11,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <ContextProvider defaultTheme="system" storageKey="vite-ui-theme">
             <RouterProvider router={createBrowserRouter(routeConfig)}/>
-           <Toaster/>
+                    <Toaster
+                      position="top-center"
+                      icons={{
+                        success: '✅',
+                        error: '❌',
+                        warning: '⚠️',
+                        info: 'ℹ️',
+                      }}
+                    />
         </ContextProvider>
     </React.StrictMode>
 )
