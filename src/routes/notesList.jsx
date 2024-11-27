@@ -122,12 +122,24 @@ export default function NotesList() {
      */
     const deleteNote = async (note_id) => {
         try {
-            await noteService.removeNote(note_id).finally(() => {
-                toast('Notes deleted successfully.');
+            setOperationLoading(true);
+            await noteService.removeNote(note_id);
+
+            if (notes.length === 1 && pagination.page > 1) {
+                setPagination(prev => ({
+                    ...prev,
+                    page: prev.page - 1,
+                    total: prev.total - 1,
+                    total_pages: Math.ceil((prev.total - 1) / prev.page_size)
+                }));
+            } else {
                 fetchNotes();
-            });
+            }
+            toast('Notes deleted successfully.');
         } catch (error) {
             handleError(error, "Error deleting note. Please try again.");
+        } finally {
+            setOperationLoading(false);
         }
     }
     /**
