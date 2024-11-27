@@ -1,3 +1,9 @@
+/**
+ * Axios instance configuration with interceptors for handling authentication
+ * @module axios-instance
+ * @description Creates and configures an axios instance with base URL, headers, and interceptors for handling authentication tokens
+ */
+
 import axios from "axios";
 
 
@@ -9,6 +15,11 @@ const axios_instance = axios.create({
     }
 });
 
+/**
+ * Request interceptor to add authentication token to requests
+ * @param {Object} config - Axios request configuration
+ * @returns {Object} Modified request configuration with authentication header
+ */
 axios_instance.interceptors.request.use(
     config => {
         const token = localStorage.getItem('token');
@@ -20,6 +31,12 @@ axios_instance.interceptors.request.use(
 );
 
 
+/**
+ * Response interceptor to handle token refresh on 401 errors
+ * @param {Object} response - Axios response object
+ * @param {Object} error - Error object from failed request
+ * @returns {Promise} Resolved with response data or rejected with error
+ */
 axios_instance.interceptors.response.use(
     response => response,
     async (error) => {
@@ -39,10 +56,8 @@ axios_instance.interceptors.response.use(
                 localStorage.setItem('token', access_token);
                 localStorage.setItem('user', JSON.stringify(user));
 
-                // Update the original request headers
                 originalRequest.headers.Authorization = `${token_type} ${access_token}`;
 
-                // Update default headers for future requests
                 axios_instance.defaults.headers.common['Authorization'] = `${token_type} ${access_token}`;
 
                 return axios_instance(originalRequest);
