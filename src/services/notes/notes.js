@@ -38,7 +38,7 @@ class NotesService {
             const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}&sort_order=${sort}&query=${query}`);
             return resp.data;
         } catch (err) {
-            return { items: [], total: 0, err };
+            return { items: [], total: 0, err }; //God, please
         }
     }
 
