@@ -18,7 +18,10 @@ axios_instance.interceptors.request.use(async (config) => {
             config.headers.Authorization = `Bearer ${token}`;
         }
     } catch (error) {
-        console.error("Error ->", error);
+        if (error.response?.status === 401) {
+            window.location.href = '/';
+        }
+        return Promise.reject(error);
     }
     return config;
 });

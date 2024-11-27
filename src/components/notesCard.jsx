@@ -7,6 +7,7 @@ import {useState} from 'react'
 import {Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "@/components/ui/card"
 import {Button} from "@/components/ui/button"
 import {Pencil, Trash2} from "lucide-react"
+import {useNavigate} from "react-router-dom";
 
 /**
  * @typedef {Object} Note
@@ -30,6 +31,7 @@ import {Pencil, Trash2} from "lucide-react"
 export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
     /** @type {[boolean, Function]} Content expansion state */
     const [isExpanded, setIsExpanded] = useState(false)
+    const navigate = useNavigate()
 
     /**
      * Toggles content expansion state
@@ -62,11 +64,15 @@ export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
     /** @type {boolean} Whether to show expand button */
     const shouldShowExpandButton = displayContent.length > 120
 
+    const openNote = () => {
+        navigate(`/note/${note?.id}`)
+    }
+
     return (
         <Card
             className="w-full min-w-[290px] max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent">
-            <CardHeader>
-                <CardTitle className="text-2xl font-bold ">{note?.title} </CardTitle>
+            <CardHeader onClick={openNote}>
+                <CardTitle className="text-2xl font-bold ">{note?.title} <span className='hidden' aria-label='íd'>{note?.id}</span></CardTitle>
                 <CardDescription className="text-sm font-medium">
                     Created: {formatDate(note?.created_at)} <br/>
                     Edited: {formatDate(note?.updated_at)} <br/>

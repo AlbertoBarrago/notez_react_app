@@ -16,6 +16,7 @@ import {PlusIcon} from "lucide-react";
 import {FilterSearch} from "@/components/filterSearch.jsx";
 import {useLoaderData, useNavigate, useNavigation} from "react-router-dom";
 import PaginationControls from "@/components/pagination.jsx";
+import {toast} from "sonner";
 
 
 /**
@@ -75,22 +76,14 @@ export default function NotesList() {
     const fetchNotes = useCallback(async () => {
         setOperationLoading(true)
         const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size, query, "desc");
-        console.log(notesFetched);
-        if (notesFetched && notesFetched.err) {
-            handleError();
-            return;
-        }
-
-        if (notesFetched) {
-            setNotes(notesFetched.items);
-            setPagination({
-                page: notesFetched.page,
-                page_size: notesFetched.page_size,
-                total: notesFetched.total,
-                total_pages: notesFetched.total_pages,
-            });
-            setOperationLoading(false)
-        }
+        setNotes(notesFetched.items);
+        setPagination({
+            page: notesFetched.page,
+            page_size: notesFetched.page_size,
+            total: notesFetched.total,
+            total_pages: notesFetched.total_pages,
+        });
+        setOperationLoading(false)
     }, [pagination.page, pagination.page_size, query]);
     /**
      * Creates a new note
@@ -100,6 +93,7 @@ export default function NotesList() {
     const createNotes = async (note) => {
         try {
             await noteService.addNote(note).finally(() => {
+                toast('Notes created successfully.');
                 fetchNotes();
             });
         } catch (error) {
@@ -114,6 +108,7 @@ export default function NotesList() {
     const updateNote = async (note) => {
         try {
             await noteService.updateNote(note).finally(() => {
+                toast('Notes updated successfully.');
                 fetchNotes()
             });
         } catch (error) {
@@ -127,11 +122,24 @@ export default function NotesList() {
      */
     const deleteNote = async (note_id) => {
         try {
-            await noteService.removeNote(note_id).finally(() => {
+            setOperationLoading(true);
+            await noteService.removeNote(note_id);
+
+            if (notes.length === 1 && pagination.page > 1) {
+                setPagination(prev => ({
+                    ...prev,
+                    page: prev.page - 1,
+                    total: prev.total - 1,
+                    total_pages: Math.ceil((prev.total - 1) / prev.page_size)
+                }));
+            } else {
                 fetchNotes();
-            });
+            }
+            toast('Notes deleted successfully.');
         } catch (error) {
             handleError(error, "Error deleting note. Please try again.");
+        } finally {
+            setOperationLoading(false);
         }
     }
     /**
