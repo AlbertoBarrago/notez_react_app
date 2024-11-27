@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <ContextProvider defaultTheme="system" storageKey="vite-ui-theme">
             <RouterProvider router={createBrowserRouter(routeConfig)}/>
                     <Toaster
-                      position="top-center"
+                      position="bottom-left"
                       icons={{
                         success: '✅',
                         error: '❌',
