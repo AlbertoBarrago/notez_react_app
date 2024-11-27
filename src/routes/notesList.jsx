@@ -15,7 +15,6 @@ import AuthService from "@/services/login/login.js";
 import {PlusIcon} from "lucide-react";
 import {FilterSearch} from "@/components/filterSearch.jsx";
 import {useLoaderData, useNavigate, useNavigation} from "react-router-dom";
-import {ErrorMessage} from "@/components/error.jsx";
 import PaginationControls from "@/components/pagination.jsx";
 
 
@@ -61,7 +60,6 @@ export default function NotesList() {
         page_size: initialData.page_size,
         total_pages: initialData.total_pages,
     })
-    const [error, setError] = useState(null)
     const [isInitialLoad, setIsInitialLoad] = useState(true);
     const isLoading = routeLoading || operationLoading
 
@@ -75,21 +73,22 @@ export default function NotesList() {
      * @throws {Error} When the API request fails
      */
     const fetchNotes = useCallback(async () => {
-        try {
-            setOperationLoading(true)
-            const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size, query, "desc");
-            if (notesFetched) {
-                setNotes(notesFetched.items);
-                setPagination({
-                    page: notesFetched.page,
-                    page_size: notesFetched.page_size,
-                    total: notesFetched.total,
-                    total_pages: notesFetched.total_pages,
-                });
-                setOperationLoading(false)
-            }
-        } catch (error) {
-            handleError(error);
+        setOperationLoading(true)
+        const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size, query, "desc");
+        console.log(notesFetched);
+        if (notesFetched && notesFetched.err) {
+            handleError();
+            return;
+        }
+
+        if (notesFetched) {
+            setNotes(notesFetched.items);
+            setPagination({
+                page: notesFetched.page,
+                page_size: notesFetched.page_size,
+                total: notesFetched.total,
+                total_pages: notesFetched.total_pages,
+            });
             setOperationLoading(false)
         }
     }, [pagination.page, pagination.page_size, query]);
@@ -200,24 +199,14 @@ export default function NotesList() {
     }
     /**
      * Error handler for note operations
-     * @param {{status?: number, message?: string}} error - Error object with status and message
+     * @param {null} error - Error object with status and message
      * @param {string} [message] - Optional custom error message
      * @throws {Error} Rethrows the error after handling
      */
-    const handleError = (error, message) => {
-        switch (error.status) {
-            case 401:
-            case 403:
-            case 429:
-                alert(error.message);
-                authService.logout();
-                navigate('/');
-                break;
-        }
-
-        const errorMessage = message || error.message || 'An unexpected error occurred';
-        setError(errorMessage)
-        console.error(errorMessage, error);
+    const handleError = (message = "", error = null) => {
+        console.error(error, message)
+        authService.logout();
+        navigate('/');
     };
 
     useEffect(() => {
@@ -230,7 +219,6 @@ export default function NotesList() {
 
     return (
         <Layout>
-            {error && <ErrorMessage message={error}/>}
             {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
