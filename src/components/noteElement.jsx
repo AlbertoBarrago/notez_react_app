@@ -1,7 +1,12 @@
-export function NoteElement() {
+import Layout from "@/components/layout/layout.jsx";
+
+export function NoteElement({note}) {
+    // console.log(note);
     return (
-        <>
-            <h1 className="text-3xl font-bold leading-tight"> Ciao </h1>
-        </>
+        <Layout>
+            {/*{note.title}*/}
+            {/*{note.content}*/}
+            <h1 className='text-2xl flex animate-pulse'>Working on...</h1>
+        </Layout>
     )
 }
