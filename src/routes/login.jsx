@@ -20,45 +20,14 @@ const SIGN_IN = "signin";
  * @returns {JSX.Element} Rendered authentication component
  */
 export default function AuthRoute() {
-    /**
-     * @type {[boolean, Function]} Loading state and setter
-     */
     const [isLoading, setIsLoading] = useState(false);
-
-    /**
-     * @type {AuthService} Authentication service instance
-     */
     const auth = new AuthService();
-
-    /**
-     * @type {[string, Function]} Active tab state and setter
-     */
-        // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     const [tab, setTab] = useState(SIGN_IN);
-
-    /**
-     * @type {[boolean, Function]} Error modal visibility state and setter
-     */
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    /**
-     * @type {[Object, Function]} Error properties state and setter
-     */
     const [errorProps, setErrorProps] = useState({});
-
-    /**
-     * * @type {import('react-router-dom').NavigateFunction} Navigation function for route transitions
-     * */
     const navigate = useNavigate();
-
-    /**
-     * @type {Object} Form control for sign-in
-     */
     const signingForm = useForm();
-
-    /**
-     * @type {Object} Form control for sign-up
-     */
     const signupForm = useForm();
 
     /**
