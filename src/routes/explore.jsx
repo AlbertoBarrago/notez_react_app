@@ -10,7 +10,7 @@ import NotesService from "@/services/notes/notes.js";
 import AuthService from "@/services/login/login.js";
 import {FilterSearch} from "@/components/filterSearch.jsx";
 import {useLoaderData, useNavigate, useNavigation} from "react-router-dom";
-import {ErrorMessage} from "@/components/error.jsx";
+import ErrorMessage from "@/components/error.jsx";
 import PaginationControls from "@/components/pagination.jsx";
 
 

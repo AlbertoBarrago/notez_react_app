@@ -85,7 +85,9 @@ export default function NotesList() {
                 total_pages: notesFetched.total_pages,
             });
             setOperationLoading(false)
+            return;
         }
+        navigate('/')
     }, [pagination.page, pagination.page_size, query]);
     /**
      * Creates a new note

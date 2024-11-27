@@ -1,5 +1,4 @@
 import axios_instance from "@/interceptor/axios.js";
-import AuthService from "@/services/login/login.js";
 
 
 /**
@@ -18,7 +17,6 @@ import AuthService from "@/services/login/login.js";
  * @property {number} total_pages - Total number of pages
  */
 
-const authService = new AuthService();
 
 /**
  * AuthedNotesService provides a service for managing notes with authorization.
@@ -37,14 +35,8 @@ class NotesService {
      * @return {PaginatedResponse} A promise that resolves to an array of note objects.
      */
     async getNotes(page, pageSize, query, sort = "asc") {
-        try {
-            const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}&sort_order=${sort}&query=${query}`);
-            return resp.data;
-        } catch (err) {
-            authService.logout();
-            window.location.href = "/notes";
-            return err
-        }
+        const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}&sort_order=${sort}&query=${query}`);
+        return resp.data;
     }
 
     /**

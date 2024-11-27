@@ -11,9 +11,10 @@ import AuthService from "@/services/login/login.js";
 import ResetPassword from "@/routes/resetPassword.jsx";
 import {Note} from "@/routes/note.jsx";
 import NotesService from "@/services/notes/notes.js";
+import ErrorBoundary from "@/components/error.jsx";
 
 const publicPath = '/';
-const auth = new AuthService();
+const authService = new AuthService();
 
 /**
  * @constant {NotesService}
@@ -25,40 +26,49 @@ const PAGINATION_DEFAULTS = {
     DESC_ORDER: 'desc'
 }
 
+
+const getNotes = async (request, funcName) => {
+    const url = new URL(request.url);
+    const page = url.searchParams.get("page") || PAGINATION_DEFAULTS.INITIAL_PAGE;
+    const pageSize = PAGINATION_DEFAULTS.PAGE_SIZE;
+    const sort = PAGINATION_DEFAULTS.DESC_ORDER;
+    const query = url.searchParams.get("query") || "";
+
+    const noteService = new NotesService();
+    return noteService[funcName](page, pageSize, query, sort);
+}
+
 const routeConfig = [
     {
         path: publicPath,
         element: <AuthRoute/>,
-        loader: () => auth.isLoggedIn() ? redirect('/notes') : null,
+        loader: () => authService.isLoggedIn() ? redirect('/notes') : null,
     },
     {
         path: "/",
-        element: <PrivateRoute />,
+        element: <PrivateRoute/>,
         children: [
-            { path: "notes", element: <NoteList />,
-                loader: async ({ request }) => {
-                    const url = new URL(request.url);
-                    const page = url.searchParams.get("page") || PAGINATION_DEFAULTS.INITIAL_PAGE;
-                    const pageSize = PAGINATION_DEFAULTS.PAGE_SIZE;
-                    const sort = PAGINATION_DEFAULTS.DESC_ORDER;
-                    const query = url.searchParams.get("query") || "";
-
-                    const noteService = new NotesService();
-                    return noteService.getNotes(page, pageSize, query, sort);
-                }},
-            { path: "note/:id", element: <Note /> },
-            { path: "explore", element: <Explore />,
-                loader: async ({ request }) => {
-                    const url = new URL(request.url);
-                    const page = url.searchParams.get("page") || PAGINATION_DEFAULTS.INITIAL_PAGE;
-                    const pageSize = PAGINATION_DEFAULTS.PAGE_SIZE;
-                    const sort = PAGINATION_DEFAULTS.DESC_ORDER;
-                    const query = url.searchParams.get("query") || "";
-
-                    const noteService = new NotesService();
-                    return noteService.getNotes(page, pageSize, query, sort);
-                }},
-            { path: "reset/password/:token", element: <ResetPassword /> },
+            {
+                path: "notes",
+                element: <NoteList/>,
+                errorElement: <ErrorBoundary/>,
+                loader: async ({request}) => {
+                    return await getNotes(request, 'getNotes');
+                }
+            },
+            {
+                path: "note/:id",
+                element: <Note/>,
+                errorElement: <ErrorBoundary/>,
+            },
+            {
+                path: "explore", element: <Explore/>,
+                errorElement: <ErrorBoundary/>,
+                loader: async ({request}) => {
+                    return await getNotes(request, 'getPublicNotes');
+                }
+            },
+            {path: "reset/password/:token", element: <ResetPassword/>},
         ]
     },
     {
