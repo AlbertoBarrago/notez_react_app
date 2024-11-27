@@ -16,6 +16,7 @@ import {PlusIcon} from "lucide-react";
 import {FilterSearch} from "@/components/filterSearch.jsx";
 import {useLoaderData, useNavigate, useNavigation} from "react-router-dom";
 import PaginationControls from "@/components/pagination.jsx";
+import {toast} from "sonner";
 
 
 /**
@@ -75,19 +76,14 @@ export default function NotesList() {
     const fetchNotes = useCallback(async () => {
         setOperationLoading(true)
         const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size, query, "desc");
-
-        if (notesFetched) {
-            setNotes(notesFetched.items);
-            setPagination({
-                page: notesFetched.page,
-                page_size: notesFetched.page_size,
-                total: notesFetched.total,
-                total_pages: notesFetched.total_pages,
-            });
-            setOperationLoading(false)
-            return;
-        }
-        navigate('/')
+        setNotes(notesFetched.items);
+        setPagination({
+            page: notesFetched.page,
+            page_size: notesFetched.page_size,
+            total: notesFetched.total,
+            total_pages: notesFetched.total_pages,
+        });
+        setOperationLoading(false)
     }, [pagination.page, pagination.page_size, query]);
     /**
      * Creates a new note
@@ -97,6 +93,7 @@ export default function NotesList() {
     const createNotes = async (note) => {
         try {
             await noteService.addNote(note).finally(() => {
+                toast('Notes created successfully.');
                 fetchNotes();
             });
         } catch (error) {
@@ -111,6 +108,7 @@ export default function NotesList() {
     const updateNote = async (note) => {
         try {
             await noteService.updateNote(note).finally(() => {
+                toast('Notes updated successfully.');
                 fetchNotes()
             });
         } catch (error) {
@@ -125,6 +123,7 @@ export default function NotesList() {
     const deleteNote = async (note_id) => {
         try {
             await noteService.removeNote(note_id).finally(() => {
+                toast('Notes deleted successfully.');
                 fetchNotes();
             });
         } catch (error) {

@@ -1,5 +1,14 @@
 import axios_instance from "@/interceptor/axios.js";
-
+import {toast} from "sonner";
+/**
+ * @constant {NotesService}
+ * @type {{PAGE_SIZE: number, INITIAL_PAGE: number}}
+ */
+const PAGINATION_DEFAULTS = {
+    PAGE_SIZE: 8,
+    INITIAL_PAGE: 1,
+    DESC_ORDER: 'desc'
+}
 
 /**
  * @typedef {Object} Note
@@ -25,6 +34,28 @@ import axios_instance from "@/interceptor/axios.js";
  * It uses an authentication instance passed during construction to handle any login-related operations.
  */
 class NotesService {
+
+
+    /**
+     * Get notes for routes
+     * @param request
+     * @param funcName
+     * @returns {Promise<*>}
+     */
+      async getNotesForRoutes(request, funcName) {
+        const url = new URL(request.url);
+        const page = url.searchParams.get("page") || PAGINATION_DEFAULTS.INITIAL_PAGE;
+        const pageSize = PAGINATION_DEFAULTS.PAGE_SIZE;
+        const sort = PAGINATION_DEFAULTS.DESC_ORDER;
+        const query = url.searchParams.get("query") || "";
+
+        const noteService = new NotesService();
+        let noteResp = noteService[funcName](page, pageSize, query, sort);
+        if (noteResp) {
+            toast('Notes fetched successfully.');
+            return noteResp;
+        }
+    }
     /**
      * Fetches notes based on provided identifiers.
      *
@@ -49,8 +80,22 @@ class NotesService {
      * @return {PaginatedResponse} A promise that resolves to an array of note objects.
      */
     async getPublicNotes(page, pageSize, query, sort = "asc") {
-        const resp = await axios_instance.get(`/notes/list/explore?page=${page}&page_size=${pageSize}&sort_order=${sort}&query=${query}`);
-        return resp.data;
+        return await axios_instance.get(`/notes/list/explore?page=${page}&page_size=${pageSize}&sort_order=${sort}&query=${query}`);
+
+    }
+
+    /**
+     * Get Note by id
+     * @param noteId
+     * @returns {Note}
+     */
+    async getNoteById(noteId) {
+        try {
+            const response = await axios_instance.get(`/notes/${noteId}`);
+            return response.data;
+        } catch (error) {
+            throw new Error(`Error fetching note with ID ${noteId}: ${error.message}`);
+        }
     }
 
     /**
