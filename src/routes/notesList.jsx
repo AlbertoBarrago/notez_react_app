@@ -75,11 +75,6 @@ export default function NotesList() {
     const fetchNotes = useCallback(async () => {
         setOperationLoading(true)
         const notesFetched = await noteService.getNotes(pagination.page, pagination.page_size, query, "desc");
-        console.log(notesFetched);
-        if (notesFetched && notesFetched.err) {
-            handleError();
-            return;
-        }
 
         if (notesFetched) {
             setNotes(notesFetched.items);
