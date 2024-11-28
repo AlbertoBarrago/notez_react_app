@@ -28,10 +28,11 @@ import {useNavigate} from "react-router-dom";
  * @param {boolean} props.justReadable - Flag to indicate if the note is just readable
  * @returns {JSX.Element} Rendered note card
  */
-export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
+export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false}) {
     /** @type {[boolean, Function]} Content expansion state */
     const [isExpanded, setIsExpanded] = useState(false)
-    const navigate = useNavigate()
+    const displayContent = note?.content || '';
+    const shouldShowExpandButton = displayContent.length > 120;
 
     /**
      * Toggles content expansion state
@@ -55,25 +56,20 @@ export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
         return 'Date not available'
     }
 
-    /** @type {string} Placeholder text for empty content */
-    const fakeText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-
-    /** @type {string} Content to display */
-    const displayContent = note?.content || fakeText
-
-    /** @type {boolean} Whether to show expand button */
-    const shouldShowExpandButton = displayContent.length > 120
-
-    const openNote = () => {
-        navigate(`/note/${note?.id}`)
-    }
 
     return (
         <Card
             className="w-full min-w-[290px] max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent">
-            <CardHeader onClick={openNote}>
-                <CardTitle className="text-2xl font-bold ">{note?.title} <span className='hidden' aria-label='íd'>{note?.id}</span></CardTitle>
-                <CardDescription className="text-sm font-medium">
+            <CardHeader
+                onClick={onClick}>
+                <CardTitle
+                    className="text-2xl font-bold">
+                    {note?.title} <span className='hidden' aria-label='íd'>{note?.id}</span>
+                </CardTitle>
+                <CardDescription
+                    className="text-sm font-medium"
+
+                >
                     Created: {formatDate(note?.created_at)} <br/>
                     Edited: {formatDate(note?.updated_at)} <br/>
                     Author: {note?.user?.role === "ADMIN" ? ` 🥷🏻 ${note?.user.username}` : note?.user.username} <br/>
@@ -81,7 +77,7 @@ export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
             </CardHeader>
             <CardContent>
                 <p className="text-sm text-primary-700 dark:text-primary-300 min-h-[2rem]">
-                    {!isExpanded ? displayContent.substring(0, 120) + '...' : displayContent}
+                    {!isExpanded && shouldShowExpandButton ? displayContent.substring(0, 120) + '...' : displayContent}
                 </p>
                 {shouldShowExpandButton && (
                     <p onClick={toggleExpand}
@@ -93,7 +89,8 @@ export function NotesCard({note, onEdit, onDelete, justReadable = false}) {
                     </p>
                 )}
             </CardContent>
-            <CardFooter className="flex items-end justify-end gap-2">
+            <CardFooter
+                className="flex items-end justify-end gap-2">
                 {!justReadable && (
                     <>
                         <Button

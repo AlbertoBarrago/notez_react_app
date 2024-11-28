@@ -66,7 +66,6 @@ class NotesService {
      */
     async getNotes(page, pageSize, query, sort = "asc") {
         const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}&sort_order=${sort}&query=${query}`);
-        console.log(resp);
         return resp.data;
     }
 
