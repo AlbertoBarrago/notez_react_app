@@ -6,7 +6,7 @@ export const cardAnimation = (element) => {
         opacity: [0, 1],
         translateY: [20, 0],
         duration: 800,
-        easing: 'easeOutElastic'
+        easing: 'easeOutSine'
     });
 };
 
@@ -16,7 +16,7 @@ export const cardTitleAnimation = element => {
             opacity: [0, 1],
             translateY: [20, 0],
             duration: 1200,
-            easing: 'easeInOutSine'
+            easing: 'easeOutSine'
         }
     )
 }

@@ -2,7 +2,7 @@ import Layout from "@/components/layout/layout.jsx";
 import {useEffect, useRef} from "react";
 import {cardTitleAnimation} from "@/lib/animation.js";
 import {ArrowLeftCircle, Globe, Lock} from "lucide-react";
-import {useNavigate, useLocation, useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {Badge} from "@/components/ui/badge.jsx";
 
 export function NoteElement({note}) {
