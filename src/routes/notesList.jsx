@@ -109,6 +109,7 @@ export default function NotesList() {
      */
     const updateNote = async (note) => {
         try {
+            console.log(note)
             await noteService.updateNote(note).finally(() => {
                 toast.success('Notes updated.', {
                     description: 'Note updated successfully.',

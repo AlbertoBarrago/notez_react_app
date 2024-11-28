@@ -15,6 +15,10 @@ const PAGINATION_DEFAULTS = {
  * @property {string} id - Unique identifier for the note
  * @property {string} title - Title of the note
  * @property {string} content - Content of the note
+ * @property {boolean} is_public - is Public content
+ * @property {string} image_url - Image URL
+ * @property {JSON} tags - List of tags
+ *
  */
 
 /**
@@ -105,7 +109,10 @@ class NotesService {
     async addNote(note) {
         const resp = await axios_instance.post('/notes/', {
             title: note.title,
-            content: note.content
+            content: note.content,
+            is_public: note.is_public,
+            image_url: note.image_url,
+            tags: note.tags
         });
 
         return resp.data;
@@ -121,7 +128,10 @@ class NotesService {
     async updateNote(note) {
         const resp = await axios_instance.put(`/notes/${note.id}`, {
             title: note.title,
-            content: note.content
+            content: note.content,
+            is_public: note.is_public,
+            image_url: note.image_url,
+            tags: note.tags
         });
 
         return resp.data;
