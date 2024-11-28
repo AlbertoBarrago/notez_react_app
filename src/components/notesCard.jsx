@@ -45,18 +45,23 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
     }, [])
 
     return (
-        <div ref={cardRef} onClick={onClick}>
+        <div ref={cardRef}>
             <Card
                 className="w-full min-w-[290px] max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent
-                        hover:cursor-pointer hover:scale-105 hover:shadow-xl transform transition-all duration-300
-                        hover:border-primary/50 hover:bg-accent/90 relative z-10 active:scale-95"
+                        hover:shadow-xl transform transition-all duration-300
+                        hover:border-primary/50 hover:bg-accent/90 relative"
                 title={note.title}>
                 <CardHeader>
                     <div className="flex justify-between items-start gap-4">
-                        <CardTitle className="text-2xl font-bold truncate flex-1">
-                            {note?.title}
-                            <span className='hidden' aria-label='íd'>{note?.id}</span>
-                        </CardTitle>
+                        <div className="flex-1">
+                            <CardTitle className="text-2xl font-bold truncate flex-1">
+                                {note?.title}
+                                <span className='hidden' aria-label='íd'>{note?.id}</span>
+                            </CardTitle>
+                            <span className="text-sm text-primary-600 dark:text-primary-400 hover:cursor-pointer mt-1" onClick={onClick}>
+                                Click to open note
+                            </span>
+                        </div>
                         {note?.is_public ?
                             <Globe className="w-5 h-5 text-primary flex-shrink-0"/> :
                             <Lock className="w-5 h-5 text-primary flex-shrink-0"/>
@@ -88,15 +93,19 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
                             {isExpanded ? 'Show less' : 'Show more'}
                         </p>
                     )}
-                    {note?.tags && note.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            {note.tags.map((tag, index) => (
-                                <Badge key={index} variant="secondary">
-                                    {tag}
-                                </Badge>
-                            ))}
-                        </div>
-                    )}
+                    <div className="flex flex-wrap gap-2 mt-4">
+                        {note.tags.map((tag, index) => (
+                            <Badge
+                                key={index}
+                                variant="secondary"
+                                className="bg-secondary/10 hover:bg-secondary/20 bg-secondary-600 dark:bg-secondary-400
+                         px-3 py-1 rounded-full text-xs font-medium transition-colors
+                         border border-primary/20"
+                            >
+                                #{tag}
+                            </Badge>
+                        ))}
+                    </div>
                 </CardContent>
                 <CardFooter className="flex items-end justify-end gap-2">
                     {!justReadable && (
@@ -106,7 +115,7 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
                                 size="sm"
                                 onClick={() => onEdit(note)}
                                 className="bg:bg-secondary hover:bg-secondary-600 dark:bg-secondary-700 dark:hover:bg-secondary-800">
-                                <Pencil className="w-4 h-4 mr-2"/>
+                            <Pencil className="w-4 h-4 mr-2"/>
                                 Edit
                             </Button>
                             <Button
