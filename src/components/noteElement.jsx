@@ -1,10 +1,17 @@
 import Layout from "@/components/layout/layout.jsx";
+import {useEffect, useRef} from "react";
+import {cardTitleAnimation} from "@/lib/animation.js";
 
 
 export function NoteElement({note}) {
+    const noteRef = useRef(null);
+
+    useEffect(() => {
+        cardTitleAnimation(noteRef.current);
+    }, []);
     return (
         <Layout>
-            <div className="max-w-4xl mx-auto p-6">
+            <div className="max-w-4xl mx-auto p-6" ref={noteRef}>
                 <h1
                     className="text-4xl font-bold mb-4"
                 >

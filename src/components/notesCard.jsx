@@ -3,10 +3,11 @@
  * @module Notes
  */
 
-import {useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "@/components/ui/card"
 import {Button} from "@/components/ui/button"
 import {Pencil, Trash2} from "lucide-react"
+import {cardAnimation} from "@/lib/animation.js";
 
 /**
  * @typedef {Object} Note
@@ -32,6 +33,7 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
     const [isExpanded, setIsExpanded] = useState(false)
     const displayContent = note?.content || '';
     const shouldShowExpandButton = displayContent.length > 120;
+    const cardRef = useRef(null);
 
     /**
      * Toggles content expansion state
@@ -55,9 +57,14 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
         return 'Date not available'
     }
 
+    useEffect(() => {
+        cardAnimation(cardRef.current)
+    },[])
+
 
     return (
         <Card
+            ref={cardRef}
             className="w-full min-w-[290px] max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent">
             <CardHeader
                 onClick={onClick}>
