@@ -228,7 +228,8 @@ export default function NotesList() {
     };
 
     const handleNoteClick = (note) => {
-        navigate(`/note/${note.id}`);
+        const source = location.pathname === '/explore' ? 'explore' : 'notes';
+        navigate(`/note/${note.id}?from=${source}`);
     };
 
     useEffect(() => {

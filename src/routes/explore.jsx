@@ -105,7 +105,8 @@ export default function ExploreRoute() {
     };
 
     const handleNoteClick = (note) => {
-        navigate(`/note/${note.id}`);
+        const source = location.pathname === '/explore' ? 'explore' : 'notes';
+        navigate(`/note/${note.id}?from=${source}`);
     };
 
     useEffect(() => {
