@@ -65,7 +65,7 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
     return (
         <Card
             ref={cardRef}
-            className="w-full min-w-[290px] max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent">
+            className="w-full min-w-[290px] max-w-md bg-gradient-to-br dark:from-secondary dark:to-accent hover:cursor-pointer">
             <CardHeader
                 onClick={onClick}>
                 <CardTitle
