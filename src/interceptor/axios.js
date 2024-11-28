@@ -47,6 +47,13 @@ axios_instance.interceptors.response.use(
 
             try {
                 const refreshToken = localStorage.getItem('refreshToken');
+
+                if (!refreshToken) {
+                    localStorage.clear();
+                    window.location.href = '/';
+                    return Promise.reject(error);
+                }
+
                 const response = await axios_instance.post('/auth/refresh-token', {
                     refresh_token: refreshToken
                 });
@@ -70,8 +77,7 @@ axios_instance.interceptors.response.use(
         }
 
         return Promise.reject(error);
-    }
-);
+    });
 
 
 

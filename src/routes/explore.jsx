@@ -104,6 +104,10 @@ export default function ExploreRoute() {
         console.error(errorMessage, error);
     };
 
+    const handleNoteClick = (note) => {
+        navigate(`/note/${note.id}`);
+    };
+
     useEffect(() => {
         if(isInitialLoad){
             setIsInitialLoad(false);
@@ -145,6 +149,7 @@ export default function ExploreRoute() {
                             note={note}
                             onEdit={null}
                             onDelete={null}
+                            onClick={() => {handleNoteClick(note)}}
                             justReadable={true}
                         />
                     ))

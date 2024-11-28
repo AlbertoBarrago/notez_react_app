@@ -226,6 +226,10 @@ export default function NotesList() {
         navigate('/');
     };
 
+    const handleNoteClick = (note) => {
+        navigate(`/note/${note.id}`);
+    };
+
     useEffect(() => {
         if(isInitialLoad) {
             setIsInitialLoad(false);
@@ -239,7 +243,7 @@ export default function NotesList() {
             {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
-                {isLoading ? (
+                {isLoading && !notes ? (
                     Array(pagination.page_size).fill(null).map((_, index) => (
                         <div key={`skeleton-${index}`}
                              className="border-2 rounded-xl p-6 shadow-md min-h-[200px] bg-secondary/50">
@@ -264,6 +268,7 @@ export default function NotesList() {
                         <NotesCard
                             key={note.id}
                             note={note}
+                            onClick={() => {handleNoteClick(note)}}
                             onEdit={memoizedHandleEditNote}
                             onDelete={handleDeleteNote}
                         />

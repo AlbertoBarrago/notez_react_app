@@ -49,7 +49,6 @@ class NotesService {
 
         const noteService = new NotesService();
         let noteResp = await noteService[funcName](page, pageSize, query, sort);
-        console.log(noteResp);
         if (noteResp) {
             toast.success('Notes fetched successfully.');
             return noteResp;
@@ -66,7 +65,6 @@ class NotesService {
      */
     async getNotes(page, pageSize, query, sort = "asc") {
         const resp = await axios_instance.get(`/notes/list/paginated?page=${page}&page_size=${pageSize}&sort_order=${sort}&query=${query}`);
-        console.log(resp);
         return resp.data;
     }
 
