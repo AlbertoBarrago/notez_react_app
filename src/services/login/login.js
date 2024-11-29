@@ -45,7 +45,7 @@ class AuthService {
      * @throws {Error} - If there is an issue with the registration request
      */
     async register(email, username, password) {
-        const response = await axios_instance.post('/users/register', {
+        const response = await axios_instance.post('/users/', {
             email,
             username,
             password
