@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <meta http-equiv="refresh" content="0; url=/" />
       <title>Notez</title>
+      <script>
+          const redirectTo = `${location.origin}${location.pathname}${location.search}`;
+          location.replace(redirectTo);
+      </script>
   </head>
   <body>
     <p>Redirecting to password reset...</p>
