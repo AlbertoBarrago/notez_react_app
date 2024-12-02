@@ -1,12 +1,12 @@
 /**
- * @fileoverview Authentication route component handling login and registration
+ * @fileoverview Authentication route component handling auth and registration
  * @module AuthRoute
  */
 
 'use client'
 
 import {useState} from "react";
-import AuthService from "@/services/login/login.js";
+import AuthService from "@/services/auth/auth.js";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {LoginForm} from "@/components/loginForm.jsx";

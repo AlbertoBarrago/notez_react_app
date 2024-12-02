@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import AuthService from "@/services/login/login.js";
+import AuthService from "@/services/auth/auth.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ export default function ResetPasswordForm({ className }) {
 
         try {
             let token_parsed = token.token.toString().replace('token=', '');
-            let resp = await authService.resetGoogleAuthPassword(token_parsed, newPassword);
+            let resp = await authService.resetPassword(token_parsed, newPassword);
             if (resp) {
                 navigate('/');
             }
