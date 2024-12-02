@@ -15,7 +15,7 @@
     "version:minor": "npm version minor",
     "version:major": "npm version major",
     "copy:404": "cp ./404.html ./dist/404.html",
-    "release": "npm run version:patch && npm run build && npm run copy:404 && npm run deploy"
+    "release": "npm run version:patch && npm run build && npm run deploy"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
