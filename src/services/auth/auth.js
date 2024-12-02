@@ -80,42 +80,27 @@ class AuthService {
     }
 
     /**
-     * Reset the password
-     * @param email
-     * @param oldPassword
-     * @param newPassword
+     * Reset the password for Google auth
+     * @param username
      * @returns {Promise<any>}
      */
-    async resetPassword(email, oldPassword, newPassword) {
-        const response = await axios_instance.post('/auth/reset', {
-            username: email,
-            old_password: oldPassword,
-            new_password: newPassword
+    async sendResetEmail(username) {
+        const response = await axios_instance.post('/auth/send-reset-email', {
+            username
         });
         return response.data;
     }
 
     /**
      * Reset the password for Google auth
-     * @param token
      * @param newPassword
      * @returns {Promise<any>}
      */
-    async resetGoogleAuthPassword(token, newPassword) {
-        const response = await axios_instance.post('/oauth/reset', {
-            token,
+    async resetPassword(newPassword) {
+        const response = await axios_instance.post('/auth/reset', {
             new_password: newPassword
         });
         return response.data;
-    }
-
-    /**
-     * Retrieves the stored token from local storage.
-     *
-     * @return {string | null} The token if it exists, otherwise null.
-     */
-    async getToken() {
-        return localStorage.getItem('token');
     }
 
     /**
