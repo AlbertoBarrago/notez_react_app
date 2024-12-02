@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-      <title>Notez</title>
-      <script>
-          const redirectTo = `${location.origin}${location.pathname}${location.search}`;
-          location.replace(redirectTo);
-      </script>
-  </head>
-  <body>
-    <p>Redirecting to password reset...</p>
-  </body>
+<html>
+<head>
+    <script>
+        // Se il file non è già l'index.html, reindirizza lì con il percorso corrente
+        if (location.pathname !== "/albertobarrago.github.io/index.html") {
+            const redirectUrl = `${location.origin}/albertobarrago.github.io/${location.search}${location.hash}`;
+            location.replace(redirectUrl);
+        }
+    </script>
+</head>
+<body>
+<p>Redirecting...</p>
+</body>
 </html>
