@@ -1,6 +1,6 @@
 import Header from "@/components/layout/header/header.jsx";
 import Footer from "@/components/layout/footer/footer.jsx";
-import AuthService from "@/services/login/login.js";
+import AuthService from "@/services/auth/auth.js";
 const auth = new AuthService();
 
 const Layout = ({children}) => {

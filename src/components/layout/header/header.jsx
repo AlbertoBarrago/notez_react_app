@@ -6,7 +6,7 @@ import {
 import {NavLink, useNavigate} from "react-router-dom";
 import {ThemeSelector} from "@/components/theme/themeSelector.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import AuthService from "@/services/login/login.js";
+import AuthService from "@/services/auth/auth.js";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
 import {
     Sheet,
@@ -31,7 +31,7 @@ export default function Header() {
     const auth = new AuthService()
     const navigate = useNavigate()
 
-    /** @type {import('@/services/login/login.js').User} */
+    /** @type {import('@/services/auth/auth.js').User} */
     const user = auth.getUser();
 
     const performLogout = () => {

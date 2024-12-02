@@ -1,5 +1,5 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
-import AuthService from "@/services/login/login.js";
+import AuthService from "@/services/auth/auth.js";
 
 const PrivateRoute = () => {
     const auth = new AuthService();

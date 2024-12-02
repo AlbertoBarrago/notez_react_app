@@ -35,7 +35,7 @@ const PAGINATION_DEFAULTS = {
  * AuthedNotesService provides a service for managing notes with authorization.
  *
  * This class includes methods to fetch, add, update, and remove notes via HTTP requests to the server.
- * It uses an authentication instance passed during construction to handle any login-related operations.
+ * It uses an authentication instance passed during construction to handle any auth-related operations.
  */
 class NotesService {
     /**

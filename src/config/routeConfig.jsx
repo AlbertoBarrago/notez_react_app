@@ -1,4 +1,4 @@
-import AuthService from "@/services/login/login.js";
+import AuthService from "@/services/auth/auth.js";
 import NotesService from "@/services/notes/notes.js";
 import AuthRoute from "@/routes/login.jsx";
 import {redirect} from "react-router-dom";

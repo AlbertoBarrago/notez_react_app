@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import AuthService from "@/services/login/login.js";
+import AuthService from "@/services/auth/auth.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
