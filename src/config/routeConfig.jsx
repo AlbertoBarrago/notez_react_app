@@ -52,7 +52,7 @@ const routeConfig = [
                 }
             },
             {
-                path: "reset/password/:token",
+                path: "reset/password",
                 element: <ResetPassword/>,
                 errorElement: <ErrorBoundary/>,
             }
