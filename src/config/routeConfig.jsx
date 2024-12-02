@@ -17,7 +17,13 @@ const routeConfig = [
     {
         path: publicPath,
         element: <AuthRoute/>,
-        loader: () => authService.isLoggedIn() ? redirect('/notes') : null,
+        loader: ({request}) => {
+            const currentPath = new URL(request.url).pathname;
+            if (currentPath === "/") {
+                return authService.isLoggedIn() ? redirect('/notes') : null;
+            }
+            return null;
+        },
     },
     {
         path: "/",
