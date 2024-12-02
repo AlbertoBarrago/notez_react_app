@@ -26,7 +26,6 @@ import {Dialog, DialogTitle} from "@radix-ui/react-dialog";
 import {DialogContent, DialogDescription, DialogFooter, DialogHeader} from "@/components/ui/dialog.jsx";
 import {useState} from "react";
 
-const auth = new AuthService()
 /**
  * Main header component that handles navigation and user interface elements
  * Features:
@@ -52,6 +51,7 @@ export default function Header() {
 
     const sendEmail = () => {
         auth.sendResetEmail(user?.username)
+        setOpenResetDialog(false)
     }
 
     const ResetPasswordDialog = () => (

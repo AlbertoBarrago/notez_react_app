@@ -1,5 +1,6 @@
 import axios_instance from "@/interceptor/axios.js";
 import CommonService from "@/services/common/common.js";
+import {toast} from "sonner";
 
 const CService = new CommonService();
 /**
@@ -88,16 +89,19 @@ class AuthService {
         const response = await axios_instance.post('/auth/send-reset-email', {
             username
         });
+        toast.success('Reset Email sent successfully');
         return response.data;
     }
 
     /**
      * Reset the password for Google auth
+     * @param token
      * @param newPassword
      * @returns {Promise<any>}
      */
-    async resetPassword(newPassword) {
+    async resetPassword(token, newPassword) {
         const response = await axios_instance.post('/auth/reset', {
+            token: token,
             new_password: newPassword
         });
         return response.data;

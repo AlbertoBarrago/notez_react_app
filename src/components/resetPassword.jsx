@@ -3,14 +3,15 @@ import AuthService from "@/services/auth/auth.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 export default function ResetPasswordForm({ className }) {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const token = useParams()
+    const token = searchParams.get('token');
 
     const authService = new AuthService();
 
@@ -30,8 +31,7 @@ export default function ResetPasswordForm({ className }) {
         }
 
         try {
-            let token_parsed = token.token.toString().replace('token=', '');
-            let resp = await authService.resetPassword(token_parsed, newPassword);
+            let resp = await authService.resetPassword(token, newPassword);
             if (resp) {
                 navigate('/');
             }
