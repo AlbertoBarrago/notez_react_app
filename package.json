@@ -9,12 +9,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "build": "vite build",
+    "start": "vite --host 0.0.0.0 --port $PORT",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",
     "version:major": "npm version major",
-    "copy:404": "cp ./404.html ./dist/404.html",
     "release": "npm run version:patch && npm run build && npm run deploy"
   },
   "dependencies": {
