@@ -26,7 +26,7 @@ export default function NoteAddNoteModal({isOpen, onClose, onSave}) {
             title,
             content,
             is_public: isPublic,
-            image_url: imageUrl || null,
+            image_url: imageUrl || 'https://picsum.photos/200/300',
             tags: tags
     })
         setTitle('')
