@@ -7,11 +7,15 @@ export default defineConfig({
     plugins: [react()],
     build: {
         minify: 'terser',
-        rollupOptions: {
-            output: {
-                manualChunks: undefined
-            }
-        }
+        terserOptions: {
+            compress: {
+                drop_console: true,
+                drop_debugger: true,
+            },
+            format: {
+                comments: false,
+            },
+        },
     },
     resolve: {
         alias: {
