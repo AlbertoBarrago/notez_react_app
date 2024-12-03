@@ -6,20 +6,23 @@ import path from "node:path";
 export default defineConfig({
     plugins: [react()],
     build: {
-        minify: 'terser',
-        terserOptions: {
-            compress: {
-                drop_console: true,
-                drop_debugger: true,
-            },
-            format: {
-                comments: false,
-            },
-        },
+        minify: 'esbuild',
+        sourcemap: false,
+        rollupOptions: {
+            output: {
+                manualChunks: undefined
+            }
+        }
     },
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),
         },
     },
+    esbuild: {
+        drop: ['console', 'debugger'],
+        pure: ['console.log'],
+        minify: true,
+        treeShaking: true
+    }
 })
