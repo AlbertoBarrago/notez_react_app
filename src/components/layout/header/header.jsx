@@ -25,12 +25,15 @@ import {Menu} from "lucide-react";
 import {Dialog, DialogTitle} from "@radix-ui/react-dialog";
 import {DialogContent, DialogDescription, DialogFooter, DialogHeader} from "@/components/ui/dialog.jsx";
 import {useState} from "react";
-
-/**
- * Main header component that handles navigation and user interface elements
+const BOSS_NAME = {
+    name: 'Alberto Barrago',
+    nickname: 'alBz'
+};/**
+ * Main header part that handles navigation and user interface elements
  * Features:
  * - Responsive navigation menu with mobile/desktop layouts
  * - User authentication status display
+ * - User avatar display for logged-in users
  * - Theme selection
  * - Avatar display for logged-in users
  * - Logout functionality
@@ -79,7 +82,7 @@ export default function Header() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
+                    <Avatar className="h-9 w-9">
                         <AvatarImage
                             src={user?.picture_url}
                             alt={user?.username || 'User avatar'}
@@ -87,7 +90,7 @@ export default function Header() {
                         />
                         <AvatarFallback>NA</AvatarFallback>
                     </Avatar>
-                    <span>{user?.username}</span>
+                    <span className='text-[1.2rem]'>{user?.username === BOSS_NAME.name ? BOSS_NAME.nickname: user?.username}</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>

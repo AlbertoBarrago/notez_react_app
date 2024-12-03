@@ -87,7 +87,8 @@ class AuthService {
      */
     async sendResetEmail(username) {
         const response = await axios_instance.post('/auth/send-reset-email', {
-            username
+            username,
+            token: localStorage.getItem('token')
         });
         toast.success('Reset Email sent successfully');
         return response.data;
