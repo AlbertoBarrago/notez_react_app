@@ -70,9 +70,6 @@ src/
 
 ## Getting Started 🚀
 
-## Live Demo 🌐
-Try it out: [NotesWebApp Demo](https://albertobarrago.github.io/)
-
 ```bash
 # Clone the repository
 git clone https://github.com/albertobarrago/notes-card.git
