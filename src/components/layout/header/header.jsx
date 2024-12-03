@@ -25,10 +25,15 @@ import {Menu} from "lucide-react";
 import {Dialog, DialogTitle} from "@radix-ui/react-dialog";
 import {DialogContent, DialogDescription, DialogFooter, DialogHeader} from "@/components/ui/dialog.jsx";
 import {useState} from "react";
+import SendResetEmailDialog from "@/components/dialogs/send_reset_email.jsx";
+import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
+import EditProfileDialog from "@/components/dialogs/edit_user.jsx";
+
 const BOSS_NAME = {
     name: 'Alberto Barrago',
     nickname: 'alBz'
-};/**
+};
+/**
  * Main header part that handles navigation and user interface elements
  * Features:
  * - Responsive navigation menu with mobile/desktop layouts
@@ -43,6 +48,7 @@ const BOSS_NAME = {
  */
 export default function Header() {
     const [openResetDialog, setOpenResetDialog] = useState(false)
+    const [openEditDialog, setOpenEditDialog] = useState(false)
     const auth = new AuthService()
     const navigate = useNavigate()
     const user = auth.getUser();
@@ -57,26 +63,9 @@ export default function Header() {
         setOpenResetDialog(false)
     }
 
-    const ResetPasswordDialog = () => (
-        <Dialog open={openResetDialog} onOpenChange={setOpenResetDialog}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Reset Password</DialogTitle>
-                    <DialogDescription>
-                        Will send a password reset link to your email address: {user?.email}
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                    <Button variant="outline" onClick={() => setOpenResetDialog(false)}>
-                        Cancel
-                    </Button>
-                    <Button onClick={sendEmail}>
-                        Send Reset Link
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    )
+    const handleEditProfile = () => {
+        setOpenEditDialog(true)
+    }
 
     const UserDropdownMenu = () => (
         <DropdownMenu>
@@ -90,13 +79,18 @@ export default function Header() {
                         />
                         <AvatarFallback>NA</AvatarFallback>
                     </Avatar>
-                    <span className='text-[1.2rem]'>{user?.username === BOSS_NAME.name ? BOSS_NAME.nickname: user?.username}</span>
+                    <span
+                        className='text-[1.2rem]'>{user?.username === BOSS_NAME.name ? BOSS_NAME.nickname : user?.username}</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuSeparator/>
+                <DropdownMenuItem onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setOpenEditDialog(true);
+                }}>
                     Edit Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={(e) => {
@@ -106,7 +100,7 @@ export default function Header() {
                 }}>
                     Reset Password
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator/>
                 <DropdownMenuItem onClick={performLogout}>
                     Logout
                 </DropdownMenuItem>
@@ -206,7 +200,13 @@ export default function Header() {
                     </div>
                 </NavigationMenu>
             </header>
-            <ResetPasswordDialog/>
+            <SendResetEmailDialog openResetDialog={openResetDialog}
+                                  setOpenResetDialog={setOpenResetDialog}
+                                  sendEmail={sendEmail}
+                                  user={user}/>
+            <EditProfileDialog user={user}
+                               openEditProfileDialog={openEditDialog}
+                               setOpenEditProfileDialog={setOpenEditDialog}/>
         </>
     );
 }
