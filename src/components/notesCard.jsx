@@ -23,12 +23,9 @@ import {Badge} from "@/components/ui/badge"
  */
 
 export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false}) {
-    const [isExpanded, setIsExpanded] = useState(false)
     const displayContent = note?.content || '';
-    const shouldShowExpandButton = displayContent.length > 120;
     const cardRef = useRef(null);
 
-    const toggleExpand = () => setIsExpanded(!isExpanded)
 
     const formatDate = date => {
         if (date instanceof Date) {
@@ -74,7 +71,7 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
                         <br/>
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className='min-h-[180px]'>
                     {note?.image_url && (
                         <div className="mb-4">
                             <img
@@ -85,14 +82,8 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
                         </div>
                     )}
                     <p className="text-sm text-primary-700 dark:text-primary-300 min-h-[2rem]">
-                        {!isExpanded && shouldShowExpandButton ? displayContent.substring(0, 120) + '...' : displayContent}
+                        {displayContent.substring(0, 120) + '...'}
                     </p>
-                    {shouldShowExpandButton && (
-                        <p onClick={toggleExpand}
-                           className="text-sm mt-5 font-medium text-primary-600 dark:text-primary-300">
-                            {isExpanded ? 'Show less' : 'Show more'}
-                        </p>
-                    )}
                     <div className="flex flex-wrap gap-2 mt-4">
                         {note.tags.map((tag, index) => (
                             <Badge

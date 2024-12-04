@@ -22,13 +22,15 @@ class AuthService {
 
     /**
      * Logs in a user
+     * @param email {string} - The user's email
      * @param {string} username - The user's email
      * @param {string} password - The user's password
      * @returns {Promise<AuthResp>} - The response from the auth request
      * @throws {Error} - If there is an issue with the auth request
      */
-    async login(username, password) {
+    async login(email, username, password) {
         const response = await axios_instance.post('/auth/login', {
+            email,
             username,
             password
         });
@@ -89,6 +91,18 @@ class AuthService {
         const response = await axios_instance.post('/auth/send-reset-email', {
             username,
             token: localStorage.getItem('token')
+        });
+        toast.success('Reset Email sent successfully');
+        return response.data;
+    }
+    /**
+     * Reset the password from email
+     * @param email
+     * @returns {Promise<any>}
+     */
+    async sendResetEmailFromEmail(email) {
+        const response = await axios_instance.post('/auth/password-reset/request', {
+            email
         });
         toast.success('Reset Email sent successfully');
         return response.data;
