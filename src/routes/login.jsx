@@ -34,7 +34,6 @@ export default function AuthRoute() {
             password: ""
         }
     });
-
     const signupForm = useForm({
         defaultValues: {
             username: "",
@@ -54,7 +53,7 @@ export default function AuthRoute() {
     const onSubmitSignIn = async (data) => {
         setIsLoading(true);
         try {
-            const resp = await auth.login(data.email, data.username, data.password);
+            const resp = await auth.login(data.username, data.password);
             if (resp.user) {
                 navigate("/notes");
             }

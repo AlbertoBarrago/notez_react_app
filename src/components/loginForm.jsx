@@ -55,7 +55,10 @@ export function LoginForm({
                         <Card className="w-[350px]">
                             <CardHeader>
                                 <CardTitle>📒 Notez App</CardTitle>
-                                <CardDescription>Sign in to your account or create a new one.</CardDescription>
+                                <CardDescription>
+                                    Sign in to your account or create a new one.
+                                    <p className="text-xs mt-2">* Indicates required field</p>
+                                </CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <Tabs defaultValue={SIGN_IN} className="w-full mb-5" onValueChange={setTab}>
@@ -69,32 +72,22 @@ export function LoginForm({
                                                 <FormField
                                                     control={signingForm.control}
                                                     name="username"
-                                                    render={({field}) => (
-                                                        <FormItem>
-                                                            <FormLabel>Username</FormLabel>
-                                                            <FormControl>
-                                                                <Input placeholder="johnDoe" {...field} />
-                                                            </FormControl>
-                                                            <FormDescription className="text-xs">
-                                                                Enter your username.
-                                                            </FormDescription>
-                                                        </FormItem>
-                                                    )}
-                                                />
-                                                <FormField
-                                                    control={signingForm.control}
-                                                    name="email"
                                                     rules={{
-                                                        pattern: {
-                                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                                            message: "Please enter a valid email address"
+                                                        validate: (value) => {
+                                                            if (value.includes('@')) {
+                                                                const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+                                                                return emailRegex.test(value) || "Please enter a valid email address";
+                                                            }
+                                                            const usernameRegex = /^[a-zA-Z0-9\s]{3,30}$/;
+                                                            return usernameRegex.test(value) || "Username must be 3-20 characters and can contain letters, numbers, and underscores";
                                                         }
                                                     }}
                                                     render={({field}) => (
                                                         <FormItem className="mt-4">
-                                                            <FormLabel>Email</FormLabel>
+                                                            <FormLabel>Email/Username*</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="johnDoe@evilcorp.com" {...field} />
+                                                                <Input
+                                                                    placeholder="johnDoe@evilcorp.com | Jhon Doe" {...field} />
                                                             </FormControl>
                                                             <FormDescription className="text-xs">
                                                                 Enter your email address.
@@ -108,7 +101,7 @@ export function LoginForm({
                                                     name="password"
                                                     render={({field}) => (
                                                         <FormItem className="mt-4">
-                                                            <FormLabel>Password</FormLabel>
+                                                            <FormLabel>Password*</FormLabel>
                                                             <FormControl>
                                                                 <div className="relative">
                                                                     <Input
@@ -280,7 +273,7 @@ export function LoginForm({
             <SendResetEmailDialog setOpenResetDialog={setOpenResetDialog}
                                   openResetDialog={openResetDialog}
                                   user={user}
-                                  sendEmail={(email)=> sendEmail(email)}/>
+                                  sendEmail={(email) => sendEmail(email)}/>
         </>
     )
 }
