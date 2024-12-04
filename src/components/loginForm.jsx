@@ -41,241 +41,246 @@ export function LoginForm({
     const [openResetDialog, setOpenResetDialog] = useState(false)
     const user = auth.getUser();
 
-    const sendEmail = () => {
-        auth.sendResetEmail(user?.username).then(() =>
-            setOpenResetDialog(true)
+    const sendEmail = (data) => {
+        auth.sendResetEmailFromEmail(data).then(() =>
+            setOpenResetDialog(false)
         )
     }
 
     return (
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
-            <Layout>
-                <div className="flex justify-center items-center min-h-[85vh] sm:min-h-auto px-4 py-6">
-                    <Card className="w-[350px]">
-                        <CardHeader>
-                            <CardTitle>📒 Notez App</CardTitle>
-                            <CardDescription>Sign in to your account or create a new one.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <Tabs defaultValue={SIGN_IN} className="w-full mb-5" onValueChange={setTab}>
-                                <TabsList className="grid w-full grid-cols-2">
-                                    <TabsTrigger value={SIGN_IN}>Sign In</TabsTrigger>
-                                    <TabsTrigger value={SIGN_UP}>Sign Up</TabsTrigger>
-                                </TabsList>
-                                <TabsContent value={SIGN_IN}>
-                                    <Form {...signingForm}>
-                                        <form className="mt-6" onSubmit={signingForm.handleSubmit(onSubmitSignIn)}>
-                                            <FormField
-                                                control={signingForm.control}
-                                                name="username"
-                                                render={({field}) => (
-                                                    <FormItem>
-                                                        <FormLabel>Username</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="johnDoe" {...field} />
-                                                        </FormControl>
-                                                        <FormDescription className="text-xs">
-                                                            Enter your username.
-                                                        </FormDescription>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={signingForm.control}
-                                                name="email"
-                                                rules={{
-                                                    pattern: {
-                                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                                        message: "Please enter a valid email address"
-                                                    }
-                                                }}
-                                                render={({field}) => (
-                                                    <FormItem className="mt-4">
-                                                        <FormLabel>Email</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="johnDoe@evilcorp.com" {...field} />
-                                                        </FormControl>
-                                                        <FormDescription className="text-xs">
-                                                            Enter your email address.
-                                                        </FormDescription>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={signingForm.control}
-                                                name="password"
-                                                render={({field}) => (
-                                                    <FormItem className="mt-4">
-                                                        <FormLabel>Password</FormLabel>
-                                                        <FormControl>
-                                                            <div className="relative">
-                                                                <Input
-                                                                    type={showPassword ? "text" : "password"}
-                                                                    placeholder="********"
-                                                                    {...field}
-                                                                />
-                                                                <Button
-                                                                    type="button"
-                                                                    variant="ghost"
-                                                                    size="icon"
-                                                                    className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
-                                                                    onClick={() => {setShowPassword(!showPassword)}}
-                                                                >
-                                                                    {showPassword ? (
-                                                                        <EyeOffIcon className="h-4 w-4"/>
-                                                                    ) : (
-                                                                        <EyeIcon className="h-4 w-4"/>
-                                                                    )}
-                                                                </Button>
-                                                            </div>
-                                                        </FormControl>
-                                                        <FormDescription className="text-xs">
-                                                            Enter your password.
-                                                        </FormDescription>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <div className="flex justify-end mt-2">
-                                                <Button
-                                                    variant="link"
-                                                    className="text-sm text-muted-foreground hover:text-primary p-0"
-                                                    onClick={() => {
-                                                        setOpenResetDialog(true)
+        <>
+            <GoogleOAuthProvider clientId={CLIENT_ID}>
+                <Layout>
+                    <div className="flex justify-center items-center min-h-[85vh] sm:min-h-auto px-4 py-12">
+                        <Card className="w-[350px]">
+                            <CardHeader>
+                                <CardTitle>📒 Notez App</CardTitle>
+                                <CardDescription>Sign in to your account or create a new one.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Tabs defaultValue={SIGN_IN} className="w-full mb-5" onValueChange={setTab}>
+                                    <TabsList className="grid w-full grid-cols-2">
+                                        <TabsTrigger value={SIGN_IN}>Sign In</TabsTrigger>
+                                        <TabsTrigger value={SIGN_UP}>Sign Up</TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value={SIGN_IN}>
+                                        <Form {...signingForm}>
+                                            <form className="mt-6" onSubmit={signingForm.handleSubmit(onSubmitSignIn)}>
+                                                <FormField
+                                                    control={signingForm.control}
+                                                    name="username"
+                                                    render={({field}) => (
+                                                        <FormItem>
+                                                            <FormLabel>Username</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="johnDoe" {...field} />
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your username.
+                                                            </FormDescription>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={signingForm.control}
+                                                    name="email"
+                                                    rules={{
+                                                        pattern: {
+                                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                            message: "Please enter a valid email address"
+                                                        }
                                                     }}
-                                                >
-                                                    Forgot Password?
+                                                    render={({field}) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>Email</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="johnDoe@evilcorp.com" {...field} />
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your email address.
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={signingForm.control}
+                                                    name="password"
+                                                    render={({field}) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>Password</FormLabel>
+                                                            <FormControl>
+                                                                <div className="relative">
+                                                                    <Input
+                                                                        type={showPassword ? "text" : "password"}
+                                                                        placeholder="********"
+                                                                        {...field}
+                                                                    />
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                                                                        onClick={() => {
+                                                                            setShowPassword(!showPassword)
+                                                                        }}
+                                                                    >
+                                                                        {showPassword ? (
+                                                                            <EyeOffIcon className="h-4 w-4"/>
+                                                                        ) : (
+                                                                            <EyeIcon className="h-4 w-4"/>
+                                                                        )}
+                                                                    </Button>
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your password.
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <div className="flex justify-end mt-2">
+                                                    <Button
+                                                        variant="link"
+                                                        className="text-sm text-muted-foreground hover:text-primary p-0"
+                                                        onClick={() => {
+                                                            setOpenResetDialog(true)
+                                                        }}
+                                                    >
+                                                        Forgot Password?
+                                                    </Button>
+                                                </div>
+                                                <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
+                                                    {isLoading ? 'Signing In...' : 'Sign In'}
                                                 </Button>
-                                            </div>
-                                            <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
-                                                {isLoading ? 'Signing In...' : 'Sign In'}
-                                            </Button>
-                                            <GoogleLogin
-                                                text="signin"
-                                                type="standard"
-                                                theme="filled_black"
-                                                shape="rectangular"
-                                                width="100%"
-                                                size="large"
-                                                onSuccess={credentialResponse => {
-                                                    googleOAuth(credentialResponse);
-                                                }}
-                                                onError={() => {
-                                                    console.log('Login Failed');
-                                                }}
-                                            />
-                                        </form>
-                                    </Form>
-                                </TabsContent>
-                                <TabsContent value={SIGN_UP}>
-                                    <Form {...signupForm}>
-                                        <form className="mt-6" onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
-                                            <FormField
-                                                control={signupForm.control}
-                                                name="username"
-                                                render={({field}) => (
-                                                    <FormItem>
-                                                        <FormLabel>Username</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="johndoe" {...field} />
-                                                        </FormControl>
-                                                        <FormDescription className="text-xs">
-                                                            Enter your username.
-                                                        </FormDescription>
-                                                        <FormMessage/>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={signupForm.control}
-                                                name="email"
-                                                rules={{
-                                                    required: "Email is required",
-                                                    pattern: {
-                                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                                        message: "Please enter a valid email address"
-                                                    }
-                                                }}
-                                                render={({field}) => (
-                                                    <FormItem className="mt-4">
-                                                        <FormLabel>Email</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="m@example.com" {...field} />
-                                                        </FormControl>
-                                                        <FormDescription className="text-xs">
-                                                            Enter your email address.
-                                                        </FormDescription>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={signupForm.control}
-                                                name="password"
-                                                render={({field}) => (
-                                                    <FormItem className="mt-4">
-                                                        <FormLabel>Password</FormLabel>
-                                                        <FormControl>
-                                                            <div className="relative">
-                                                                <Input
-                                                                    type={showPassword ? "text" : "password"}
-                                                                    placeholder="********"
-                                                                    {...field}
-                                                                />
-                                                                <Button
-                                                                    type="button"
-                                                                    variant="ghost"
-                                                                    size="icon"
-                                                                    className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
-                                                                    onClick={() => {
-                                                                        setShowPassword(!showPassword)
-                                                                    }}
-                                                                >
-                                                                    {showPassword ? (
-                                                                        <EyeOffIcon className="h-4 w-4"/>
-                                                                    ) : (
-                                                                        <EyeIcon className="h-4 w-4"/>
-                                                                    )}
-                                                                </Button>
-                                                            </div>
-                                                        </FormControl>
-                                                        <FormDescription className="text-xs">
-                                                            Enter your password
-                                                        </FormDescription>
-                                                        <FormMessage/>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
-                                                {isLoading ? 'Signing Up...' : 'Sign Up'}
-                                            </Button>
-                                            <GoogleLogin
-                                                text="signup_with"
-                                                type="standard"
-                                                theme="filled_black"
-                                                shape="rectangular"
-                                                width="100%"
-                                                size="large"
-                                                onSuccess={credentialResponse => {
-                                                    googleOAuth(credentialResponse, false);
-                                                }}
-                                                onError={() => {
-                                                    console.log('Login Failed');
-                                                }}
-                                            />
-                                        </form>
-                                    </Form>
-                                </TabsContent>
-                            </Tabs>
-                        </CardContent>
-                    </Card>
-                </div>
-                <SendResetEmailDialog setOpenResetDialog={setOpenResetDialog}
-                                      openResetDialog={openResetDialog}
-                                      user={user}
-                                      sendEmail={sendEmail}/>
-            </Layout>
-        </GoogleOAuthProvider>
+                                                <GoogleLogin
+                                                    text="signin"
+                                                    type="standard"
+                                                    theme="filled_black"
+                                                    shape="rectangular"
+                                                    width="100%"
+                                                    size="large"
+                                                    onSuccess={credentialResponse => {
+                                                        googleOAuth(credentialResponse);
+                                                    }}
+                                                    onError={() => {
+                                                        console.log('Login Failed');
+                                                    }}
+                                                />
+                                            </form>
+                                        </Form>
+                                    </TabsContent>
+                                    <TabsContent value={SIGN_UP}>
+                                        <Form {...signupForm}>
+                                            <form className="mt-6" onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
+                                                <FormField
+                                                    control={signupForm.control}
+                                                    name="username"
+                                                    render={({field}) => (
+                                                        <FormItem>
+                                                            <FormLabel>Username</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="johndoe" {...field} />
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your username.
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={signupForm.control}
+                                                    name="email"
+                                                    rules={{
+                                                        required: "Email is required",
+                                                        pattern: {
+                                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                            message: "Please enter a valid email address"
+                                                        }
+                                                    }}
+                                                    render={({field}) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>Email</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="m@example.com" {...field} />
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your email address.
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={signupForm.control}
+                                                    name="password"
+                                                    render={({field}) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>Password</FormLabel>
+                                                            <FormControl>
+                                                                <div className="relative">
+                                                                    <Input
+                                                                        type={showPassword ? "text" : "password"}
+                                                                        placeholder="********"
+                                                                        {...field}
+                                                                    />
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                                                                        onClick={() => {
+                                                                            setShowPassword(!showPassword)
+                                                                        }}
+                                                                    >
+                                                                        {showPassword ? (
+                                                                            <EyeOffIcon className="h-4 w-4"/>
+                                                                        ) : (
+                                                                            <EyeIcon className="h-4 w-4"/>
+                                                                        )}
+                                                                    </Button>
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your password
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
+                                                    {isLoading ? 'Signing Up...' : 'Sign Up'}
+                                                </Button>
+                                                <GoogleLogin
+                                                    text="signup_with"
+                                                    type="standard"
+                                                    theme="filled_black"
+                                                    shape="rectangular"
+                                                    width="100%"
+                                                    size="large"
+                                                    onSuccess={credentialResponse => {
+                                                        googleOAuth(credentialResponse, false);
+                                                    }}
+                                                    onError={() => {
+                                                        console.log('Login Failed');
+                                                    }}
+                                                />
+                                            </form>
+                                        </Form>
+                                    </TabsContent>
+                                </Tabs>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                </Layout>
+            </GoogleOAuthProvider>
+            <SendResetEmailDialog setOpenResetDialog={setOpenResetDialog}
+                                  openResetDialog={openResetDialog}
+                                  user={user}
+                                  sendEmail={(email)=> sendEmail(email)}/>
+        </>
     )
 }

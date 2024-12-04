@@ -60,7 +60,7 @@ export default function Header() {
 
     const sendEmail = () => {
         auth.sendResetEmail(user?.username).then(() =>
-            setOpenResetDialog(true)
+            setOpenResetDialog(false)
         )
     }
 

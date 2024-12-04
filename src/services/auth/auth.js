@@ -95,6 +95,18 @@ class AuthService {
         toast.success('Reset Email sent successfully');
         return response.data;
     }
+    /**
+     * Reset the password from email
+     * @param email
+     * @returns {Promise<any>}
+     */
+    async sendResetEmailFromEmail(email) {
+        const response = await axios_instance.post('/auth/password-reset/request', {
+            email
+        });
+        toast.success('Reset Email sent successfully');
+        return response.data;
+    }
 
     /**
      * Reset the password for Google auth

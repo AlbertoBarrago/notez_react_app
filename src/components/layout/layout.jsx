@@ -14,11 +14,9 @@ const Layout = ({children}) => {
             <main className="flex-grow max-w-screen-xl mx-auto">
                 {children}
             </main>
-            {!auth.isLoggedIn() ? "" :
-                <div className="w-full max-w-screen-xl mx-auto">
-                    <Footer/>
-                </div>
-            }
+            <div className="w-full max-w-screen-xl mx-auto">
+                <Footer/>
+            </div>
         </div>
     );
 }

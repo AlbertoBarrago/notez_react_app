@@ -21,103 +21,73 @@ import {useState} from "react";
  */
 export default function SendResetEmailDialog({user, openResetDialog, setOpenResetDialog, sendEmail}) {
     const [isLoading, setIsLoading] = useState(false);
-
     const methods = useForm({
         defaultValues: {
             email: user?.email || "",
         },
-        rules: {
-            email: {
-                required: "Email is required",
-                pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Please enter a valid email address"
-                }
-            }
-        }
-    })
+    });
 
-    /**
-     * Handles form submission for password reset
-     * @param {Object} data - Form data containing email
-     */
     const handleSubmit = async (data) => {
-        setIsLoading(true);
-        await sendEmail(data.email);
-        setIsLoading(false);
-        setOpenResetDialog(false);
+        setIsLoading(true)
+        await sendEmail(data.email).finally(() => setIsLoading(false));
     };
 
-    const LoggedInUserDialog = () => (
+    return (
         <Dialog open={openResetDialog} onOpenChange={setOpenResetDialog}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Reset Password</DialogTitle>
                     <DialogDescription>
-                        Will send a password reset link to your email address: {user.email}
+                        {user
+                            ? `Will send a password reset link to your email address: ${user.email}`
+                            : "Enter your email address to receive a password reset link"
+                        }
                     </DialogDescription>
                 </DialogHeader>
-                <DialogFooter>
-                    <Button variant="outline" onClick={() => setOpenResetDialog(false)}>
-                        Cancel
-                    </Button>
-                    <Button onClick={() => sendEmail(user.email)} disabled={isLoading}>
-                        {isLoading ? "Sending..." : "Send Reset Link"}
-                    </Button>
-                </DialogFooter>
+
+                {user ? (
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setOpenResetDialog(false)}>
+                            Cancel
+                        </Button>
+                        <Button onClick={() => sendEmail(user.email)} disabled={isLoading}>
+                            {isLoading ? "Sending..." : "Send Reset Link"}
+                        </Button>
+                    </DialogFooter>
+                ) : (
+                    <FormProvider {...methods}>
+                        <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-4">
+                            <FormField
+                                control={methods.control}
+                                name="email"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                placeholder="name@example.com"
+                                                onChange={(e) => field.onChange(e.target.value)}
+                                                value={field.value}
+                                                disabled={isLoading}
+                                            />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <DialogFooter>
+                                <Button variant="outline" onClick={() => setOpenResetDialog(false)}>
+                                    Cancel
+                                </Button>
+                                <Button type="submit" disabled={isLoading}>
+                                    {isLoading ? "Sending..." : "Send Reset Link"}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </FormProvider>
+                )}
             </DialogContent>
         </Dialog>
     );
-
-    const AnonymousUserDialog = () => (
-        <Dialog open={openResetDialog} onOpenChange={setOpenResetDialog}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Reset Password</DialogTitle>
-                    <DialogDescription>
-                        Enter your email address to receive a password reset link
-                    </DialogDescription>
-                </DialogHeader>
-                <FormProvider {...methods}>
-                    <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-4">
-                        <FormField
-                            control={methods.control}
-                            name="email"
-                            rules={{
-                                required: "Email is required",
-                                pattern: {
-                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                    message: "Invalid email address"
-                                }
-                            }}
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="email"
-                                            placeholder="name@example.com"
-                                            {...field}
-                                            disabled={isLoading}
-                                        />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-                        <DialogFooter>
-                            <Button variant="outline" onClick={() => setOpenResetDialog(false)}>
-                                Cancel
-                            </Button>
-                            <Button type="submit" disabled={isLoading}>
-                                {isLoading ? "Sending..." : "Send Reset Link"}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </FormProvider>
-            </DialogContent>
-        </Dialog>
-    );
-
-    return user ? <LoggedInUserDialog/> : <AnonymousUserDialog/>;
 }
