@@ -22,13 +22,15 @@ class AuthService {
 
     /**
      * Logs in a user
+     * @param email {string} - The user's email
      * @param {string} username - The user's email
      * @param {string} password - The user's password
      * @returns {Promise<AuthResp>} - The response from the auth request
      * @throws {Error} - If there is an issue with the auth request
      */
-    async login(username, password) {
+    async login(email, username, password) {
         const response = await axios_instance.post('/auth/login', {
+            email,
             username,
             password
         });

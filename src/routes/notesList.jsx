@@ -179,6 +179,9 @@ export default function NotesList() {
      * @param newNoteParam {newNoteParam: {title, content}}
      */
     const handleCreateNoteConfirm = (newNoteParam) => {
+        if (!newNoteParam.title.trim() || !newNoteParam.content.trim()) {
+            return;
+        }
         const newNoteCasted = ({
             title: newNoteParam.title,
             content: newNoteParam.content,

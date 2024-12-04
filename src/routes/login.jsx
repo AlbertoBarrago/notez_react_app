@@ -27,20 +27,34 @@ export default function AuthRoute() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [errorProps, setErrorProps] = useState({});
     const navigate = useNavigate();
-    const signingForm = useForm();
-    const signupForm = useForm();
+    const signingForm = useForm({
+        defaultValues: {
+            username: "",
+            email: "",
+            password: ""
+        }
+    });
+
+    const signupForm = useForm({
+        defaultValues: {
+            username: "",
+            email: "",
+            password: ""
+        }
+    });
 
     /**
      * Handles sign-in form submission
      * @async
-     * @param {Object} data - Form data containing username and password
+     * @param {Object} data - Form data containing username and password and email
+     * @param {string} data.email - User's email
      * @param {string} data.username - User's username
      * @param {string} data.password - User's password
      */
     const onSubmitSignIn = async (data) => {
         setIsLoading(true);
         try {
-            const resp = await auth.login(data.username, data.password);
+            const resp = await auth.login(data.email, data.username, data.password);
             if (resp.user) {
                 navigate("/notes");
             }

@@ -59,12 +59,9 @@ export default function Header() {
     }
 
     const sendEmail = () => {
-        auth.sendResetEmail(user?.username)
-        setOpenResetDialog(false)
-    }
-
-    const handleEditProfile = () => {
-        setOpenEditDialog(true)
+        auth.sendResetEmail(user?.username).then(() =>
+            setOpenResetDialog(true)
+        )
     }
 
     const UserDropdownMenu = () => (
