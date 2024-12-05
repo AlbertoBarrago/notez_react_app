@@ -21,7 +21,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {Menu} from "lucide-react";
+import {Menu, Pencil, LogOut, Trash2, KeyRound} from "lucide-react";
 import {useState} from "react";
 import SendResetEmailDialog from "@/components/dialogs/send_reset_email.jsx";
 import EditProfileDialog from "@/components/dialogs/edit_user.jsx";
@@ -119,21 +119,19 @@ export default function Header() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel>{user?.username}</DropdownMenuLabel>
-                <DropdownMenuSeparator/>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'edit-profile')}>
-                    ✍️ Edit Profile
+                    <Pencil className="mr-2 h-4 w-4" /> Edit Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'reset-password')}>
-                    ‼️ Reset Password
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'logout')}>
-                    👋🏻 Logout
+                    <KeyRound className="mr-2 h-4 w-4" /> Reset Password
                 </DropdownMenuItem>
                 <DropdownMenuSeparator/>
-
+                <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'logout')}>
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                </DropdownMenuItem>
+                <DropdownMenuSeparator/>
                 <DropdownMenuItem className="hover:cursor-pointer bg-red-500" onClick={(e) => handleDropDownClick(e, 'delete-account')}>
-                    ⚠️ Delete Account
+                    <Trash2 className="mr-2 h-4 w-4" /> Delete Account
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
