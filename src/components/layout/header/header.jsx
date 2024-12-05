@@ -48,6 +48,7 @@ export default function Header() {
     const [openResetDialog, setOpenResetDialog] = useState(false)
     const [openEditDialog, setOpenEditDialog] = useState(false)
     const [openDeleteAccountDialog, setOpenDeleteAccountDialog] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const auth = new AuthService()
     const navigate = useNavigate()
     const user = auth.getUser();
@@ -63,8 +64,19 @@ export default function Header() {
         )
     }
 
+    const editProfile = (data) => {
+        const editData = {
+            role: user?.role,
+            username: data?.username,
+            email: data?.email,
+        }
+        auth.updateUser(editData).then(() => {
+            setOpenEditDialog(false)
+        })
+    }
+
     const deleteAccount = () => {
-        auth.deleteUser(user?.user_id).then(() => {
+        auth.deleteUser().then(() => {
             performLogout()
         })
     }
@@ -115,12 +127,13 @@ export default function Header() {
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'reset-password')}>
                     ‼️ Reset Password
                 </DropdownMenuItem>
-                <DropdownMenuItem className="hover:cursor-pointer bg-red-500" onClick={(e) => handleDropDownClick(e, 'delete-account')}>
-                    ⚠️ Delete Account
-                </DropdownMenuItem>
-                <DropdownMenuSeparator/>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'logout')}>
                     👋🏻 Logout
+                </DropdownMenuItem>
+                <DropdownMenuSeparator/>
+
+                <DropdownMenuItem className="hover:cursor-pointer bg-red-500" onClick={(e) => handleDropDownClick(e, 'delete-account')}>
+                    ⚠️ Delete Account
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
@@ -218,6 +231,8 @@ export default function Header() {
 
             <EditProfileDialog user={user}
                                open={openEditDialog}
+                               isLoading={isLoading}
+                               editAction={editProfile}
                                setOpen={setOpenEditDialog}/>
 
             <DeleteAccountDialog open={openDeleteAccountDialog}

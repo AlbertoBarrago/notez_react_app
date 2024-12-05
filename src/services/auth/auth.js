@@ -129,6 +129,10 @@ class AuthService {
        return JSON.parse(localStorage.getItem('user'));
     }
 
+    updateUserDataSession(user) {
+        localStorage.setItem('user', JSON.stringify(user));
+    }
+
     /**
      * Checks if a user is currently logged in.
      *
@@ -152,12 +156,22 @@ class AuthService {
     }
 
     /**
-     * Delete the user's profile information.
-     * @param id
+     * Update the user's profile information.
+     * @param user
      * @returns {Promise<any>}
      */
-    deleteUser(id) {
-        return axios_instance.delete(`/users/${id}`);
+    updateUser(user) {
+       const userUpdate = axios_instance.put(`/users/`, user);
+       this.updateUserDataSession(user);
+       return userUpdate;
+    }
+
+    /**
+     * Delete the user's profile information.
+     * @returns {Promise<any>}
+     */
+    deleteUser() {
+        return axios_instance.delete(`/users/`);
     }
 }
 
