@@ -21,7 +21,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {Menu} from "lucide-react";
+import {Menu, Pencil, LogOut, Trash2, KeyRound} from "lucide-react";
 import {useState} from "react";
 import SendResetEmailDialog from "@/components/dialogs/send_reset_email.jsx";
 import EditProfileDialog from "@/components/dialogs/edit_user.jsx";
@@ -48,6 +48,7 @@ export default function Header() {
     const [openResetDialog, setOpenResetDialog] = useState(false)
     const [openEditDialog, setOpenEditDialog] = useState(false)
     const [openDeleteAccountDialog, setOpenDeleteAccountDialog] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const auth = new AuthService()
     const navigate = useNavigate()
     const user = auth.getUser();
@@ -63,8 +64,19 @@ export default function Header() {
         )
     }
 
+    const editProfile = (data) => {
+        const editData = {
+            role: user?.role,
+            username: data?.username,
+            email: data?.email,
+        }
+        auth.updateUser(editData).then(() => {
+            setOpenEditDialog(false)
+        })
+    }
+
     const deleteAccount = () => {
-        auth.deleteUser(user?.user_id).then(() => {
+        auth.deleteUser().then(() => {
             performLogout()
         })
     }
@@ -107,20 +119,19 @@ export default function Header() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel>{user?.username}</DropdownMenuLabel>
-                <DropdownMenuSeparator/>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'edit-profile')}>
-                    ✍️ Edit Profile
+                    <Pencil className="mr-2 h-4 w-4" /> Edit Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'reset-password')}>
-                    ‼️ Reset Password
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:cursor-pointer bg-red-500" onClick={(e) => handleDropDownClick(e, 'delete-account')}>
-                    ⚠️ Delete Account
+                    <KeyRound className="mr-2 h-4 w-4" /> Reset Password
                 </DropdownMenuItem>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'logout')}>
-                    👋🏻 Logout
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                </DropdownMenuItem>
+                <DropdownMenuSeparator/>
+                <DropdownMenuItem className="hover:cursor-pointer bg-red-500" onClick={(e) => handleDropDownClick(e, 'delete-account')}>
+                    <Trash2 className="mr-2 h-4 w-4" /> Delete Account
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
@@ -218,6 +229,8 @@ export default function Header() {
 
             <EditProfileDialog user={user}
                                open={openEditDialog}
+                               isLoading={isLoading}
+                               editAction={editProfile}
                                setOpen={setOpenEditDialog}/>
 
             <DeleteAccountDialog open={openDeleteAccountDialog}
