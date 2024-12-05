@@ -107,20 +107,20 @@ export default function Header() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{user?.username}</DropdownMenuLabel>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'edit-profile')}>
-                    Edit Profile
+                    ✍️ Edit Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'reset-password')}>
-                    Reset Password
+                    ‼️ Reset Password
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer bg-red-500" onClick={(e) => handleDropDownClick(e, 'delete-account')}>
-                    Delete Account
+                    ⚠️ Delete Account
                 </DropdownMenuItem>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'logout')}>
-                    Logout
+                    👋🏻 Logout
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
