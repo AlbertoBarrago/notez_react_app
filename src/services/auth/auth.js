@@ -150,6 +150,15 @@ class AuthService {
         localStorage.removeItem('user');
         localStorage.removeItem('token_type');
     }
+
+    /**
+     * Delete the user's profile information.
+     * @param id
+     * @returns {Promise<any>}
+     */
+    deleteUser(id) {
+        return axios_instance.delete(`/users/${id}`);
+    }
 }
 
 export default AuthService;

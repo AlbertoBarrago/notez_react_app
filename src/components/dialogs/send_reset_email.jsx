@@ -9,7 +9,7 @@ import {useState} from "react";
 /**
  * @typedef {Object} SendResetEmailDialogProps
  * @property {Object|null} user - The current user object
- * @property {boolean} openResetDialog - Dialog open state
+ * @property {boolean} open - Dialog open state
  * @property {Function} setOpenResetDialog - Dialog state setter
  * @property {Function} sendEmail - Email sending function
  */
@@ -19,7 +19,7 @@ import {useState} from "react";
  * @param {SendResetEmailDialogProps} props
  * @returns {JSX.Element}
  */
-export default function SendResetEmailDialog({user, openResetDialog, setOpenResetDialog, sendEmail}) {
+export default function SendResetEmailDialog({user, open, setOpen, sendEmail}) {
     const [isLoading, setIsLoading] = useState(false);
     const methods = useForm({
         defaultValues: {
@@ -33,7 +33,7 @@ export default function SendResetEmailDialog({user, openResetDialog, setOpenRese
     };
 
     return (
-        <Dialog open={openResetDialog} onOpenChange={setOpenResetDialog}>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Reset Password</DialogTitle>
@@ -46,8 +46,8 @@ export default function SendResetEmailDialog({user, openResetDialog, setOpenRese
                 </DialogHeader>
 
                 {user ? (
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setOpenResetDialog(false)}>
+                    <DialogFooter className="flex justify-end gap-2 md:flex-row flex-col">
+                        <Button variant="outline" onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
                         <Button onClick={() => sendEmail(user.email)} disabled={isLoading}>
@@ -66,7 +66,7 @@ export default function SendResetEmailDialog({user, openResetDialog, setOpenRese
                                         <FormControl>
                                             <Input
                                                 type="text"
-                                                placeholder="name@example.com"
+                                                placeholder="evilcorp@example.com"
                                                 onChange={(e) => field.onChange(e.target.value)}
                                                 value={field.value}
                                                 disabled={isLoading}
@@ -76,8 +76,8 @@ export default function SendResetEmailDialog({user, openResetDialog, setOpenRese
                                     </FormItem>
                                 )}
                             />
-                            <DialogFooter>
-                                <Button variant="outline" onClick={() => setOpenResetDialog(false)}>
+                            <DialogFooter className="flex justify-end gap-2 md:flex-row flex-col">
+                                <Button variant="outline" onClick={() => setOpen(false)}>
                                     Cancel
                                 </Button>
                                 <Button type="submit" disabled={isLoading}>
