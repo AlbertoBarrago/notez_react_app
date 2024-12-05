@@ -30,9 +30,6 @@ import PaginationControls from "@/components/pagination.jsx";
  * @property {number} total_pages - Total number of pages
  */
 
-/**
- * @constant {NotesService}
- */
 const noteService = new NotesService();
 const authService = new AuthService();
 
