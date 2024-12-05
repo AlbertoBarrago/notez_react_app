@@ -3,7 +3,6 @@ import Layout from "@/components/layout/layout.jsx";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.jsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import ErrorsModal from "@/components/dialogs/errors.jsx";
 import {EyeIcon, EyeOffIcon} from "lucide-react"
 import {useState} from "react";
 import {
@@ -19,22 +18,31 @@ import {Input} from "@/components/ui/input"
 import SendResetEmailDialog from "@/components/dialogs/send_reset_email.jsx";
 import AuthService from "@/services/auth/auth.js";
 
-/** @constant {string} */
 const SIGN_IN = "signing";
-/** @constant {string} */
 const SIGN_UP = "signup";
-/** @constant {string} */
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-
+/**
+ * Login form component
+ * @typedef {Object} LoginFormProps
+ * @param signingForm
+ * @param signupForm
+ * @param onSubmitSignIn
+ * @param onSubmitSignUp
+ * @param setTab
+ * @param isLoading
+ * @param googleOAuth
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function LoginForm({
                               signingForm,
+                              signupForm,
                               onSubmitSignIn,
                               onSubmitSignUp,
                               setTab,
                               isLoading,
-                              signupForm,
-                              googleOAuth,
+                              googleOAuth
                           }) {
     const auth = new AuthService();
     const [showPassword, setShowPassword] = useState(false)

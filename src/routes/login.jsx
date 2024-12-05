@@ -10,8 +10,8 @@ import AuthService from "@/services/auth/auth.js";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {LoginForm} from "@/components/loginForm.jsx";
+import ErrorsModal from "@/components/dialogs/errors.jsx";
 
-/** @constant {string} */
 const SIGN_IN = "signin";
 
 /**
@@ -21,10 +21,10 @@ const SIGN_IN = "signin";
  */
 export default function AuthRoute() {
     const [isLoading, setIsLoading] = useState(false);
+    const [errorDialogIsOpen, setErrorDialogIsOpen] = useState(false);
     const auth = new AuthService();
     // eslint-disable-next-line no-unused-vars
     const [tab, setTab] = useState(SIGN_IN);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [errorProps, setErrorProps] = useState({});
     const navigate = useNavigate();
     const signingForm = useForm({
@@ -64,7 +64,7 @@ export default function AuthRoute() {
                 message: err.response?.data?.detail || 'LoginForm failed. Please try again.'
             };
             setErrorProps(errorMessage);
-            setIsModalOpen(true);
+            setErrorDialogIsOpen(true);
         } finally {
             setIsLoading(false);
         }
@@ -87,7 +87,7 @@ export default function AuthRoute() {
             }
         } catch (e) {
             setErrorProps(e);
-            setIsModalOpen(true);
+            setErrorDialogIsOpen(true);
         } finally {
             setIsLoading(false);
         }
@@ -108,24 +108,26 @@ export default function AuthRoute() {
             }
         } catch (e) {
             setErrorProps(e);
-            setIsModalOpen(true);
+            setErrorDialogIsOpen(true);
         } finally {
             setIsLoading(false);
         }
     }
 
     return (
-        <LoginForm signingForm={signingForm}
-                   signupForm={signupForm}
-                   onSubmitSignUp={onSubmitSignUp}
-                   onSubmitSignIn={onSubmitSignIn}
-                   onGoogleOAuth={googleOAuth}
-                   setIsModalOpen={setIsModalOpen}
-                   setTab={setTab}
-                   isLoading={isLoading}
-                   isModalOpen={isModalOpen}
-                   googleOAuth={googleOAuth}
-                   errorProps={errorProps}
-        />
+        <>
+            <LoginForm signingForm={signingForm}
+                       signupForm={signupForm}
+                       onSubmitSignUp={onSubmitSignUp}
+                       onSubmitSignIn={onSubmitSignIn}
+                       onGoogleOAuth={googleOAuth}
+                       setTab={setTab}
+                       isLoading={isLoading}
+                       googleOAuth={googleOAuth}
+            />
+            <ErrorsModal isOpen={errorDialogIsOpen}
+                         onClose={() => setErrorDialogIsOpen(false)}
+                         errorProps={errorProps}/>
+        </>
     )
 }
