@@ -16,25 +16,17 @@ import {
 } from "@/components/ui/form";
 import {FormProvider, useForm} from "react-hook-form";
 
-export default function EditProfileDialog({user, open, setOpen}) {
-    const [isLoading, setIsLoading] = useState(false);
+export default function EditProfileDialog({user, open, setOpen, isLoading, editAction }) {
 
     const methods = useForm({
         defaultValues: {
-            name: user ? user.username : "",
+            username: user ? user.username : "",
             email: user ? user.email : "",
         },
     });
 
     async function onSubmit(data) {
-        setIsLoading(true);
-        try {
-            console.log("Profile updated:", data);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
+       editAction(data)
     }
 
     return (
@@ -50,7 +42,7 @@ export default function EditProfileDialog({user, open, setOpen}) {
                         <div className="flex justify-end gap-2 flex-col">
                             <FormField
                                 control={methods.control}
-                                name="name"
+                                name="username"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
