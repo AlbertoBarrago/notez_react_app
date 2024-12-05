@@ -93,6 +93,18 @@ class AuthService {
         toast.success('Reset Email sent successfully');
         return response.data;
     }
+    /**
+     * Reset the password from email
+     * @param email
+     * @returns {Promise<any>}
+     */
+    async sendResetEmailFromEmail(email) {
+        const response = await axios_instance.post('/auth/password-reset/request', {
+            email
+        });
+        toast.success('Reset Email sent successfully');
+        return response.data;
+    }
 
     /**
      * Reset the password for Google auth
@@ -137,6 +149,15 @@ class AuthService {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('token_type');
+    }
+
+    /**
+     * Delete the user's profile information.
+     * @param id
+     * @returns {Promise<any>}
+     */
+    deleteUser(id) {
+        return axios_instance.delete(`/users/${id}`);
     }
 }
 

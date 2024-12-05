@@ -10,7 +10,7 @@ import AuthService from "@/services/auth/auth.js";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
 import {
     Sheet,
-    SheetContent,
+    SheetContent, SheetHeader, SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
 import {
@@ -22,12 +22,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {Menu} from "lucide-react";
-import {Dialog, DialogTitle} from "@radix-ui/react-dialog";
-import {DialogContent, DialogDescription, DialogFooter, DialogHeader} from "@/components/ui/dialog.jsx";
 import {useState} from "react";
 import SendResetEmailDialog from "@/components/dialogs/send_reset_email.jsx";
-import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import EditProfileDialog from "@/components/dialogs/edit_user.jsx";
+import DeleteAccountDialog from "@/components/dialogs/delete_account.jsx";
 
 const BOSS_NAME = {
     name: 'Alberto Barrago',
@@ -49,6 +47,7 @@ const BOSS_NAME = {
 export default function Header() {
     const [openResetDialog, setOpenResetDialog] = useState(false)
     const [openEditDialog, setOpenEditDialog] = useState(false)
+    const [openDeleteAccountDialog, setOpenDeleteAccountDialog] = useState(false)
     const auth = new AuthService()
     const navigate = useNavigate()
     const user = auth.getUser();
@@ -59,16 +58,40 @@ export default function Header() {
     }
 
     const sendEmail = () => {
-        auth.sendResetEmail(user?.username)
-        setOpenResetDialog(false)
+        auth.sendResetEmail(user?.username).then(() =>
+            setOpenResetDialog(false)
+        )
     }
 
-    const handleEditProfile = () => {
-        setOpenEditDialog(true)
+    const deleteAccount = () => {
+        auth.deleteUser(user?.user_id).then(() => {
+            performLogout()
+        })
+    }
+
+    const handleDropDownClick = (e, operation) => {
+        e.preventDefault();
+        e.stopPropagation();
+        switch (operation) {
+            case 'reset-password':
+                setOpenResetDialog(true)
+                break;
+            case 'edit-profile':
+                setOpenEditDialog(true)
+                break;
+            case 'delete-account':
+                setOpenDeleteAccountDialog(true)
+                break;
+            case 'logout':
+                performLogout()
+                break;
+            default:
+                break;
+        }
     }
 
     const UserDropdownMenu = () => (
-        <DropdownMenu>
+        <DropdownMenu className="hover:cursor-pointer">
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative flex items-center gap-2">
                     <Avatar className="h-9 w-9">
@@ -84,25 +107,20 @@ export default function Header() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{user?.username}</DropdownMenuLabel>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setOpenEditDialog(true);
-                }}>
-                    Edit Profile
+                <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'edit-profile')}>
+                    ✍️ Edit Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setOpenResetDialog(true);
-                }}>
-                    Reset Password
+                <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'reset-password')}>
+                    ‼️ Reset Password
+                </DropdownMenuItem>
+                <DropdownMenuItem className="hover:cursor-pointer bg-red-500" onClick={(e) => handleDropDownClick(e, 'delete-account')}>
+                    ⚠️ Delete Account
                 </DropdownMenuItem>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem onClick={performLogout}>
-                    Logout
+                <DropdownMenuItem className="hover:cursor-pointer" onClick={(e) => handleDropDownClick(e, 'logout')}>
+                    👋🏻 Logout
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
@@ -113,7 +131,7 @@ export default function Header() {
             <NavLink
                 to="/notes"
                 className={({isActive, isPending}) =>
-                    `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
+                    `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "bg-primary rounded" : "bg-secondary rounded"}`
                 }
             >
                 Your Articles
@@ -121,16 +139,11 @@ export default function Header() {
             <NavLink
                 to="/explore"
                 className={({isActive, isPending}) =>
-                    `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "active rounded" : ""}`
+                    `w-full p-3 mb-3 text-center ${isPending ? "pending" : isActive ? "bg-primary rounded" : "bg-secondary rounded"}`
                 }
             >
                 Explore
             </NavLink>
-            {auth.isLoggedIn() && (
-                <Button className="w-full" onClick={performLogout}>
-                    Logout
-                </Button>
-            )}
         </div>
     )
 
@@ -140,7 +153,7 @@ export default function Header() {
                 <NavLink
                     to="/notes"
                     className={({isActive, isPending}) =>
-                        isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
+                        isPending ? "pending p-3" : isActive ? "bg-primary p-3 rounded" : "p-3 bg-secondary rounded"
                     }
                 >
                     Your Articles
@@ -150,17 +163,12 @@ export default function Header() {
                 <NavLink
                     to="/explore"
                     className={({isActive, isPending}) =>
-                        isPending ? "pending p-3" : isActive ? "active p-3 rounded" : "p-3"
+                        isPending ? "pending p-3" : isActive ? "bg-primary p-3 rounded" : "p-3 bg-secondary rounded"
                     }
                 >
                     Explore
                 </NavLink>
             </NavigationMenuItem>
-            {auth.isLoggedIn() && (
-                <NavigationMenuItem>
-                    <Button onClick={performLogout}>Logout</Button>
-                </NavigationMenuItem>
-            )}
         </>
     )
 
@@ -192,6 +200,9 @@ export default function Header() {
                                 </Button>
                             </SheetTrigger>
                             <SheetContent>
+                                <SheetHeader>
+                                    <SheetTitle>Menu</SheetTitle>
+                                </SheetHeader>
                                 <div className="flex flex-col mt-10">
                                     <MobileNavigationItems/>
                                 </div>
@@ -200,13 +211,18 @@ export default function Header() {
                     </div>
                 </NavigationMenu>
             </header>
-            <SendResetEmailDialog openResetDialog={openResetDialog}
-                                  setOpenResetDialog={setOpenResetDialog}
+            <SendResetEmailDialog open={openResetDialog}
+                                  setOpen={setOpenResetDialog}
                                   sendEmail={sendEmail}
                                   user={user}/>
+
             <EditProfileDialog user={user}
-                               openEditProfileDialog={openEditDialog}
-                               setOpenEditProfileDialog={setOpenEditDialog}/>
+                               open={openEditDialog}
+                               setOpen={setOpenEditDialog}/>
+
+            <DeleteAccountDialog open={openDeleteAccountDialog}
+                                 setOpen={setOpenDeleteAccountDialog}
+                                 deleteAction={deleteAccount}/>
         </>
     );
 }

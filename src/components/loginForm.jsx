@@ -2,187 +2,286 @@ import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
 import Layout from "@/components/layout/layout.jsx";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.jsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.jsx";
-import {Label} from "@/components/ui/label.jsx";
-import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import ErrorsModal from "@/components/dialogs/errors.jsx";
-import { EyeIcon, EyeOffIcon } from "lucide-react"
+import {EyeIcon, EyeOffIcon} from "lucide-react"
 import {useState} from "react";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import {Input} from "@/components/ui/input"
+import SendResetEmailDialog from "@/components/dialogs/send_reset_email.jsx";
+import AuthService from "@/services/auth/auth.js";
 
-
-/** @constant {string} */
 const SIGN_IN = "signing";
-/** @constant {string} */
 const SIGN_UP = "signup";
-/** @constant {string} */
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-
+/**
+ * Login form component
+ * @typedef {Object} LoginFormProps
+ * @param signingForm
+ * @param signupForm
+ * @param onSubmitSignIn
+ * @param onSubmitSignUp
+ * @param setTab
+ * @param isLoading
+ * @param googleOAuth
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function LoginForm({
-                                  signingForm,
-                                  onSubmitSignIn,
-                                  onSubmitSignUp,
-                                  setIsModalOpen,
-                                  setTab,
-                                  isLoading,
-                                  signupForm,
-                                  googleOAuth,
-                                  isModalOpen,
-                                  errorProps
-                              }) {
-
+                              signingForm,
+                              signupForm,
+                              onSubmitSignIn,
+                              onSubmitSignUp,
+                              setTab,
+                              isLoading,
+                              googleOAuth
+                          }) {
+    const auth = new AuthService();
     const [showPassword, setShowPassword] = useState(false)
+    const [openResetDialog, setOpenResetDialog] = useState(false)
+    const user = auth.getUser();
+
+    const sendEmail = (data) => {
+        auth.sendResetEmailFromEmail(data).then(() =>
+            setOpenResetDialog(false)
+        )
+    }
 
     return (
-
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
-            <Layout>
-                <div className="flex justify-center items-center min-h-[85vh] sm:min-h-auto px-4 py-6">
-                    <Card className="w-[350px]">
-                        <CardHeader>
-                            <CardTitle>📒 Notez App</CardTitle>
-                            <CardDescription>Sign in to your account or create a new one.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <Tabs defaultValue={SIGN_IN} className="w-full mb-5" onValueChange={setTab}>
-                                <TabsList className="grid w-full grid-cols-2">
-                                    <TabsTrigger value={SIGN_IN}>Sign In</TabsTrigger>
-                                    <TabsTrigger value={SIGN_UP}>Sign Up</TabsTrigger>
-                                </TabsList>
-                                <TabsContent value={SIGN_IN}>
-                                    <form className="mt-6" onSubmit={signingForm.handleSubmit(onSubmitSignIn)}>
-                                        <div className="grid w-full items-center gap-4">
-                                            <div className="flex flex-col space-y-1.5">
-                                                <Label htmlFor="usernameSignIn">Username</Label>
-                                                <Input id="usernameSignIn" placeholder="johnDoe"
-                                                       {...signingForm.register("username", {required: true})} />
-                                                {signingForm.formState.errors.username &&
-                                                    <span>This field is required</span>}
-                                            </div>
-                                            <div className="flex flex-col space-y-1.5">
-                                                <Label htmlFor="passwordSignIn">Password</Label>
-                                                <div className="relative">
-                                                    <Input
-                                                        id="passwordSignIn"
-                                                        placeholder="********"
-                                                        type={showPassword ? "text" : "password"}
-                                                        {...signingForm.register("password", {required: true})}
-                                                    />
+        <>
+            <GoogleOAuthProvider clientId={CLIENT_ID}>
+                <Layout>
+                    <div className="flex justify-center items-center min-h-[85vh] sm:min-h-auto px-4 py-12">
+                        <Card className="w-[350px]">
+                            <CardHeader>
+                                <CardTitle>📒 Notez App</CardTitle>
+                                <CardDescription>
+                                    Sign in to your account or create a new one.
+                                    <p className="text-xs mt-2">* Indicates required field</p>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Tabs defaultValue={SIGN_IN} className="w-full mb-5" onValueChange={setTab}>
+                                    <TabsList className="grid w-full grid-cols-2">
+                                        <TabsTrigger value={SIGN_IN}>Sign In</TabsTrigger>
+                                        <TabsTrigger value={SIGN_UP}>Sign Up</TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value={SIGN_IN}>
+                                        <Form {...signingForm}>
+                                            <form className="mt-6" onSubmit={signingForm.handleSubmit(onSubmitSignIn)}>
+                                                <FormField
+                                                    control={signingForm.control}
+                                                    name="username"
+                                                    rules={{
+                                                        validate: (value) => {
+                                                            if (value.includes('@')) {
+                                                                const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+                                                                return emailRegex.test(value) || "Please enter a valid email address";
+                                                            }
+                                                            const usernameRegex = /^[a-zA-Z0-9\s]{3,30}$/;
+                                                            return usernameRegex.test(value) || "Username must be 3-20 characters and can contain letters, numbers, and underscores";
+                                                        }
+                                                    }}
+                                                    render={({field}) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>Email/Username*</FormLabel>
+                                                            <FormControl>
+                                                                <Input
+                                                                    placeholder="johnDoe@evilcorp.com | Jhon Doe" {...field} />
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your email address.
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={signingForm.control}
+                                                    name="password"
+                                                    render={({field}) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>Password*</FormLabel>
+                                                            <FormControl>
+                                                                <div className="relative">
+                                                                    <Input
+                                                                        type={showPassword ? "text" : "password"}
+                                                                        placeholder="********"
+                                                                        {...field}
+                                                                    />
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                                                                        onClick={() => {
+                                                                            setShowPassword(!showPassword)
+                                                                        }}
+                                                                    >
+                                                                        {showPassword ? (
+                                                                            <EyeOffIcon className="h-4 w-4"/>
+                                                                        ) : (
+                                                                            <EyeIcon className="h-4 w-4"/>
+                                                                        )}
+                                                                    </Button>
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your password.
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <div className="flex justify-end mt-2">
                                                     <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
-                                                        onClick={() => setShowPassword(!showPassword)}
+                                                        variant="link"
+                                                        className="text-sm text-muted-foreground hover:text-primary p-0"
+                                                        onClick={() => {
+                                                            setOpenResetDialog(true)
+                                                        }}
                                                     >
-                                                        {showPassword ? (
-                                                            <EyeOffIcon className="h-4 w-4"/>
-                                                        ) : (
-                                                            <EyeIcon className="h-4 w-4"/>
-                                                        )}
+                                                        Forgot Password?
                                                     </Button>
                                                 </div>
-                                                {signingForm.formState.errors.password &&
-                                                    <span>This field is required</span>}
-                                            </div>
-                                        </div>
-                                        <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
-                                            {isLoading ? 'Signing In...' : 'Sign In'}
-                                        </Button>
-                                        <GoogleLogin
-                                            text="signin"
-                                            type="standard"
-                                            theme="filled_black"
-                                            size="large"
-                                            onSuccess={credentialResponse => {
-                                                googleOAuth(credentialResponse);
-                                            }}
-                                            onError={() => {
-                                                console.log('LoginForm Failed');
-                                            }}
-                                        />
-                                    </form>
-                                </TabsContent>
-                                <TabsContent value={SIGN_UP}>
-                                    <form className="mt-6" onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
-                                        <div className="grid w-full items-center gap-4">
-                                            <div className="flex flex-col space-y-1.5">
-                                                <Label htmlFor="usernameSignUp">Username</Label>
-                                                <Input id="usernameSignUp" placeholder="johndoe"
-                                                       {...signupForm.register("username", {required: true})} />
-                                                {signupForm.formState.errors.username &&
-                                                    <span>This field is required</span>}
-                                            </div>
-                                            <div className="flex flex-col space-y-1.5">
-                                                <Label htmlFor="emailSignUp">Email</Label>
-                                                <Input
-                                                    id="emailSignUp"
-                                                    type="email"
-                                                    placeholder="m@example.com"
-                                                    {...signupForm.register("email", {
+                                                <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
+                                                    {isLoading ? 'Signing In...' : 'Sign In'}
+                                                </Button>
+                                                <GoogleLogin
+                                                    text="signin"
+                                                    type="standard"
+                                                    theme="filled_black"
+                                                    shape="rectangular"
+                                                    width="100%"
+                                                    size="large"
+                                                    onSuccess={credentialResponse => {
+                                                        googleOAuth(credentialResponse);
+                                                    }}
+                                                    onError={() => {
+                                                        console.log('Login Failed');
+                                                    }}
+                                                />
+                                            </form>
+                                        </Form>
+                                    </TabsContent>
+                                    <TabsContent value={SIGN_UP}>
+                                        <Form {...signupForm}>
+                                            <form className="mt-6" onSubmit={signupForm.handleSubmit(onSubmitSignUp)}>
+                                                <FormField
+                                                    control={signupForm.control}
+                                                    name="username"
+                                                    render={({field}) => (
+                                                        <FormItem>
+                                                            <FormLabel>Username</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="johndoe" {...field} />
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your username.
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={signupForm.control}
+                                                    name="email"
+                                                    rules={{
                                                         required: "Email is required",
                                                         pattern: {
                                                             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                                            message: "Invalid email address"
+                                                            message: "Please enter a valid email address"
                                                         }
-                                                    })}
+                                                    }}
+                                                    render={({field}) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>Email</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="m@example.com" {...field} />
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your email address.
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
                                                 />
-                                                {signupForm.formState.errors.email && (
-                                                    <span className="text-sm text-red-500">
-                                                        {signupForm.formState.errors.email.message}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <div className="flex flex-col space-y-1.5">
-                                                <Label htmlFor="passwordSignUp">Password</Label>
-                                                <div className="relative">
-                                                    <Input
-                                                        id="passwordSignUp"
-                                                        placeholder="********"
-                                                        type={showPassword ? "text" : "password"}
-                                                        {...signupForm.register("password", {required: true})}
-                                                    />
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
-                                                        onClick={() => setShowPassword(!showPassword)}
-                                                    >
-                                                        {showPassword ? (
-                                                            <EyeOffIcon className="h-4 w-4"/>
-                                                        ) : (
-                                                            <EyeIcon className="h-4 w-4"/>
-                                                        )}
-                                                    </Button>
-                                                </div>
-                                                {signupForm.formState.errors.password &&
-                                                    <span>This field is required</span>}
-                                            </div>
-                                        </div>
-                                        <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
-                                            {isLoading ? 'Signing Up...' : 'Sign Up'}
-                                        </Button>
-                                        <GoogleLogin
-                                            text="signup_with"
-                                            type="standard"
-                                            theme="filled_black"
-                                            size="large"
-                                            onSuccess={credentialResponse => {
-                                                googleOAuth(credentialResponse, false);
-                                            }}
-                                            onError={() => {
-                                                console.log('LoginForm Failed');
-                                            }}
-                                        />
-                                    </form>
-                                </TabsContent>
-                            </Tabs>
-                        </CardContent>
-                    </Card>
-                    <ErrorsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} errorProps={errorProps}/>
-                </div>
-            </Layout>
-        </GoogleOAuthProvider>
+                                                <FormField
+                                                    control={signupForm.control}
+                                                    name="password"
+                                                    render={({field}) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>Password</FormLabel>
+                                                            <FormControl>
+                                                                <div className="relative">
+                                                                    <Input
+                                                                        type={showPassword ? "text" : "password"}
+                                                                        placeholder="********"
+                                                                        {...field}
+                                                                    />
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                                                                        onClick={() => {
+                                                                            setShowPassword(!showPassword)
+                                                                        }}
+                                                                    >
+                                                                        {showPassword ? (
+                                                                            <EyeOffIcon className="h-4 w-4"/>
+                                                                        ) : (
+                                                                            <EyeIcon className="h-4 w-4"/>
+                                                                        )}
+                                                                    </Button>
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormDescription className="text-xs">
+                                                                Enter your password
+                                                            </FormDescription>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
+                                                    {isLoading ? 'Signing Up...' : 'Sign Up'}
+                                                </Button>
+                                                <GoogleLogin
+                                                    text="signup_with"
+                                                    type="standard"
+                                                    theme="filled_black"
+                                                    shape="rectangular"
+                                                    width="100%"
+                                                    size="large"
+                                                    onSuccess={credentialResponse => {
+                                                        googleOAuth(credentialResponse, false);
+                                                    }}
+                                                    onError={() => {
+                                                        console.log('Login Failed');
+                                                    }}
+                                                />
+                                            </form>
+                                        </Form>
+                                    </TabsContent>
+                                </Tabs>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                </Layout>
+            </GoogleOAuthProvider>
+            <SendResetEmailDialog setOpenResetDialog={setOpenResetDialog}
+                                  openResetDialog={openResetDialog}
+                                  user={user}
+                                  sendEmail={(email) => sendEmail(email)}/>
+        </>
     )
 }

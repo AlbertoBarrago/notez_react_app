@@ -22,15 +22,13 @@ export function FilterSearch({onSearch, initialValue = ""}) {
     }
 
     return (
-        <div className="flex items-center space-x-1 w-full
-                        sm:max-w-[620px]
-                        sm:min-w-[620px]
-                        md:max-w-[768px]
-                        md:min-w-[769px]
+        <div className="flex items-center space-x-1
+                        w-full
+                        max-w-[400px]
+                        sm:max-w-[580px]
+                        md:max-w-[769px]
                         lg:max-w-[890px]
-                        lg:min-w-[890px]
-                        xl:max-w-[1200px]
-                        xl:min-w-[1200px]
+                        xl:max-w-[1230px]
                         mx-auto mt-5
                         px-4 md:px-0">
             <Input
