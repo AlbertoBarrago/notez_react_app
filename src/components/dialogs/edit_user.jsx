@@ -47,7 +47,7 @@ export default function EditProfileDialog({user, open, setOpen}) {
                 </DialogHeader>
                 <FormProvider {...methods}>
                     <form onSubmit={methods.handleSubmit(onSubmit)} className="grid gap-4 py-4">
-                        <div className="flex justify-end gap-2 md:flex-row flex-col">
+                        <div className="flex justify-end gap-2 flex-col">
                             <FormField
                                 control={methods.control}
                                 name="name"
@@ -84,7 +84,7 @@ export default function EditProfileDialog({user, open, setOpen}) {
                                 )}
                             />
                         </div>
-                        <DialogFooter className="flex justify-end gap-4 md:flex-row flex-col mt-10">
+                        <DialogFooter className="flex justify-end gap-2 md:flex-row flex-col mt-5">
                             <Button
                                 type="button"
                                 variant="outline"
