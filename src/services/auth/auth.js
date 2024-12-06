@@ -99,7 +99,7 @@ class AuthService {
      * @returns {Promise<any>}
      */
     async sendResetEmailFromEmail(email) {
-        const response = await axios_instance.post('/auth/password-reset/request', {
+        const response = await axios_instance.post('/auth/password-reset', {
             email
         });
         toast.success('Reset Email sent successfully');

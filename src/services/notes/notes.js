@@ -82,7 +82,7 @@ class NotesService {
      * @return {PaginatedResponse} A promise that resolves to an array of note objects.
      */
     async getPublicNotes(page, pageSize, query, sort = "asc") {
-        const resp =  await axios_instance.get(`/notes/list/public?page=${page}&page_size=${pageSize}&sort_order=${sort}&query=${query}`);
+        const resp =  await axios_instance.get(`/notes/list/public?page=${page}&page_size=${pageSize}&sort_order=${sort}&sort_by='created_at'&query=${query}`);
         return resp.data;
     }
 
