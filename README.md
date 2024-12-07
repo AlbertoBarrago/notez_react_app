@@ -84,3 +84,6 @@ npm install
 npm run dev
 ```
 
+
+## TODOs: 
+- [ ] Add error handling on note 
