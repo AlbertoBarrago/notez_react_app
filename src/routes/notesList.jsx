@@ -16,7 +16,9 @@ import {PlusIcon} from "lucide-react";
 import {FilterSearch} from "@/components/filterSearch.jsx";
 import {useLoaderData, useNavigate, useNavigation} from "react-router-dom";
 import PaginationControls from "@/components/pagination.jsx";
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import {toast} from "sonner";
+import {SkeletonComp} from "@/components/skeleton.jsx";
 
 
 /**
@@ -171,7 +173,7 @@ export default function NotesList() {
     /**
      * Handles note creation action
      */
-    const handleCreateNote = useCallback( () => {
+    const handleCreateNote = useCallback(() => {
         setIsModalCreateOpen(true)
     }, [])
     /**
@@ -206,7 +208,7 @@ export default function NotesList() {
             deleteNote(selectedNote).finally(() => {
                 setIsModalDeleteOpen(false)
                 setSelectedNote(null)
-                if(notes.length < 5) {
+                if (notes.length < 5) {
                     setPagination({
                         ...pagination,
                         page: 1,
@@ -235,8 +237,9 @@ export default function NotesList() {
         navigate(`/note/${note.id}?from=${source}`);
     };
 
+
     useEffect(() => {
-        if(isInitialLoad) {
+        if (isInitialLoad) {
             setIsInitialLoad(false);
             return;
         }
@@ -247,43 +250,36 @@ export default function NotesList() {
         <Layout>
             {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
-                {isLoading && !notes ? (
-                    Array(pagination.page_size).fill(null).map((_, index) => (
-                        <div key={`skeleton-${index}`}
-                             className="border-2 rounded-xl p-6 shadow-md min-h-[200px] bg-secondary/50">
-                            <div className="animate-pulse space-y-6">
-                                <div className="h-6 bg-primary/20 rounded-lg w-3/4"></div>
-
-                                <div className="space-y-3">
-                                    <div className="h-4 bg-primary/20 rounded-lg w-full"></div>
-                                    <div className="h-4 bg-primary/20 rounded-lg w-5/6"></div>
-                                    <div className="h-4 bg-primary/20 rounded-lg w-4/6"></div>
-                                </div>
-
-                                <div className="flex justify-end space-x-2 mt-4">
-                                    <div className="h-8 w-8 bg-primary/20 rounded-full"></div>
-                                    <div className="h-8 w-8 bg-primary/20 rounded-full"></div>
-                                </div>
+                <ResponsiveMasonry
+                    columnsCountBreakPoints={{350: 1, 500: 2, 750: 3, 1000: 4}}
+                >
+                    <Masonry gutter='10px' className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
+                        {isLoading && !notes ? (
+                            Array(pagination.page_size).fill(null).map((_, index) => (
+                                <SkeletonComp key={index}/>
+                            ))
+                        ) : notes.length > 0 ? (
+                            notes.map(note => (
+                                <NotesCard
+                                    key={note.id}
+                                    note={note}
+                                    onClick={() => {
+                                        handleNoteClick(note)
+                                    }}
+                                    onEdit={memoizedHandleEditNote}
+                                    onDelete={handleDeleteNote}
+                                />
+                            ))
+                        ) : (
+                            <div className="col-span-full flex items-center justify-center text-center mt-40">
+                                <p className="text-primary-400 text-2xl">
+                                    Add some notes Dude, press the <br/> button below with symbol <code>+</code>
+                                </p>
                             </div>
-                        </div>
-                    ))
-                ) : notes.length > 0 ? (
-                    notes.map(note => (
-                        <NotesCard
-                            key={note.id}
-                            note={note}
-                            onClick={() => {handleNoteClick(note)}}
-                            onEdit={memoizedHandleEditNote}
-                            onDelete={handleDeleteNote}
-                        />
-                    ))
-                ) : (
-                    <div className="col-span-full flex items-center justify-center text-center mt-40">
-                        <p className="text-primary-400 text-2xl">Add some notes Dude, press the <br/> button below with symbol <code>+</code></p>
-                    </div>
-                )}
-            </div>
+                        )}
+                    </Masonry>
+                </ResponsiveMasonry>
+
 
             {notes.length > 0 && (
                 <div className="flex items-center justify-center">
