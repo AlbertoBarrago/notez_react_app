@@ -65,10 +65,11 @@ class NotesService {
      * @param {number} pageSize - The number of notes per page.
      * @param {string} query - The search query for filtering notes.
      * @param {string} sort - The sorting criteria for the notes.
+     * @param sort_by
      * @return {PaginatedResponse} A promise that resolves to an array of note objects.
      */
-    async getNotes(page, pageSize, query, sort = "asc") {
-        const resp = await axios_instance.get(`/notes/list/private?page=${page}&page_size=${pageSize}&sort_order=${sort}&sort_by='created_at'&query=${query}`);
+    async getNotes(page, pageSize, query, sort = "asc", sort_by = "created_at") {
+        const resp = await axios_instance.get(`/notes/list/private?page=${page}&page_size=${pageSize}&sort_order=${sort}&sort_by=${sort_by}&query=${query}`);
         return resp.data;
     }
 
@@ -79,10 +80,11 @@ class NotesService {
      * @param {number} pageSize - The number of notes per page.
      * @param {string} query - The search query for filtering notes.
      * @param {string} sort - The sorting criteria for the notes.
+     * @param sort_by
      * @return {PaginatedResponse} A promise that resolves to an array of note objects.
      */
-    async getPublicNotes(page, pageSize, query, sort = "asc") {
-        const resp =  await axios_instance.get(`/notes/list/public?page=${page}&page_size=${pageSize}&sort_order=${sort}&sort_by='created_at'&query=${query}`);
+    async getPublicNotes(page, pageSize, query, sort = "asc", sort_by = "created_at") {
+        const resp =  await axios_instance.get(`/notes/list/public?page=${page}&page_size=${pageSize}&sort_order=${sort}&sort_by=${sort_by}&query=${query}`);
         return resp.data;
     }
 
