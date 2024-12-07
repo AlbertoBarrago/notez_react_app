@@ -248,12 +248,14 @@ export default function NotesList() {
 
     return (
         <Layout>
-            {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
+            <div className="max-w-[1300px] mx-auto px-4 w-full">
+                {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
 
                 <ResponsiveMasonry
-                    columnsCountBreakPoints={{350: 1, 500: 2, 750: 3, 1000: 4}}
+                    columnsCountBreakPoints={{350: 1, 500: 2, 750: 3, 1280: 4}}
                 >
-                    <Masonry gutter='10px' className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mx-auto p-5">
+                    <Masonry gutter='10px'
+                             className="flex flex-wrap justify-center gap-4 mt-4 p-5">
                         {isLoading && !notes ? (
                             Array(pagination.page_size).fill(null).map((_, index) => (
                                 <SkeletonComp key={index}/>
@@ -281,42 +283,43 @@ export default function NotesList() {
                 </ResponsiveMasonry>
 
 
-            {notes.length > 0 && (
-                <div className="flex items-center justify-center">
-                    <PaginationControls
-                        pagination={pagination}
-                        setPagination={setPagination}
-                    />
-                </div>
-            )}
+                {notes.length > 0 && (
+                    <div className="flex items-center justify-center">
+                        <PaginationControls
+                            pagination={pagination}
+                            setPagination={setPagination}
+                        />
+                    </div>
+                )}
+            </div>
 
-            <Button
-                className={`fixed bottom-6 right-6 rounded-full p-4 shadow-lg ${notes.length === 0 ? 'animate-pulse' : ''}`}
-                onClick={handleCreateNote}
-                variant="secondary"
-                size="icon">
-                <PlusIcon className="h-6 w-6"/>
-            </Button>
+                <Button
+                    className={`fixed bottom-6 right-6 rounded-full p-4 shadow-lg ${notes.length === 0 ? 'animate-pulse' : ''}`}
+                    onClick={handleCreateNote}
+                    variant="secondary"
+                    size="icon">
+                    <PlusIcon className="h-6 w-6"/>
+                </Button>
 
-            <NoteAddNoteModal
-                isOpen={isModalCreateOpen}
-                onClose={() => setIsModalCreateOpen(false)}
-                onSave={handleCreateNoteConfirm}
-            />
+                <NoteAddNoteModal
+                    isOpen={isModalCreateOpen}
+                    onClose={() => setIsModalCreateOpen(false)}
+                    onSave={handleCreateNoteConfirm}
+                />
 
-            <NoteEditModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSave={handleSaveNoteConfirm}
-                note={selectedNote}
-            />
+                <NoteEditModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={handleSaveNoteConfirm}
+                    note={selectedNote}
+                />
 
-            <NoteDeleteModal
-                isOpen={isModalDeleteOpen}
-                onClose={() => setIsModalDeleteOpen(false)}
-                onDelete={handleDeleteNoteConfirm}
-                note={selectedNote}
-            />
+                <NoteDeleteModal
+                    isOpen={isModalDeleteOpen}
+                    onClose={() => setIsModalDeleteOpen(false)}
+                    onDelete={handleDeleteNoteConfirm}
+                    note={selectedNote}
+                />
         </Layout>
-    );
+);
 }
