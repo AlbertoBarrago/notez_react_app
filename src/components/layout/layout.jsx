@@ -5,7 +5,7 @@ const auth = new AuthService();
 
 const Layout = ({children}) => {
     return (
-        <div className="flex flex-col min-h-screen roboto-thin">
+        <div className="flex flex-col min-h-screen roboto-thin overflow-x-hidden">
             {!auth.isLoggedIn() ? "" :
                 <div className="w-full max-w-screen-xl mx-auto">
                     <Header/>

@@ -255,7 +255,7 @@ export default function NotesList() {
                     columnsCountBreakPoints={{350: 1, 500: 2, 750: 3, 1280: 4}}
                 >
                     <Masonry gutter='10px'
-                             className="flex flex-wrap justify-center gap-4 mt-4 p-5">
+                             className="flex flex-wrap justify-center mt-4 p-3">
                         {isLoading && !notes ? (
                             Array(pagination.page_size).fill(null).map((_, index) => (
                                 <SkeletonComp key={index}/>
