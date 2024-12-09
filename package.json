@@ -13,8 +13,7 @@
     "deploy": "railway up",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",
-    "version:major": "npm version major",
-    "release": "npm run version:patch && npm run build && npm run deploy"
+    "version:major": "npm version major"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
