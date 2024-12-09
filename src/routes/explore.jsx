@@ -137,7 +137,9 @@ export default function ExploreRoute() {
                                 <NotesCard
                                     key={note.id}
                                     note={note}
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
                                         handleNoteClick(note)
                                     }}
                                 />
