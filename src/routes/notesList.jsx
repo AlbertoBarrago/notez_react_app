@@ -232,11 +232,6 @@ export default function NotesList() {
         navigate('/');
     };
 
-    const handleNoteClick = (note) => {
-        const source = location.pathname === '/explore' ? 'explore' : 'notes';
-        navigate(`/note/${note.id}?from=${source}`);
-    };
-
 
     useEffect(() => {
         if (isInitialLoad) {
@@ -265,10 +260,8 @@ export default function NotesList() {
                                 <NotesCard
                                     key={note.id}
                                     note={note}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        handleNoteClick(note)
+                                    onClick={() => {
+                                        noteService.handleNoteClick(note, location.pathname, navigate)
                                     }}
                                     onEdit={memoizedHandleEditNote}
                                     onDelete={handleDeleteNote}

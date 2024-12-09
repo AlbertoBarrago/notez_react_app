@@ -3,7 +3,7 @@
  * @module Notes
  */
 
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useRef} from 'react'
 import {Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "@/components/ui/card"
 import {Button} from "@/components/ui/button"
 import {Pencil, Trash2, Globe, Lock} from "lucide-react"
@@ -55,7 +55,8 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
                                 {note?.title}
                                 <span className='hidden' aria-label='íd'>{note?.id}</span>
                             </CardTitle>
-                            <span className="text-sm text-primary-600 dark:text-primary-400 hover:cursor-pointer mt-1" onClick={onClick}>
+                            <span className="text-sm text-primary-600 dark:text-primary-400 hover:cursor-pointer mt-1"
+                                  onClick={onClick}>
                                 Click to open note
                             </span>
                         </div>

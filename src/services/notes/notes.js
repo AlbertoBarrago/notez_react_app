@@ -152,6 +152,19 @@ class NotesService {
         }
         return resp.data;
     }
+
+    /**
+     * Handles the click event on a note by navigating to the note's detailed view.
+     *
+     * @function
+     * @param {Object} note - The note object containing information about the note.
+     * @param {string} note.id - The unique identifier of the note.
+     * @param {string} source - The origin or context from where the note was clicked.
+     * @param {any} navigate - The navigation function used to change the current view or page.
+     */
+    handleNoteClick = (note, source, navigate) => {
+        navigate(`/note/${note.id}?from=${source}`);
+    };
 }
 
 export default NotesService;
