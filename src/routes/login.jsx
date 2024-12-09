@@ -100,6 +100,10 @@ export default function AuthRoute() {
      * @returns {Promise<void>}
      */
     const googleOAuth = async (data, isSigning = true) => {
+        console.log(
+            "Google OAuth",
+            data,
+            isSigning)
         setIsLoading(true);
         try {
             const resp = isSigning ? await auth.googleOAuth(data) : await auth.googleAuthSignup(data);
@@ -120,10 +124,9 @@ export default function AuthRoute() {
                        signupForm={signupForm}
                        onSubmitSignUp={onSubmitSignUp}
                        onSubmitSignIn={onSubmitSignIn}
-                       onGoogleOAuth={googleOAuth}
+                       googleOAuth={googleOAuth}
                        setTab={setTab}
                        isLoading={isLoading}
-                       googleOAuth={googleOAuth}
             />
             <ErrorsModal isOpen={errorDialogIsOpen}
                          onClose={() => setErrorDialogIsOpen(false)}

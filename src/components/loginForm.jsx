@@ -1,4 +1,4 @@
-import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
+import {GoogleOAuthProvider} from "@react-oauth/google";
 import Layout from "@/components/layout/layout.jsx";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.jsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.jsx";
@@ -17,6 +17,7 @@ import {
 import {Input} from "@/components/ui/input"
 import SendResetEmailDialog from "@/components/dialogs/send_reset_email.jsx";
 import AuthService from "@/services/auth/auth.js";
+import CustomGoogleLoginButton from "@/components/googleButton.jsx";
 
 const SIGN_IN = "signing";
 const SIGN_UP = "signup";
@@ -29,9 +30,9 @@ const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
  * @param signupForm
  * @param onSubmitSignIn
  * @param onSubmitSignUp
+ * @param googleOAuth
  * @param setTab
  * @param isLoading
- * @param googleOAuth
  * @returns {JSX.Element}
  * @constructor
  */
@@ -40,9 +41,9 @@ export function LoginForm({
                               signupForm,
                               onSubmitSignIn,
                               onSubmitSignUp,
+                              googleOAuth,
                               setTab,
                               isLoading,
-                              googleOAuth
                           }) {
     const auth = new AuthService();
     const [showPassword, setShowPassword] = useState(false)
@@ -155,19 +156,9 @@ export function LoginForm({
                                                 <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
                                                     {isLoading ? 'Signing In...' : 'Sign In'}
                                                 </Button>
-                                                <GoogleLogin
-                                                    text="signin"
-                                                    type="standard"
-                                                    theme="filled_black"
-                                                    shape="rectangular"
-                                                    width="100%"
-                                                    size="large"
-                                                    onSuccess={credentialResponse => {
-                                                        googleOAuth(credentialResponse);
-                                                    }}
-                                                    onError={() => {
-                                                        console.log('Login Failed');
-                                                    }}
+                                                <CustomGoogleLoginButton
+                                                    operation={googleOAuth}
+                                                    isLogin={true}
                                                 />
                                             </form>
                                         </Form>
@@ -254,19 +245,8 @@ export function LoginForm({
                                                 <Button className="w-full mt-8 mb-4" type="submit" disabled={isLoading}>
                                                     {isLoading ? 'Signing Up...' : 'Sign Up'}
                                                 </Button>
-                                                <GoogleLogin
-                                                    text="signup_with"
-                                                    type="standard"
-                                                    theme="filled_black"
-                                                    shape="rectangular"
-                                                    width="100%"
-                                                    size="large"
-                                                    onSuccess={credentialResponse => {
-                                                        googleOAuth(credentialResponse, false);
-                                                    }}
-                                                    onError={() => {
-                                                        console.log('Login Failed');
-                                                    }}
+                                                <CustomGoogleLoginButton
+                                                    operation={googleOAuth}
                                                 />
                                             </form>
                                         </Form>

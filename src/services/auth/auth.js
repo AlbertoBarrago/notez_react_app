@@ -3,6 +3,7 @@ import CommonService from "@/services/common/common.js";
 import {toast} from "sonner";
 
 const CService = new CommonService();
+
 /**
  * @typedef {Object} AuthResp
  * @property {string} access_token - The access_token
@@ -62,7 +63,6 @@ class AuthService {
      * @returns {Promise<any>}
      */
     async googleOAuth(data) {
-        delete data.select_by
         const response = await axios_instance.post('/oauth/login', data);
         CService.storeTokenAndUser(response.data);
         return response.data;
@@ -93,6 +93,7 @@ class AuthService {
         toast.success('Reset Email sent successfully');
         return response.data;
     }
+
     /**
      * Reset the password from email
      * @param email
@@ -126,7 +127,7 @@ class AuthService {
      * @return {User|null} The parsed user data object if available, otherwise null.
      */
     getUser() {
-       return JSON.parse(localStorage.getItem('user'));
+        return JSON.parse(localStorage.getItem('user'));
     }
 
     updateUserDataSession(user) {
@@ -161,9 +162,9 @@ class AuthService {
      * @returns {Promise<any>}
      */
     updateUser(user) {
-       const userUpdate = axios_instance.put(`/users/`, user);
-       this.updateUserDataSession(user);
-       return userUpdate;
+        const userUpdate = axios_instance.put(`/users/`, user);
+        this.updateUserDataSession(user);
+        return userUpdate;
     }
 
     /**
