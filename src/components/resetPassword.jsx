@@ -44,36 +44,38 @@ export default function ResetPasswordForm({ className }) {
 
     return (
         <>
-        <div className={cn("grid gap-6", className)}>
-            <form onSubmit={onSubmit}>
-                <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        <Input
-                            id="newPassword"
-                            placeholder="New Password"
-                            type="password"
-                            disabled={isLoading}
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                        <Input
-                            id="confirmPassword"
-                            placeholder="Confirm Password"
-                            type="password"
-                            disabled={isLoading}
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
+            <div className={cn("grid gap-6", className)}>
+                <h1 className={'text-2xl text-center'}>Insert here the new password, after confirm an email with instructions will be sent</h1>
+
+                <form onSubmit={onSubmit}>
+                    <div className="grid gap-4">
+                        <div className="grid gap-2">
+                            <Input
+                                id="newPassword"
+                                placeholder="New Password"
+                                type="password"
+                                disabled={isLoading}
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                            <Input
+                                id="confirmPassword"
+                                placeholder="Confirm Password"
+                                type="password"
+                                disabled={isLoading}
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                        </div>
+                        <Button disabled={isLoading}>
+                            {isLoading && (
+                                <div className="mr-2 h-4 w-4 animate-spin"/>
+                            )}
+                            Reset Password
+                        </Button>
                     </div>
-                    <Button disabled={isLoading}>
-                        {isLoading && (
-                            <div className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Reset Password
-                    </Button>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
         </>
     );
 }

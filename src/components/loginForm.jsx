@@ -146,7 +146,9 @@ export function LoginForm({
                                                     <Button
                                                         variant="link"
                                                         className="text-sm text-muted-foreground hover:text-primary p-0"
-                                                        onClick={() => {
+                                                        onClick={(e) => {
+                                                            e.preventDefault()
+                                                            e.stopPropagation()
                                                             setOpenResetDialog(true)
                                                         }}
                                                     >
@@ -223,7 +225,9 @@ export function LoginForm({
                                                                         variant="ghost"
                                                                         size="icon"
                                                                         className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
-                                                                        onClick={() => {
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault()
+                                                                            e.stopPropagation()
                                                                             setShowPassword(!showPassword)
                                                                         }}
                                                                     >
