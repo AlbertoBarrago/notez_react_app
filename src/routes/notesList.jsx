@@ -260,7 +260,9 @@ export default function NotesList() {
                                 <NotesCard
                                     key={note.id}
                                     note={note}
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
                                         noteService.handleNoteClick(note, location.pathname, navigate)
                                     }}
                                     onEdit={memoizedHandleEditNote}

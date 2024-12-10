@@ -56,7 +56,7 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
                                 <span className='hidden' aria-label='íd'>{note?.id}</span>
                             </CardTitle>
                             <span className="text-sm text-primary-600 dark:text-primary-400 hover:cursor-pointer mt-1"
-                                  onClick={onClick}>
+                                  onClick={(e)=> onClick(e)}>
                                 Click to open note
                             </span>
                         </div>
@@ -105,7 +105,11 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => onEdit(note)}
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    onEdit(note)
+                                }}
                                 className="bg:bg-secondary hover:bg-secondary-600 dark:bg-secondary-700 dark:hover:bg-secondary-800">
                             <Pencil className="w-4 h-4 mr-2"/>
                                 Edit
@@ -113,7 +117,11 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
                             <Button
                                 variant="destructive"
                                 size="sm"
-                                onClick={() => onDelete(note.id)}
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    onDelete(note.id)
+                                }}
                                 className="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
                                 <Trash2 className="w-4 h-4 mr-2"/>
                                 Delete
