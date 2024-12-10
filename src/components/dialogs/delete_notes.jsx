@@ -32,10 +32,18 @@ export default function NoteDeleteModal({isOpen, onClose, onDelete, note}) {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button type="button" variant="secondary" onClick={onClose}>
+                    <Button type="button" variant="secondary" onClick={(e)=>{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onClose()
+                    }}>
                         Cancel
                     </Button>
-                    <Button type="button" onClick={handleDelete}>
+                    <Button type="button" onClick={(e)=>{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleDelete()
+                    }}>
                         Delete
                     </Button>
                 </DialogFooter>
