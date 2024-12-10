@@ -246,17 +246,16 @@ export default function NotesList() {
             <div className="max-w-[1300px] mx-auto px-4 w-full">
                 {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
 
-                <ResponsiveMasonry
-                    columnsCountBreakPoints={{350: 1, 500: 2, 750: 3, 1280: 4}}
-                >
-                    <Masonry gutter='10px'
-                             className="flex flex-wrap justify-center mt-4 p-3">
-                        {isLoading && !notes ? (
-                            Array(pagination.page_size).fill(null).map((_, index) => (
+                <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 500: 2, 750: 3, 1280: 4}}>
+                    {isLoading && !notes ? (
+                        <Masonry gutter='10px' className="flex flex-wrap justify-center mt-4 p-3">
+                            {Array(pagination.page_size).fill(null).map((_, index) => (
                                 <SkeletonComp key={index}/>
-                            ))
-                        ) : notes.length > 0 ? (
-                            notes.map(note => (
+                            ))}
+                        </Masonry>
+                    ) : notes.length > 0 ? (
+                        <Masonry gutter='10px' className="flex flex-wrap justify-center mt-4 p-3">
+                            {notes.map(note => (
                                 <NotesCard
                                     key={note.id}
                                     note={note}
@@ -268,15 +267,16 @@ export default function NotesList() {
                                     onEdit={memoizedHandleEditNote}
                                     onDelete={handleDeleteNote}
                                 />
-                            ))
-                        ) : (
-                            <div className="col-span-full flex items-center justify-center text-center min-h-[60vh]">
-                                <p className="text-primary-400 text-2xl">
-                                    Add some notes Dude, press the <br/> button below with symbol <code>+</code>
-                                </p>
-                            </div>
-                        )}
-                    </Masonry>
+                            ))}
+                        </Masonry>
+                    ) : (
+                        <div className="flex justify-center items-center min-h-[50vh]">
+                            <p className="text-primary-400 text-2xl text-center">
+                                Add some notes Dude, press the <br/>
+                                button below with symbol <code>+</code>
+                            </p>
+                        </div>
+                    )}
                 </ResponsiveMasonry>
 
 

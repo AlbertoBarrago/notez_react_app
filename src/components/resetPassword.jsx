@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import {toast} from "sonner";
 
 export default function ResetPasswordForm({ className }) {
     const navigate = useNavigate();
@@ -17,8 +18,11 @@ export default function ResetPasswordForm({ className }) {
 
     useEffect(() => {
         if (!token) {
+            toast.error("Invalid token");
             navigate('/');
+            return;
         }
+        toast.success("Token is valid");
     }, [token]);
 
     async function onSubmit(e) {
@@ -27,15 +31,18 @@ export default function ResetPasswordForm({ className }) {
 
         if (newPassword !== confirmPassword) {
             setIsLoading(false);
+            toast.error("Passwords do not match");
             return;
         }
 
         try {
             let resp = await authService.resetPassword(token, newPassword);
             if (resp) {
+                toast.success("Password reset successfully");
                 navigate('/');
             }
         } catch (error) {
+            toast.error(error.message);
             console.error(error);
         } finally {
             setIsLoading(false);
