@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {LoginForm} from "@/components/loginForm.jsx";
 import ErrorsModal from "@/components/dialogs/errors.jsx";
+import {toast} from "sonner";
 
 const SIGN_IN = "signin";
 
@@ -52,6 +53,7 @@ export default function AuthRoute() {
         try {
             const resp = await auth.login(data.username, data.password);
             if (resp.user) {
+                toast.success("Login successful");
                 navigate("/notes");
             }
         } catch (err) {
@@ -80,10 +82,16 @@ export default function AuthRoute() {
         try {
             const resp = await auth.register(data.email, data.username, data.password);
             if (resp.user) {
+                toast.success("Registration successful");
                 navigate("/notes");
             }
         } catch (e) {
-            setErrorProps(e);
+            const errorMessage = {
+                title: 'Authentication Error',
+                status: e.response?.status || 500,
+                message: e.response?.data?.detail || 'Registration failed. Please try again.'
+            };
+            setErrorProps(errorMessage);
             setErrorDialogIsOpen(true);
         } finally {
             setIsLoading(false);
@@ -101,10 +109,16 @@ export default function AuthRoute() {
         try {
             const resp = isSigning ? await auth.googleOAuth(data) : await auth.googleAuthSignup(data);
             if (resp.user) {
+                toast.success("Login successful");
                 navigate("/notes");
             }
         } catch (e) {
-            setErrorProps(e);
+            const errorMessage = {
+                title: 'Authentication Error',
+                status: e.response?.status || 500,
+                message: e.response?.data?.detail || 'LoginForm failed. Please try again.'
+            };
+            setErrorProps(errorMessage);
             setErrorDialogIsOpen(true);
         } finally {
             setIsLoading(false);
