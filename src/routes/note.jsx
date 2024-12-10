@@ -1,7 +1,7 @@
 import {NoteElement} from "@/components/noteElement.jsx";
 import {useLoaderData} from "react-router-dom";
 import {useState} from "react";
-export function Note() {
+export default function Note() {
     const initialData = useLoaderData()
     const [note] = useState(initialData)
 

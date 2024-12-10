@@ -47,7 +47,11 @@ const CustomGoogleLoginButton = ({ operation, isLogin = false }) => {
         <Button
             className="w-full mb-4"
             variant="outline"
-            onClick={() => googleLogin()}
+            onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                googleLogin()
+            }}
         >
 
             {isLogin ? 'Log In' : 'Sign Up'} <GoogleIcon className="mr-2" />oogle
