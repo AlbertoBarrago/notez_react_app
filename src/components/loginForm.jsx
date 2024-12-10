@@ -262,9 +262,9 @@ export function LoginForm({
 
                 </Layout>
             </GoogleOAuthProvider>
-            <SendResetEmailDialog setOpenResetDialog={setOpenResetDialog}
-                                  openResetDialog={openResetDialog}
-                                  user={user}
+            <SendResetEmailDialog user={user}
+                                  open={openResetDialog}
+                                  setOpen={setOpenResetDialog}
                                   sendEmail={(email) => sendEmail(email)}/>
         </>
     )
