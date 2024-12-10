@@ -121,7 +121,7 @@ export default function ExploreRoute() {
         <Layout>
             <div className="max-w-[1300px] mx-auto px-4 w-full">
                 {error && <ErrorMessage message={error}/>}
-                {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query}/> : null}
+                {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query} totalNote={notes.length}/> : null}
 
                 <ResponsiveMasonry
                     columnsCountBreakPoints={{350: 1, 500: 2, 750: 3, 1000: 4}}

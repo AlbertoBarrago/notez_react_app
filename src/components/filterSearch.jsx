@@ -1,14 +1,19 @@
 import {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input.jsx";
+import {toast} from 'sonner'
 
 /** @constant {number} WORDS_LIMIT */
 const WORDS_LIMIT = 3;
 
-export function FilterSearch({onSearch, initialValue = ""}) {
+export function FilterSearch({onSearch, initialValue = "", totalNote = 0}) {
     const [searchTerm, setSearchTerm] = useState(initialValue)
 
     useEffect(() => {
         const debounceTimer = setTimeout(() => {
+            if (searchTerm.length > 0 && searchTerm.length < WORDS_LIMIT && totalNote > 0) {
+                toast.error(`Please enter at least ${WORDS_LIMIT} words`)
+                return
+            }
             if (searchTerm.length === 0 || searchTerm.length >= WORDS_LIMIT) {
                 onSearch(searchTerm)
             }
@@ -18,6 +23,9 @@ export function FilterSearch({onSearch, initialValue = ""}) {
     }, [searchTerm, onSearch]);
 
     const handleChange = (e) => {
+        if(totalNote === 0) {
+            toast.info('No notes to search, dude :)')
+        }
         setSearchTerm(e.target.value)
     }
 
