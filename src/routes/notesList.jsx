@@ -270,7 +270,7 @@ export default function NotesList() {
                                 />
                             ))
                         ) : (
-                            <div className="col-span-full flex items-center justify-center text-center mt-40">
+                            <div className="col-span-full flex items-center justify-center text-center min-h-[60vh]">
                                 <p className="text-primary-400 text-2xl">
                                     Add some notes Dude, press the <br/> button below with symbol <code>+</code>
                                 </p>
