@@ -54,7 +54,6 @@ class NotesService {
         const noteService = new NotesService();
         let noteResp = await noteService[funcName](page, pageSize, query, sort);
         if (noteResp) {
-            toast.success('Notes fetched successfully.');
             return noteResp;
         }
     }

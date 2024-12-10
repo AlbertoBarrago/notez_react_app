@@ -30,8 +30,6 @@ const CustomGoogleLoginButton = ({ operation, isLogin = false }) => {
                     client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
                 };
 
-                console.log('User Data:', userData);
-                console.log('Payload:', payload);
 
                 await operation(payload, isLogin);
             } catch (error) {

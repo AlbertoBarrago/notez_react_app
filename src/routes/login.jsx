@@ -2,9 +2,6 @@
  * @fileoverview Authentication route component handling auth and registration
  * @module AuthRoute
  */
-
-'use client'
-
 import {useState} from "react";
 import AuthService from "@/services/auth/auth.js";
 import {useNavigate} from "react-router-dom";
@@ -100,10 +97,6 @@ export default function AuthRoute() {
      * @returns {Promise<void>}
      */
     const googleOAuth = async (data, isSigning = true) => {
-        console.log(
-            "Google OAuth",
-            data,
-            isSigning)
         setIsLoading(true);
         try {
             const resp = isSigning ? await auth.googleOAuth(data) : await auth.googleAuthSignup(data);

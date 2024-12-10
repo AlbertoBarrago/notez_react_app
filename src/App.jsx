@@ -12,6 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <ContextProvider defaultTheme="system" storageKey="vite-ui-theme">
             <RouterProvider router={createBrowserRouter(routeConfig)}/>
                     <Toaster
+                      duration={import.meta.env.VITE_NOTIFIER_DURATION_SECONDS}
                       position="bottom-left"
                       icons={{
                         success: '✅',
