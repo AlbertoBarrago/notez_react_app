@@ -51,9 +51,10 @@ export function LoginForm({
     const user = auth.getUser();
 
     const sendEmail = (data) => {
-        auth.sendResetEmailFromEmail(data).then(() =>
-            setOpenResetDialog(false)
-        )
+        if(data)
+            auth.sendResetEmailFromEmail(data).then(() =>
+                setOpenResetDialog(false)
+            )
     }
 
     return (
