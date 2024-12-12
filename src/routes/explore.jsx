@@ -147,7 +147,7 @@ export default function ExploreRoute() {
                         ) : (
                             <div className="col-span-full flex items-center justify-center text-center mt-40">
                                 <p className="text-primary-400 text-2xl">
-                                    Add some notes Dude, press the <br/> button below with symbol <code>+</code>
+                                    No notes found.
                                 </p>
                             </div>
                         )}
