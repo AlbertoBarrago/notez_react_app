@@ -39,7 +39,7 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
 
     useEffect(() => {
         cardAnimation(cardRef.current)
-    }, [])
+    }, [displayContent])
 
     return (
         <div ref={cardRef}>

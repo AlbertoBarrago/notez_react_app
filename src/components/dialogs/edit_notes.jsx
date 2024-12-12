@@ -29,16 +29,6 @@ export default function NoteEditModal({isOpen, onClose, onSave, note}) {
         }
     }, [note])
 
-    useEffect(() => {
-        if (!isOpen) {
-            setTitle('')
-            setContent('')
-            setIsPublic(false)
-            setImageUrl('')
-            setTags([])
-        }
-    }, [isOpen])
-
     const handleTagsChange = (e) => {
         const tagArray = e.target.value.split(',').map(tag => tag.trim())
         setTags(tagArray)
