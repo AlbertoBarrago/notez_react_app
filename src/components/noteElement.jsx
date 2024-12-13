@@ -6,14 +6,10 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {Badge} from "@/components/ui/badge.jsx";
 
 export function NoteElement({note}) {
-    const noteRef = useRef(null);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const fromPage = searchParams.get('from');
 
-    useEffect(() => {
-        cardTitleAnimation(noteRef.current);
-    }, []);
 
     const handleBack = () => {
         navigate(`/${fromPage}`);
@@ -21,7 +17,7 @@ export function NoteElement({note}) {
 
     return (
         <Layout>
-            <div className="max-w-3xl mx-auto px-4 py-10" ref={noteRef}>
+            <div className="max-w-3xl mx-auto px-4 py-10">
                 <button className="flex items-center gap-2 mb-4 text-muted-foreground hover:text-foreground"
                         onClick={handleBack}>
                     <ArrowLeftCircle/> Back to {fromPage}

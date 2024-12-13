@@ -137,6 +137,7 @@ export default function ExploreRoute() {
                                 <NotesCard
                                     key={note.id}
                                     note={note}
+                                    justReadable={true}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
