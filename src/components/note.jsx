@@ -2,8 +2,9 @@ import Layout from "@/components/layout/layout.jsx";
 import {ArrowLeftCircle, Globe, Lock} from "lucide-react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Badge} from "@/components/ui/badge.jsx";
+import {forwardRef} from "react";
 
-export function NoteElement({note}) {
+export const Note = forwardRef(({ note }, ref) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const fromPage = searchParams.get('from');
@@ -20,7 +21,7 @@ export function NoteElement({note}) {
                         onClick={handleBack}>
                     <ArrowLeftCircle/> Back to {fromPage}
                 </button>
-                <article className="prose dark:prose-invert max-w-none">
+                <article className="prose dark:prose-invert max-w-none" ref={ref}>
                     <div className="flex items-center gap-4 mb-6">
                         <h1 className="scroll-m-20 text-4xl font-bold tracking-tight m-0">
                             {note.title}
@@ -66,4 +67,7 @@ export function NoteElement({note}) {
             </div>
         </Layout>
     );
-}
+});
+
+Note.displayName = 'Note';
+

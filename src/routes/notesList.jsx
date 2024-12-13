@@ -5,7 +5,7 @@
 
 import Layout from "../components/layout/layout.jsx";
 import {NotesCard} from "@/components/notesCard.jsx";
-import {useEffect, useState, useCallback, useRef} from "react";
+import {useEffect, useState, useCallback, useRef, useLayoutEffect} from "react";
 import NotesService from "@/services/notes/notes.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
@@ -19,7 +19,7 @@ import PaginationControls from "@/components/pagination.jsx";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import {toast} from "sonner";
 import {SkeletonComp} from "@/components/skeleton.jsx";
-import {cardAnimation} from "@/lib/animation.js";
+import {cardAnimation, cardTitleAnimation} from "@/lib/animation.js";
 
 
 /**
@@ -50,7 +50,6 @@ export default function NotesList() {
     const navigate = useNavigate()
     const initialData = useLoaderData()
     const navigation = useNavigation()
-    const cardRef = useRef(null)
     const [notes, setNotes] = useState(initialData.items);
     const routeLoading = navigation.state === "loading"
     const [operationLoading, setOperationLoading] = useState(false)
@@ -67,6 +66,8 @@ export default function NotesList() {
     })
     const [isInitialLoad, setIsInitialLoad] = useState(true);
     const isLoading = routeLoading || operationLoading
+    const notesRefs = useRef([]);
+
 
 
     /**
@@ -92,7 +93,7 @@ export default function NotesList() {
     /**
      * Creates a new note
      * @async
-     * @param {newNote: {title,content} | undefined} note - NoteElement to create
+     * @param {newNote: {title,content} | undefined} note - Note to create
      */
     const createNotes = async (note) => {
         try {
@@ -109,7 +110,7 @@ export default function NotesList() {
     /**
      * Updates an existing note
      * @async
-     * @param {Note} note - NoteElement to update
+     * @param {Note} note - Note to update
      */
     const updateNote = async (note) => {
         try {
@@ -126,11 +127,12 @@ export default function NotesList() {
     /**
      * Deletes a note
      * @async
-     * @param {string} note_id - NoteElement to delete
+     * @param {string} note_id - Note to delete
      */
     const deleteNote = async (note_id) => {
         try {
             setOperationLoading(true);
+            console.log(note_id)
             await noteService.removeNote(note_id);
 
             if (notes.length === 1 && pagination.page > 1) {
@@ -154,7 +156,7 @@ export default function NotesList() {
     }
     /**
      * Handles note edit action
-     * @param {Note} note - NoteElement to edit
+     * @param {Note} note - Note to edit
      */
     const memoizedHandleEditNote = useCallback((note) => {
         setSelectedNote(note)
@@ -195,7 +197,7 @@ export default function NotesList() {
     }
     /**
      * Handles note deletion action
-     * @param {Note} note - NoteElement to delete
+     * @param {Note} note - Note to delete
      */
     const handleDeleteNote = (note) => {
         setSelectedNote(note)
@@ -206,7 +208,7 @@ export default function NotesList() {
      */
     const handleDeleteNoteConfirm = () => {
         if (selectedNote) {
-            deleteNote(selectedNote).finally(() => {
+            deleteNote(selectedNote.id).finally(() => {
                 setIsModalDeleteOpen(false)
                 setSelectedNote(null)
                 if (notes.length < 5) {
@@ -242,6 +244,14 @@ export default function NotesList() {
         fetchNotes()
     }, [pagination.page, pagination.page_size, query]);
 
+    useLayoutEffect(() => {
+        notesRefs.current.forEach(ref => {
+            if (ref) {
+                cardAnimation(ref);
+            }
+        });
+    }, [notes]);
+
     return (
         <Layout>
             <div className="max-w-[1300px] mx-auto px-4 w-full">
@@ -256,8 +266,11 @@ export default function NotesList() {
                         </Masonry>
                     ) : notes.length > 0 ? (
                         <Masonry gutter='10px' className="flex flex-wrap justify-center mt-4 p-3">
-                            {notes.map(note => (
+                            {notes.map((note,index) => (
                                 <NotesCard
+                                    ref={element => {
+                                        notesRefs.current[index] = element;
+                                    }}
                                     key={note.id}
                                     note={note}
                                     onClick={(e) => {
@@ -319,5 +332,5 @@ export default function NotesList() {
                     note={selectedNote}
                 />
         </Layout>
-);
+    );
 }

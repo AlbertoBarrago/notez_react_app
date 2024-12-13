@@ -5,7 +5,7 @@ export const cardAnimation = (element) => {
         targets: element,
         opacity: [0, 1],
         translateY: [20, 0],
-        duration: 800,
+        duration: 2000,
         easing: 'easeOutSine'
     });
 };
