@@ -39,7 +39,7 @@ export function NotesCard({note, onEdit, onDelete, onClick, justReadable = false
 
     useEffect(() => {
         cardAnimation(cardRef.current)
-    }, [displayContent])
+    }, [displayContent]) //TODO: move me on parent in this way I dance every click :D
 
     return (
         <div ref={cardRef}>
