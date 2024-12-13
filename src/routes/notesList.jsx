@@ -5,7 +5,7 @@
 
 import Layout from "../components/layout/layout.jsx";
 import {NotesCard} from "@/components/notesCard.jsx";
-import {useEffect, useState, useCallback} from "react";
+import {useEffect, useState, useCallback, useRef} from "react";
 import NotesService from "@/services/notes/notes.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
@@ -19,6 +19,7 @@ import PaginationControls from "@/components/pagination.jsx";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import {toast} from "sonner";
 import {SkeletonComp} from "@/components/skeleton.jsx";
+import {cardAnimation} from "@/lib/animation.js";
 
 
 /**
@@ -49,6 +50,7 @@ export default function NotesList() {
     const navigate = useNavigate()
     const initialData = useLoaderData()
     const navigation = useNavigation()
+    const cardRef = useRef(null)
     const [notes, setNotes] = useState(initialData.items);
     const routeLoading = navigation.state === "loading"
     const [operationLoading, setOperationLoading] = useState(false)
