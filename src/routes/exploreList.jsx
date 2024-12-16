@@ -5,7 +5,7 @@
 
 import Layout from "../components/layout/layout.jsx";
 import {NotesCard} from "@/components/notesCard.jsx";
-import {useEffect, useState, useCallback} from "react";
+import {useEffect, useState, useCallback, useRef, useLayoutEffect} from "react";
 import NotesService from "@/services/notes/notes.js";
 import AuthService from "@/services/auth/auth.js";
 import {FilterSearch} from "@/components/filterSearch.jsx";
@@ -14,6 +14,7 @@ import ErrorMessage from "@/components/error.jsx";
 import PaginationControls from "@/components/pagination.jsx";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import {SkeletonComp} from "@/components/skeleton.jsx";
+import {cardAnimation, cardTitleAnimation} from "@/lib/animation.js";
 
 
 
@@ -56,6 +57,7 @@ export default function ExploreRoute() {
     })
     const [error, setError] = useState(null)
     const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const notesRefs = useRef([]);
 
 
     /**
@@ -117,6 +119,24 @@ export default function ExploreRoute() {
         fetchNotes()
     }, [pagination.page, pagination.page_size, query]);
 
+
+    useLayoutEffect(() => {
+        notesRefs.current = notesRefs.current.slice(0, notes.length);
+
+        const animationTimeout = setTimeout(() => {
+            notesRefs.current.forEach((ref, index) => {
+                if (ref) {
+                    setTimeout(() => {
+                        cardAnimation(ref);
+                    }, 120 * index);
+                }
+            });
+        }, 50);
+
+        return () => clearTimeout(animationTimeout);
+    }, [notes]);
+
+
     return (
         <Layout>
             <div className="max-w-[1300px] mx-auto px-4 w-full">
@@ -133,8 +153,11 @@ export default function ExploreRoute() {
                                 <SkeletonComp key={index}/>
                             ))
                         ) : notes.length > 0 ? (
-                            notes.map(note => (
+                            notes.map((note,index) => (
                                 <NotesCard
+                                    ref={element => {
+                                        notesRefs.current[index] = element;
+                                    }}
                                     key={note.id}
                                     note={note}
                                     justReadable={true}

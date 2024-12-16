@@ -5,7 +5,7 @@
 
 import Layout from "../components/layout/layout.jsx";
 import {NotesCard} from "@/components/notesCard.jsx";
-import {useEffect, useState, useCallback} from "react";
+import {useEffect, useState, useCallback, useRef, useLayoutEffect, createRef} from "react";
 import NotesService from "@/services/notes/notes.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
@@ -19,6 +19,8 @@ import PaginationControls from "@/components/pagination.jsx";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import {toast} from "sonner";
 import {SkeletonComp} from "@/components/skeleton.jsx";
+import {cardAnimation, noteAnimations} from "@/lib/animation.js";
+import anime from "animejs";
 
 
 /**
@@ -67,6 +69,7 @@ export default function NotesList() {
     const isLoading = routeLoading || operationLoading
 
 
+
     /**
      * Fetches paginated notes from the server and updates state
      * @type {() => Promise<void>}
@@ -90,7 +93,7 @@ export default function NotesList() {
     /**
      * Creates a new note
      * @async
-     * @param {newNote: {title,content} | undefined} note - NoteElement to create
+     * @param {newNote: {title,content} | undefined} note - Note to create
      */
     const createNotes = async (note) => {
         try {
@@ -107,7 +110,7 @@ export default function NotesList() {
     /**
      * Updates an existing note
      * @async
-     * @param {Note} note - NoteElement to update
+     * @param {Note} note - Note to update
      */
     const updateNote = async (note) => {
         try {
@@ -124,11 +127,19 @@ export default function NotesList() {
     /**
      * Deletes a note
      * @async
-     * @param {string} note_id - NoteElement to delete
+     * @param {string} note_id - Note to delete
      */
     const deleteNote = async (note_id) => {
         try {
             setOperationLoading(true);
+            const elementToRemove = notesRefs.current.find(
+                ref => ref?.getAttribute('data-note-id') === note_id
+            );
+            debugger;
+            if (elementToRemove) {
+                await noteAnimations.exit(elementToRemove).finished;
+            }
+
             await noteService.removeNote(note_id);
 
             if (notes.length === 1 && pagination.page > 1) {
@@ -152,7 +163,7 @@ export default function NotesList() {
     }
     /**
      * Handles note edit action
-     * @param {Note} note - NoteElement to edit
+     * @param {Note} note - Note to edit
      */
     const memoizedHandleEditNote = useCallback((note) => {
         setSelectedNote(note)
@@ -193,7 +204,7 @@ export default function NotesList() {
     }
     /**
      * Handles note deletion action
-     * @param {Note} note - NoteElement to delete
+     * @param {Note} note - Note to delete
      */
     const handleDeleteNote = (note) => {
         setSelectedNote(note)
@@ -204,7 +215,7 @@ export default function NotesList() {
      */
     const handleDeleteNoteConfirm = () => {
         if (selectedNote) {
-            deleteNote(selectedNote).finally(() => {
+            deleteNote(selectedNote.id).finally(() => {
                 setIsModalDeleteOpen(false)
                 setSelectedNote(null)
                 if (notes.length < 5) {
@@ -240,6 +251,7 @@ export default function NotesList() {
         fetchNotes()
     }, [pagination.page, pagination.page_size, query]);
 
+
     return (
         <Layout>
             <div className="max-w-[1300px] mx-auto px-4 w-full">
@@ -254,7 +266,7 @@ export default function NotesList() {
                         </Masonry>
                     ) : notes.length > 0 ? (
                         <Masonry gutter='10px' className="flex flex-wrap justify-center mt-4 p-3">
-                            {notes.map(note => (
+                            {notes.map((note,index) => (
                                 <NotesCard
                                     key={note.id}
                                     note={note}
@@ -317,5 +329,5 @@ export default function NotesList() {
                     note={selectedNote}
                 />
         </Layout>
-);
+    );
 }

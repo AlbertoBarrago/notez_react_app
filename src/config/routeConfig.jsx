@@ -32,7 +32,7 @@ const Note = lazy(() => import(
 
 const Explore = lazy(() => import(
     /* webpackPrefetch: true */
-    "@/routes/explore.jsx"
+    "@/routes/exploreList.jsx"
     ));
 
 const ResetPassword = lazy(() => import("@/routes/resetPassword.jsx"));

@@ -1,15 +1,17 @@
-import {NoteElement} from "@/components/noteElement.jsx";
+import {Note} from "@/components/note.jsx";
 import {useLoaderData} from "react-router-dom";
-import {useRef, useState} from "react";
-import {cardTitleAnimation} from "@/lib/animation.js";
-export default function Note() {
-    const noteRef = useRef(null);
+import {useLayoutEffect, useRef, useState} from "react";
+import {cardAnimation} from "@/lib/animation.js";
+export default function NoteDetails() {
     const initialData = useLoaderData()
     const [note] = useState(initialData)
+    const noteRef = useRef(null)
 
-    cardTitleAnimation(noteRef.current);
+    useLayoutEffect(() => {
+        cardAnimation(noteRef.current)
+    },[])
 
     return (
-        <NoteElement note={note} ref={noteRef}/>
+        <Note note={note} ref={noteRef}/>
     )
 }

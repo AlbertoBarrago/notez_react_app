@@ -145,6 +145,7 @@ class NotesService {
      * @return {Promise} A promise that resolves with the server response indicating the success or failure of the note removal.
      */
     async removeNote(id) {
+        debugger;
         const resp = await axios_instance.delete(`/notes/${id}`);
         if (resp.data.success) {
             this.notes = this.notes.filter(note => note.id !== id);
