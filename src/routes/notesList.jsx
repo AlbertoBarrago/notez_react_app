@@ -5,7 +5,7 @@
 
 import Layout from "../components/layout/layout.jsx";
 import {NotesCard} from "@/components/notesCard.jsx";
-import {useEffect, useState, useCallback, useRef, useLayoutEffect} from "react";
+import {useEffect, useState, useCallback, useRef, useLayoutEffect, createRef} from "react";
 import NotesService from "@/services/notes/notes.js";
 import NoteEditModal from "@/components/dialogs/edit_notes.jsx";
 import NoteDeleteModal from "@/components/dialogs/delete_notes.jsx";
@@ -67,8 +67,6 @@ export default function NotesList() {
     })
     const [isInitialLoad, setIsInitialLoad] = useState(true);
     const isLoading = routeLoading || operationLoading
-    const notesRefs = useRef([]);
-    const skeletonRef = useRef(null);
 
 
 
@@ -103,11 +101,6 @@ export default function NotesList() {
                 toast.success('Notes created successfully.', {
                     description: note.title
                 });
-                const newElement = notesRefs.current[notesRefs.current.length - 1];
-                if (newElement) {
-                    noteAnimations.enter(newElement);
-                }
-
                 fetchNotes();
             });
         } catch (error) {
@@ -121,14 +114,6 @@ export default function NotesList() {
      */
     const updateNote = async (note) => {
         try {
-            const elementToUpdate = notesRefs.current.find(
-                ref => ref?.getAttribute('data-note-id') === note.id
-            );
-
-            if (elementToUpdate) {
-                noteAnimations.update(elementToUpdate);
-            }
-
             await noteService.updateNote(note).finally(() => {
                 toast.success('Notes updated.', {
                     description: 'Note updated successfully.',
@@ -150,7 +135,7 @@ export default function NotesList() {
             const elementToRemove = notesRefs.current.find(
                 ref => ref?.getAttribute('data-note-id') === note_id
             );
-
+            debugger;
             if (elementToRemove) {
                 await noteAnimations.exit(elementToRemove).finished;
             }
@@ -266,13 +251,10 @@ export default function NotesList() {
         fetchNotes()
     }, [pagination.page, pagination.page_size, query]);
 
-    useLayoutEffect(() => {
-        notesRefs.current = notesRefs.current.slice(0, notes.length);
-    }, [notes]);
 
     return (
         <Layout>
-            <div className="max-w-[1300px] mx-auto px-4 w-full" ref={skeletonRef}>
+            <div className="max-w-[1300px] mx-auto px-4 w-full">
                 {notes ? <FilterSearch onSearch={(q) => setQuery(q)} initialValue={query} totalNote={notes.length}/> : null}
 
                 <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 500: 2, 750: 3, 1280: 4}}>
@@ -286,10 +268,6 @@ export default function NotesList() {
                         <Masonry gutter='10px' className="flex flex-wrap justify-center mt-4 p-3">
                             {notes.map((note,index) => (
                                 <NotesCard
-                                    ref={element => {
-                                        notesRefs.current[index] = element;
-                                    }}
-                                    data-note-id={note.id}
                                     key={note.id}
                                     note={note}
                                     onClick={(e) => {
