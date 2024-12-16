@@ -57,6 +57,8 @@ export default function ExploreRoute() {
     })
     const [error, setError] = useState(null)
     const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const notesRefs = useRef([]);
+
 
     /**
      * Fetches paginated notes from the server and updates state
@@ -117,6 +119,24 @@ export default function ExploreRoute() {
         fetchNotes()
     }, [pagination.page, pagination.page_size, query]);
 
+
+    useLayoutEffect(() => {
+        notesRefs.current = notesRefs.current.slice(0, notes.length);
+
+        const animationTimeout = setTimeout(() => {
+            notesRefs.current.forEach((ref, index) => {
+                if (ref) {
+                    setTimeout(() => {
+                        cardAnimation(ref);
+                    }, 120 * index);
+                }
+            });
+        }, 50);
+
+        return () => clearTimeout(animationTimeout);
+    }, [notes]);
+
+
     return (
         <Layout>
             <div className="max-w-[1300px] mx-auto px-4 w-full">
@@ -133,8 +153,11 @@ export default function ExploreRoute() {
                                 <SkeletonComp key={index}/>
                             ))
                         ) : notes.length > 0 ? (
-                            notes.map(note => (
+                            notes.map((note,index) => (
                                 <NotesCard
+                                    ref={element => {
+                                        notesRefs.current[index] = element;
+                                    }}
                                     key={note.id}
                                     note={note}
                                     justReadable={true}
